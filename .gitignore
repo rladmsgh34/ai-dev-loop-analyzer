@@ -5,3 +5,4 @@ __pycache__/
 *.json
 !package.json
 .DS_Store
+data/analysis-cache.json
