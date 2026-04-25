@@ -1,0 +1,179 @@
+name: Evolve Rules
+
+on:
+  schedule:
+    - cron: '0 1 * * *'   # 매일 오전 10시 KST
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — 분석만 하고 PR 생성 생략'
+        type: boolean
+        default: false
+      fetch_files:
+        description: 'fix PR 파일 + 리뷰 코멘트 수집 (더 정확, 느림)'
+        type: boolean
+        default: true
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: ai-dev-loop-analyzer 체크아웃
+        uses: actions/checkout@v4
+
+      - name: gwangcheon-shop 체크아웃
+        uses: actions/checkout@v4
+        with:
+          repository: rladmsgh34/gwangcheon-shop
+          token: ${{ secrets.GH_PAT }}
+          path: gwangcheon-shop
+
+      # ── 1단계: 분석 ────────────────────────────────────────────────────────
+      - name: PR 히스토리 수집 및 분석
+        id: analyze
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh pr list \
+            --repo rladmsgh34/gwangcheon-shop \
+            --state merged --limit 300 \
+            --json number,title,mergedAt,additions,deletions \
+            > /tmp/prs.json
+
+          FETCH_FLAG=""
+          if [ "${{ inputs.fetch_files }}" != "false" ]; then
+            FETCH_FLAG="--fetch-files"
+          fi
+
+          python3 src/analyze.py \
+            --input /tmp/prs.json \
+            --github-token "$GH_TOKEN" \
+            --format json \
+            $FETCH_FLAG \
+            2>/dev/null > /tmp/report.json
+
+          FIX_RATE=$(python3 -c "import json; d=json.load(open('/tmp/report.json')); print(d['summary']['fix_rate'])")
+          CLUSTER_COUNT=$(python3 -c "import json; d=json.load(open('/tmp/report.json')); print(len(d['clusters']))")
+          echo "fix_rate=$FIX_RATE" >> $GITHUB_OUTPUT
+          echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
+          echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+      # ── 2단계: 이슈 리포트 ─────────────────────────────────────────────────
+      - name: 일일 리포트 이슈 게시
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import json, subprocess, os
+
+          d = json.load(open('/tmp/report.json'))
+          s = d['summary']
+          date = os.environ.get('REPORT_DATE', '')
+
+          lines = [
+            f"## 📊 일일 PR 품질 리포트 — {date}",
+            "",
+            f"**총 PR**: {s['total_prs']}개 | **fix PR**: {s['fix_prs']}개 ({s['fix_rate']}%)",
+            "",
+          ]
+
+          clusters = d.get('clusters', [])
+          if clusters:
+            lines += ["### 📍 회귀 클러스터", "| 도메인 | PR 범위 | 크기 |", "|--------|---------|------|"]
+            for c in clusters:
+              lines.append(f"| `{c['domain']}` | #{c['start']} → #{c['end']} | {c['size']}개 |")
+            lines.append("")
+
+          domain_counts = d.get('domain_counts', [])
+          if domain_counts:
+            lines += ["### 🏴 도메인별 fix", "| 도메인 | 횟수 |", "|--------|------|"]
+            for dc in domain_counts:
+              lines.append(f"| `{dc['domain']}` | {dc['fix_count']}회 |")
+            lines.append("")
+
+          risky = d.get('risky_files', [])
+          if risky:
+            lines += ["### 📁 고위험 파일"]
+            for f in risky[:5]:
+              lines.append(f"- `{f['file']}` ({f['fix_count']}회)")
+            lines.append("")
+
+          rules = d.get('claude_md_suggestions', [])
+          if rules:
+            lines += ["### 💡 CLAUDE.md 개선 아이디어"]
+            for r in rules:
+              lines.append(r)
+
+          lines += ["---", f"_[ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer) · {date}_"]
+
+          body = "\n".join(lines)
+          title = f"[일일 리포트] {date} — fix율 {s['fix_rate']}%"
+
+          existing = json.loads(subprocess.run(
+            ['gh', 'issue', 'list', '--label', 'daily-report', '--state', 'open',
+             '--json', 'number,title', '--limit', '5'],
+            capture_output=True, text=True
+          ).stdout or '[]')
+
+          today_issue = next((i for i in existing if date in i['title']), None)
+          if today_issue:
+            subprocess.run(['gh', 'issue', 'edit', str(today_issue['number']),
+                            '--title', title, '--body', body], check=True)
+          else:
+            subprocess.run(['gh', 'issue', 'create', '--title', title,
+                            '--body', body, '--label', 'daily-report'], check=True)
+          PYEOF
+        env:
+          REPORT_DATE: ${{ steps.analyze.outputs.date }}
+
+      # ── 3단계: CLAUDE.md 패치 ──────────────────────────────────────────────
+      - name: CLAUDE.md 패치 생성
+        id: patch
+        run: |
+          python3 src/patch_claude_md.py \
+            --report /tmp/report.json \
+            --claude-md gwangcheon-shop/CLAUDE.md \
+            --date "${{ steps.analyze.outputs.date }}" \
+            ${{ inputs.dry_run == 'true' && '--dry-run' || '' }} \
+            2>&1 | tee /tmp/patch-log.txt
+
+          if grep -q "신규 규칙 없음" /tmp/patch-log.txt; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      # ── 4단계: PR 생성 (dry_run=false 이고 변경사항 있을 때만) ─────────────
+      - name: gwangcheon-shop PR 생성
+        if: steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          path: gwangcheon-shop
+          commit-message: "chore: AI Dev Loop 자동 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
+          branch: chore/ai-loop-rules-${{ steps.analyze.outputs.date }}
+          title: "🤖 CLAUDE.md 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
+          body: |
+            ## AI Dev Loop — 자동 생성 PR
+
+            [ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer)가
+            PR 히스토리 + 리뷰 코멘트를 분석해 감지한 패턴을 CLAUDE.md에 반영합니다.
+
+            ### 추가된 규칙
+            ```
+            ${{ steps.patch.outputs.rules }}
+            ```
+
+            ### 검토 방법
+            1. 규칙이 실제 상황에 맞는지 확인
+            2. 불필요한 규칙 삭제 후 머지
+            3. 머지하면 다음 Claude Code 세션부터 자동 적용
+
+            ---
+            _fix율: ${{ steps.analyze.outputs.fix_rate }}% | 클러스터: ${{ steps.analyze.outputs.cluster_count }}개_
+          labels: "documentation,ai-generated"
+          delete-branch: true

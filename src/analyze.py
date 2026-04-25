@@ -60,6 +60,7 @@ class PR:
     is_fix: bool
     domain: str
     files: list[str] = field(default_factory=list)
+    review_comments: list[str] = field(default_factory=list)
 
 @dataclass
 class Cluster:
@@ -110,6 +111,27 @@ def fetch_pr_files(pr_number: int) -> list[str]:
         return []
     data = json.loads(result.stdout)
     return [f["path"] for f in data.get("files", [])]
+
+
+def fetch_pr_review_comments(pr_number: int) -> list[str]:
+    """리뷰어 코멘트 수집 — 사람이 잡아낸 패턴을 LLM 프롬프트에 반영"""
+    result = subprocess.run(
+        ["gh", "pr", "view", str(pr_number), "--json", "reviews,comments"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return []
+    data = json.loads(result.stdout)
+    comments = []
+    for r in data.get("reviews", []):
+        body = (r.get("body") or "").strip()
+        if body and len(body) > 10:
+            comments.append(body[:300])
+    for c in data.get("comments", []):
+        body = (c.get("body") or "").strip()
+        if body and len(body) > 10:
+            comments.append(body[:300])
+    return comments
 
 
 # ── 분석 엔진 ────────────────────────────────────────────────────────────────
@@ -219,10 +241,15 @@ def _build_prompt(
     risky_files: list[tuple[str, int]],
     fix_prs: list[PR],
 ) -> str:
-    fix_summary = "\n".join(
-        f"- #{p.number}: {p.title}" + (f" (파일: {', '.join(p.files[:3])})" if p.files else "")
-        for p in fix_prs
-    )
+    fix_summary_lines = []
+    for p in fix_prs:
+        line = f"- #{p.number}: {p.title}"
+        if p.files:
+            line += f" (파일: {', '.join(p.files[:3])})"
+        if p.review_comments:
+            line += f"\n  리뷰: {' / '.join(p.review_comments[:2])}"
+        fix_summary_lines.append(line)
+    fix_summary = "\n".join(fix_summary_lines)
     cluster_summary = "\n".join(
         f"- [{c.domain}] PR #{c.start}~#{c.end} ({c.size}개 연속 fix)"
         for c in clusters
@@ -482,9 +509,10 @@ def main():
 
     if args.fetch_files:
         fix_prs = [p for p in prs if p.is_fix]
-        print(f"fix PR {len(fix_prs)}개 파일 목록 수집 중...", file=sys.stderr)
+        print(f"fix PR {len(fix_prs)}개 파일 + 리뷰 코멘트 수집 중...", file=sys.stderr)
         for pr in fix_prs:
             pr.files = fetch_pr_files(pr.number)
+            pr.review_comments = fetch_pr_review_comments(pr.number)
             domain = classify_domain(pr.title, pr.files)
             pr.domain = domain
 
