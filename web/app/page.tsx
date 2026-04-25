@@ -1,34 +1,64 @@
-'use client'
+import Link from 'next/link'
+import { fetchMergedPRs, validateRepo } from '../lib/github'
+import { analyze } from '../lib/analyzer'
+import HomeForm from './HomeForm'
 
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+const FEATURED_REPOS = [
+  { owner: 'vercel', repo: 'next.js' },
+  { owner: 'facebook', repo: 'react' },
+  { owner: 'microsoft', repo: 'vscode' },
+  { owner: 'prisma', repo: 'prisma' },
+  { owner: 'vitejs', repo: 'vite' },
+]
 
-export default function Home() {
-  const router = useRouter()
-  const [input, setInput] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+interface FeaturedRepoData {
+  owner: string
+  repo: string
+  stars: number
+  fixRate: number
+  clusterCount: number
+  topDomain: string | null
+}
 
-  function parseRepo(value: string): { owner: string; repo: string } | null {
-    const cleaned = value.trim().replace(/\/$/, '')
-    const match = cleaned.match(/(?:github\.com\/)?([^/\s]+)\/([^/\s]+)/)
-    if (!match) return null
-    return { owner: match[1], repo: match[2] }
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError('')
-    const parsed = parseRepo(input)
-    if (!parsed) {
-      setError('올바른 형식을 입력해주세요 (예: facebook/react)')
-      return
+async function fetchFeaturedRepo(owner: string, repo: string): Promise<FeaturedRepoData | null> {
+  try {
+    const [repoInfo, prs] = await Promise.all([
+      validateRepo(owner, repo),
+      fetchMergedPRs(owner, repo, 200),
+    ])
+    const result = analyze(prs)
+    const topDomain = result.domainCounts[0]?.domain ?? null
+    return {
+      owner,
+      repo,
+      stars: repoInfo.stars,
+      fixRate: result.summary.fixRate,
+      clusterCount: result.clusters.length,
+      topDomain,
     }
-    setLoading(true)
-    router.push(`/r/${parsed.owner}/${parsed.repo}`)
+  } catch {
+    return null
   }
+}
 
-  const examples = ['vercel/next.js', 'shadcn-ui/ui', 'prisma/prisma']
+function fixRateColor(rate: number): string {
+  if (rate <= 10) return 'text-green-400'
+  if (rate <= 20) return 'text-yellow-400'
+  return 'text-red-400'
+}
+
+function formatStars(stars: number): string {
+  if (stars >= 1000) return `${(stars / 1000).toFixed(1)}k`
+  return String(stars)
+}
+
+export const revalidate = 86400 // 하루 캐시
+
+export default async function Home() {
+  const featuredResults = await Promise.all(
+    FEATURED_REPOS.map(({ owner, repo }) => fetchFeaturedRepo(owner, repo))
+  )
+  const featuredRepos = featuredResults.filter((r): r is FeaturedRepoData => r !== null)
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
@@ -51,48 +81,7 @@ export default function Home() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 select-none text-gray-500 text-sm">
-                github.com/
-              </span>
-              <input
-                value={input}
-                onChange={e => { setInput(e.target.value); setError('') }}
-                placeholder="owner/repo"
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-[7.5rem] pr-4 text-sm placeholder-gray-600 outline-none transition focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30"
-                autoFocus
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold transition hover:bg-blue-500 disabled:opacity-40"
-            >
-              {loading ? '...' : '분석'}
-            </button>
-          </div>
-          {error && <p className="text-sm text-red-400">{error}</p>}
-        </form>
-
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <span className="text-xs text-gray-600">예시:</span>
-          {examples.map(ex => (
-            <button
-              key={ex}
-              type="button"
-              onClick={() => { setInput(ex); setError('') }}
-              className="text-xs text-gray-500 transition hover:text-gray-300 underline underline-offset-2"
-            >
-              {ex}
-            </button>
-          ))}
-          <span className="text-gray-700">|</span>
-          <a href="/compare" className="text-xs text-gray-500 transition hover:text-gray-300 underline underline-offset-2">
-            여러 레포 비교 →
-          </a>
-        </div>
+        <HomeForm />
 
         <div className="mt-16 grid gap-4 sm:grid-cols-3">
           {[
@@ -116,6 +105,59 @@ export default function Home() {
             🌐 언어별 회귀 패턴 데이터 →
           </a>
         </div>
+
+        {featuredRepos.length > 0 && (
+          <section className="mt-20">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-white/5" />
+              <span className="text-xs font-medium text-gray-500 tracking-widest uppercase">
+                인기 레포 분석 결과
+              </span>
+              <div className="h-px flex-1 bg-white/5" />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredRepos.map(repo => (
+                <div
+                  key={`${repo.owner}/${repo.repo}`}
+                  className="rounded-2xl border border-white/5 bg-white/[0.03] p-5 transition hover:border-white/10 hover:bg-white/[0.05]"
+                >
+                  <div className="mb-3">
+                    <p className="text-xs text-gray-500">{repo.owner}/</p>
+                    <p className="text-sm font-semibold text-white">{repo.repo}</p>
+                  </div>
+
+                  <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                      ⭐ {formatStars(repo.stars)}
+                    </span>
+                    <span className={`text-xs font-semibold ${fixRateColor(repo.fixRate)}`}>
+                      fix율 {repo.fixRate}%
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      클러스터 {repo.clusterCount}개
+                    </span>
+                  </div>
+
+                  {repo.topDomain && (
+                    <div className="mb-4">
+                      <span className="inline-block rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[11px] text-gray-400">
+                        {repo.topDomain}
+                      </span>
+                    </div>
+                  )}
+
+                  <Link
+                    href={`/r/${repo.owner}/${repo.repo}`}
+                    className="inline-flex items-center gap-1 text-xs text-blue-400 transition hover:text-blue-300"
+                  >
+                    분석 보기 →
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )
