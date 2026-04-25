@@ -107,6 +107,15 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+        <div className="mt-4 text-center">
+          <a
+            href="/languages"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-2 text-xs text-gray-500 transition hover:bg-white/[0.06] hover:text-gray-300"
+          >
+            🌐 언어별 회귀 패턴 데이터 →
+          </a>
+        </div>
       </div>
     </main>
   )

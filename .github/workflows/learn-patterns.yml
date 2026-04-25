@@ -1,0 +1,59 @@
+name: Learn Language Patterns
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'   # 매주 일요일 KST 11시 (UTC 02:00)
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: '언어당 분석할 레포 수'
+        default: '30'
+        required: false
+      language:
+        description: '특정 언어만 (빈칸이면 전체)'
+        default: ''
+        required: false
+      dry_run:
+        description: 'dry-run (레포 목록만 출력)'
+        type: boolean
+        default: false
+
+jobs:
+  learn:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Crawl & analyze repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS="--limit ${{ inputs.limit || '30' }} --append"
+          if [ -n "${{ inputs.language }}" ]; then
+            ARGS="$ARGS --lang ${{ inputs.language }}"
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python3 src/crawl_repos.py $ARGS
+
+      - name: Commit updated patterns
+        if: ${{ inputs.dry_run != 'true' }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/language-patterns.json
+          if git diff --cached --quiet; then
+            echo "변경 없음, 커밋 스킵"
+          else
+            REPO_COUNT=$(python3 -c "import json; d=json.load(open('data/language-patterns.json')); print(d.get('total_repos_analyzed', 0))")
+            git commit -m "data: update language patterns (${REPO_COUNT} repos analyzed)"
+            git push origin main
+          fi
