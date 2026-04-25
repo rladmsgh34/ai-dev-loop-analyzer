@@ -93,7 +93,7 @@ class PR:
     files: list[str] = field(default_factory=list)
     review_comments: list[str] = field(default_factory=list)
     is_ai_generated: bool = False  # Co-Authored-By: Claude 커밋 포함 여부
-    diff_snippet: str = ""  # gh pr diff 앞 100줄 (--fetch-files 모드에서만 채워짐)
+    diff_snippet: str = ""  # gh pr diff 앞 100줄 (smart-fetch / --fetch-files 모드)
 
 @dataclass
 class Cluster:
@@ -137,7 +137,9 @@ def fetch_prs(limit: int = 300) -> list[PR]:
     return sorted(prs, key=lambda p: p.number)
 
 def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
-    """파일 목록 + 리뷰 코멘트 + AI 생성 여부 + diff snippet을 단일 worker에서 수집."""
+    """메타(파일·리뷰·커밋) + diff snippet을 단일 worker에서 수집.
+    gh pr view 1회 + gh pr diff 1회. 호출 자체는 ThreadPoolExecutor로 병렬화된다.
+    """
     meta = subprocess.run(
         ["gh", "pr", "view", str(pr_number),
          "--json", "files,reviews,comments,commits"],
@@ -176,6 +178,17 @@ def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
             diff_snippet += f"\n... ({len(lines) - 100}줄 생략)"
 
     return files, comments, is_ai, diff_snippet
+
+
+def _parallel_fetch(pr_numbers: list[int], label: str) -> dict[int, tuple]:
+    """pr_numbers 목록을 ThreadPoolExecutor(workers=8)로 병렬 fetch."""
+    pr_map: dict[int, tuple] = {}
+    print(f"{label} {len(pr_numbers)}개 병렬 수집 중 (workers=8)...", file=sys.stderr)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = {pool.submit(fetch_pr_details, num): num for num in pr_numbers}
+        for future in as_completed(futures):
+            pr_map[futures[future]] = future.result()
+    return pr_map
 
 
 # ── 분석 엔진 ────────────────────────────────────────────────────────────────
@@ -292,7 +305,7 @@ def _build_prompt(
     risky_files: list[tuple[str, int]],
     fix_prs: list[PR],
 ) -> str:
-    # 클러스터에 속한 PR을 우선 선택, 없으면 전체 fix PR 중 앞 10개로 diff 포함
+    # 클러스터 소속 PR 우선, 없으면 fix PR 상위 10개로 diff 포함
     cluster_pr_numbers = {p.number for c in clusters for p in c.prs}
     diff_candidates = [p for p in fix_prs if p.number in cluster_pr_numbers and p.diff_snippet]
     if not diff_candidates:
@@ -310,9 +323,10 @@ def _build_prompt(
 
     diff_section = ""
     if diff_candidates:
-        diff_blocks = []
-        for p in diff_candidates[:5]:  # 최대 5개 PR diff (토큰 절약)
-            diff_blocks.append(f"### PR #{p.number}: {p.title}\n```diff\n{p.diff_snippet}\n```")
+        diff_blocks = [
+            f"### PR #{p.number}: {p.title}\n```diff\n{p.diff_snippet}\n```"
+            for p in diff_candidates[:5]
+        ]
         diff_section = "\n\n## 주요 fix PR diff (실제 코드 변경)\n" + "\n\n".join(diff_blocks)
 
     cluster_summary = "\n".join(
@@ -558,7 +572,10 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="AI Dev Loop Analyzer")
     parser.add_argument("--limit", type=int, default=300, help="분석할 PR 수 (기본 300)")
-    parser.add_argument("--fetch-files", action="store_true", help="각 fix PR의 파일 목록 수집 (느림)")
+    parser.add_argument("--fetch-files", action="store_true",
+                        help="모든 fix PR의 파일·리뷰·diff 수집 (정밀 분석, 느림)")
+    parser.add_argument("--no-smart-fetch", action="store_true",
+                        help="클러스터 PR 자동 fetch 비활성화 (기본: 활성)")
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--input", help="미리 받은 PR JSON 파일 (gh 생략)")
     parser.add_argument(
@@ -639,16 +656,25 @@ def main():
         print("PR 데이터 수집 중...", file=sys.stderr)
         prs = fetch_prs(args.limit)
 
+    pr_map_by_num = {p.number: p for p in prs}
+
     if args.fetch_files:
-        fix_prs = [p for p in prs if p.is_fix]
-        print(f"fix PR {len(fix_prs)}개 병렬 수집 중 (메타 + diff, workers=8)...", file=sys.stderr)
-        pr_map = {p.number: p for p in fix_prs}
-        with ThreadPoolExecutor(max_workers=8) as pool:
-            futures = {pool.submit(fetch_pr_details, num): num for num in pr_map}
-            for future in as_completed(futures):
-                num = futures[future]
-                pr = pr_map[num]
-                pr.files, pr.review_comments, pr.is_ai_generated, pr.diff_snippet = future.result()
+        # 전체 fix PR 대상 정밀 수집
+        fix_nums = [p.number for p in prs if p.is_fix]
+        details = _parallel_fetch(fix_nums, "fix PR (전체)")
+        for num, (files, comments, is_ai, diff) in details.items():
+            pr = pr_map_by_num[num]
+            pr.files, pr.review_comments, pr.is_ai_generated, pr.diff_snippet = files, comments, is_ai, diff
+            pr.domain = classify_domain(pr.title, pr.files)
+    elif not args.no_smart_fetch:
+        # smart-fetch: 클러스터 감지 후 해당 PR만 fetch (기본 동작)
+        pre_clusters = detect_clusters(prs)
+        cluster_nums = list({p.number for c in pre_clusters for p in c.prs})
+        if cluster_nums:
+            details = _parallel_fetch(cluster_nums, "클러스터 PR (smart-fetch)")
+            for num, (files, comments, is_ai, diff) in details.items():
+                pr = pr_map_by_num[num]
+                pr.files, pr.review_comments, pr.is_ai_generated, pr.diff_snippet = files, comments, is_ai, diff
                 pr.domain = classify_domain(pr.title, pr.files)
 
     clusters = detect_clusters(prs)
