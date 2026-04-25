@@ -51,6 +51,7 @@ def _check_risk_zones(file_paths: list[str]) -> str:
     """
     편집하려는 파일들이 과거 회귀 핫존인지 확인.
     캐시된 분석 데이터를 사용하므로 빠르게 응답.
+    diff 스니펫이 있으면 "마지막으로 이 파일이 고쳐졌을 때 변경 내용"도 함께 표시.
     """
     cache = load_cache()
     if not cache:
@@ -67,7 +68,6 @@ def _check_risk_zones(file_paths: list[str]) -> str:
     safe_files = []
 
     for path in file_paths:
-        # 정확히 일치하거나 경로 suffix 일치
         match = risky.get(path) or next(
             (v for k, v in risky.items() if path.endswith(k) or k.endswith(path)), None
         )
@@ -78,11 +78,24 @@ def _check_risk_zones(file_paths: list[str]) -> str:
             ai_flag = " 🤖 AI 생성 코드에서 특히 취약" if domain in ai_weak else ""
             rule_hint = _get_rule_hint(domain, domain_counts)
 
-            results.append(
+            block = (
                 f"🔴 **{path}**\n"
                 f"   회귀 이력: {count}회 | 도메인: `{domain}`{ai_flag}\n"
                 f"   {rule_hint}"
             )
+
+            # diff 스니펫이 캐시에 있으면 추가
+            last_title = match.get("last_fix_title", "")
+            last_diff = match.get("last_diff_snippet", "")
+            if last_diff:
+                block += (
+                    f"\n\n   📌 마지막 수정 (`{last_title}`):\n"
+                    f"   ```diff\n"
+                    + "\n".join(f"   {l}" for l in last_diff.splitlines()[:15])
+                    + "\n   ```"
+                )
+
+            results.append(block)
         else:
             safe_files.append(path)
 
@@ -138,12 +151,14 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
 
     raw = json.loads(result.stdout)
 
-    # 분석 실행
+    import re
     import analyze as ana
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    _FIX_RE = re.compile(r'^fix|^hotfix|수정|버그|bug\b|regression|revert', re.I)
     prs = []
     for item in raw:
-        import re
-        is_fix = bool(re.match(r'^fix', item["title"], re.I))
+        is_fix = bool(_FIX_RE.search(item["title"]))
         pr = ana.PR(
             number=item["number"], title=item["title"],
             merged_at=item["mergedAt"], additions=item["additions"],
@@ -152,6 +167,24 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
         )
         prs.append(pr)
     prs = sorted(prs, key=lambda p: p.number)
+
+    # smart-fetch: 클러스터 PR만 diff + 파일 수집
+    pre_clusters = ana.detect_clusters(prs)
+    cluster_nums = list({p.number for c in pre_clusters for p in c.prs})
+    pr_map = {p.number: p for p in prs}
+
+    if cluster_nums:
+        def _fetch(num):
+            return num, ana.fetch_pr_details(num)
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            futures = {pool.submit(_fetch, num): num for num in cluster_nums}
+            for future in as_completed(futures):
+                num, (files, comments, is_ai, diff) = future.result()
+                pr = pr_map[num]
+                pr.files, pr.review_comments = files, comments
+                pr.is_ai_generated, pr.diff_snippet = is_ai, diff
+                pr.domain = ana.classify_domain(pr.title, pr.files)
 
     clusters = ana.detect_clusters(prs)
     risky_files = ana.rank_risky_files(prs)
@@ -162,6 +195,13 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
     fix_count = sum(1 for p in prs if p.is_fix)
     fix_rate = round(fix_count / total * 100, 1) if total else 0
 
+    # 파일별 마지막 fix diff 인덱스 구성
+    file_last_diff: dict[str, dict] = {}
+    for pr in sorted(prs, key=lambda p: p.number):
+        if pr.is_fix and pr.diff_snippet:
+            for f in pr.files:
+                file_last_diff[f] = {"title": pr.title, "diff": pr.diff_snippet}
+
     # 캐시 저장
     DATA_DIR.mkdir(exist_ok=True)
     cache = {
@@ -169,7 +209,13 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
         "repo": repo,
         "fix_rate": fix_rate,
         "risky_files": [
-            {"file": f, "fix_count": n, "domain": ana.classify_domain("", [f])}
+            {
+                "file": f,
+                "fix_count": n,
+                "domain": ana.classify_domain("", [f]),
+                "last_fix_title": file_last_diff.get(f, {}).get("title", ""),
+                "last_diff_snippet": file_last_diff.get(f, {}).get("diff", "")[:400],
+            }
             for f, n in risky_files
         ],
         "domain_counts": [{"domain": d, "fix_count": n} for d, n in domain_counts],

@@ -63,6 +63,7 @@ class PR:
     files: list[str] = field(default_factory=list)
     review_comments: list[str] = field(default_factory=list)
     is_ai_generated: bool = False  # Co-Authored-By: Claude 커밋 포함 여부
+    diff_snippet: str = ""
 
 @dataclass
 class Cluster:
@@ -103,6 +104,47 @@ def fetch_prs(limit: int = 300) -> list[PR]:
             domain=domain,
         ))
     return sorted(prs, key=lambda p: p.number)
+
+def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
+    """파일 목록 + 리뷰 코멘트 + AI 생성 여부 + diff snippet을 단일 worker에서 수집."""
+    meta = subprocess.run(
+        ["gh", "pr", "view", str(pr_number),
+         "--json", "files,reviews,comments,commits"],
+        capture_output=True, text=True
+    )
+    files: list[str] = []
+    comments: list[str] = []
+    is_ai = False
+    if meta.returncode == 0:
+        data = json.loads(meta.stdout)
+        files = [f["path"] for f in data.get("files", [])]
+        for r in data.get("reviews", []):
+            body = (r.get("body") or "").strip()
+            if body and len(body) > 10:
+                comments.append(body[:300])
+        for c in data.get("comments", []):
+            body = (c.get("body") or "").strip()
+            if body and len(body) > 10:
+                comments.append(body[:300])
+        is_ai = any(
+            "Co-Authored-By: Claude" in (commit.get("messageBody", "") or "")
+            or "Co-Authored-By: Claude" in (commit.get("messageHeadline", "") or "")
+            for commit in data.get("commits", [])
+        )
+
+    diff_result = subprocess.run(
+        ["gh", "pr", "diff", str(pr_number)],
+        capture_output=True, text=True
+    )
+    diff_snippet = ""
+    if diff_result.returncode == 0 and diff_result.stdout:
+        lines = diff_result.stdout.splitlines()
+        diff_snippet = "\n".join(lines[:100])
+        if len(lines) > 100:
+            diff_snippet += f"\n... ({len(lines) - 100}줄 생략)"
+
+    return files, comments, is_ai, diff_snippet
+
 
 def fetch_pr_files(pr_number: int) -> list[str]:
     result = subprocess.run(
