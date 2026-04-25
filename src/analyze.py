@@ -17,6 +17,15 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Optional
 
+# ── gh CLI 토큰 자동 감지 ────────────────────────────────────────────────────
+def _get_gh_token() -> str:
+    try:
+        result = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else ""
+    except Exception:
+        return ""
+
+
 # ── 도메인 분류 규칙 (파일 경로 기반) ───────────────────────────────────────
 DOMAIN_PATTERNS = [
     # PR 제목 키워드 + 파일 경로 모두 매칭
@@ -204,15 +213,12 @@ def generate_rules(domain_counts: list[tuple[str, int]]) -> list[str]:
     return rules
 
 
-def generate_rules_with_claude(
+def _build_prompt(
     clusters: list[Cluster],
     domain_counts: list[tuple[str, int]],
     risky_files: list[tuple[str, int]],
     fix_prs: list[PR],
-    api_key: str,
-) -> list[str]:
-    """Claude API를 사용해 문맥을 이해한 규칙 생성"""
-
+) -> str:
     fix_summary = "\n".join(
         f"- #{p.number}: {p.title}" + (f" (파일: {', '.join(p.files[:3])})" if p.files else "")
         for p in fix_prs
@@ -220,24 +226,24 @@ def generate_rules_with_claude(
     cluster_summary = "\n".join(
         f"- [{c.domain}] PR #{c.start}~#{c.end} ({c.size}개 연속 fix)"
         for c in clusters
-    )
-    domain_summary = "\n".join(f"- {d}: {n}회" for d, n in domain_counts if n >= 2)
-    file_summary = "\n".join(f"- {f}: {n}회" for f, n in risky_files[:8])
+    ) or "없음"
+    domain_summary = "\n".join(f"- {d}: {n}회" for d, n in domain_counts if n >= 2) or "없음"
+    file_summary = "\n".join(f"- {f}: {n}회" for f, n in risky_files[:8]) or "없음"
 
-    prompt = f"""당신은 소프트웨어 품질 분석 전문가입니다.
+    return f"""당신은 소프트웨어 품질 분석 전문가입니다.
 아래는 한 GitHub 레포지토리의 PR 히스토리 분석 결과입니다.
 
 ## fix PR 목록
 {fix_summary}
 
 ## 회귀 클러스터 (연속 fix 발생 구간)
-{cluster_summary if cluster_summary else "없음"}
+{cluster_summary}
 
 ## 도메인별 fix 횟수
-{domain_summary if domain_summary else "없음"}
+{domain_summary}
 
 ## 고위험 파일 (fix PR에 자주 등장)
-{file_summary if file_summary else "없음"}
+{file_summary}
 
 위 데이터를 바탕으로 AI 코딩 어시스턴트(Claude Code)의 CLAUDE.md에 추가할 규칙을 3~5개 작성해주세요.
 
@@ -250,12 +256,43 @@ def generate_rules_with_claude(
 
 규칙 목록만 출력하세요 (설명 없이):"""
 
+
+def _parse_rules(text: str) -> list[str]:
+    return [line.strip() for line in text.splitlines() if line.strip().startswith("-")]
+
+
+def generate_rules_with_ai(
+    clusters: list[Cluster],
+    domain_counts: list[tuple[str, int]],
+    risky_files: list[tuple[str, int]],
+    fix_prs: list[PR],
+    *,
+    anthropic_key: Optional[str] = None,
+    github_token: Optional[str] = None,
+    model: str = "",
+) -> list[str]:
+    """
+    AI 기반 규칙 생성. 우선순위:
+      1. ANTHROPIC_API_KEY → Anthropic API (claude-haiku)
+      2. GITHUB_TOKEN      → GitHub Models API (OpenAI-compatible, 무료)
+    """
+    prompt = _build_prompt(clusters, domain_counts, risky_files, fix_prs)
+
+    if anthropic_key:
+        return _call_anthropic(prompt, anthropic_key, model or "claude-haiku-4-5-20251001")
+    if github_token:
+        return _call_github_models(prompt, github_token, model or "gpt-4o-mini")
+
+    print("[AI 규칙 생성] API 키 없음 — 템플릿 폴백", file=sys.stderr)
+    return []
+
+
+def _call_anthropic(prompt: str, api_key: str, model: str) -> list[str]:
     payload = json.dumps({
-        "model": "claude-haiku-4-5-20251001",
+        "model": model,
         "max_tokens": 1024,
         "messages": [{"role": "user", "content": prompt}],
     }).encode()
-
     req = urllib.request.Request(
         "https://api.anthropic.com/v1/messages",
         data=payload,
@@ -269,13 +306,34 @@ def generate_rules_with_claude(
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             result = json.loads(resp.read())
-            text = result["content"][0]["text"].strip()
-            return [line.strip() for line in text.splitlines() if line.strip().startswith("-")]
-    except urllib.error.HTTPError as e:
-        print(f"[Claude API 오류] {e.code}: {e.read().decode()}", file=sys.stderr)
-        return []
+            return _parse_rules(result["content"][0]["text"])
     except Exception as e:
-        print(f"[Claude API 오류] {e}", file=sys.stderr)
+        print(f"[Anthropic API 오류] {e}", file=sys.stderr)
+        return []
+
+
+def _call_github_models(prompt: str, token: str, model: str) -> list[str]:
+    """GitHub Models API — GITHUB_TOKEN만으로 GPT-4o·Claude 등 호출 가능"""
+    payload = json.dumps({
+        "model": model,
+        "max_tokens": 1024,
+        "messages": [{"role": "user", "content": prompt}],
+    }).encode()
+    req = urllib.request.Request(
+        "https://models.inference.ai.azure.com/chat/completions",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "content-type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read())
+            return _parse_rules(result["choices"][0]["message"]["content"])
+    except Exception as e:
+        print(f"[GitHub Models API 오류] {e}", file=sys.stderr)
         return []
 
 
@@ -354,9 +412,24 @@ def main():
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--input", help="미리 받은 PR JSON 파일 (gh 생략)")
     parser.add_argument(
-        "--claude-api-key",
+        "--anthropic-key",
         default=os.environ.get("ANTHROPIC_API_KEY"),
-        help="Claude API 키 (ANTHROPIC_API_KEY 환경변수 대체 가능)",
+        help="Anthropic API 키 (ANTHROPIC_API_KEY 환경변수 사용 가능)",
+    )
+    parser.add_argument(
+        "--github-token",
+        default=os.environ.get("GITHUB_TOKEN") or _get_gh_token(),
+        help="GitHub token (GitHub Models API 사용, 기본값: gh CLI 토큰)",
+    )
+    parser.add_argument(
+        "--model",
+        default="",
+        help="모델 오버라이드 (기본: anthropic=claude-haiku / github=gpt-4o-mini)",
+    )
+    parser.add_argument(
+        "--no-ai",
+        action="store_true",
+        help="AI 규칙 생성 비활성화, 템플릿만 사용",
     )
     args = parser.parse_args()
 
@@ -419,14 +492,16 @@ def main():
     risky_files = rank_risky_files(prs)
     domain_counts = rank_risky_domains(prs)
 
-    if args.claude_api_key:
-        print("Claude API로 규칙 생성 중...", file=sys.stderr)
+    if not args.no_ai:
         fix_prs = [p for p in prs if p.is_fix]
-        rules = generate_rules_with_claude(
-            clusters, domain_counts, risky_files, fix_prs, args.claude_api_key
+        print("AI로 규칙 생성 중...", file=sys.stderr)
+        rules = generate_rules_with_ai(
+            clusters, domain_counts, risky_files, fix_prs,
+            anthropic_key=args.anthropic_key,
+            github_token=args.github_token,
+            model=args.model,
         )
         if not rules:
-            print("Claude API 실패, 템플릿 폴백", file=sys.stderr)
             rules = generate_rules(domain_counts)
     else:
         rules = generate_rules(domain_counts)

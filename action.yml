@@ -14,8 +14,17 @@ inputs:
     description: PR 코멘트로 결과 게시
     default: "true"
   github-token:
-    description: GitHub token
+    description: "GitHub token (GitHub Models API로 AI 규칙 생성에 사용 — 별도 API 키 불필요)"
     required: true
+  anthropic-key:
+    description: "Anthropic API 키 (선택사항 — 없으면 GitHub Models로 자동 폴백)"
+    default: ""
+  model:
+    description: "AI 모델 오버라이드 (기본: github=gpt-4o-mini / anthropic=claude-haiku)"
+    default: ""
+  no-ai:
+    description: "AI 규칙 생성 비활성화 (템플릿만 사용)"
+    default: "false"
 
 outputs:
   fix-rate:
@@ -48,10 +57,26 @@ runs:
           FETCH_FILES_FLAG="--fetch-files"
         fi
 
+        NO_AI_FLAG=""
+        if [ "${{ inputs.no-ai }}" = "true" ]; then
+          NO_AI_FLAG="--no-ai"
+        fi
+
+        MODEL_FLAG=""
+        if [ -n "${{ inputs.model }}" ]; then
+          MODEL_FLAG="--model ${{ inputs.model }}"
+        fi
+
+        ANTHROPIC_KEY="${{ inputs.anthropic-key }}"
+
         python3 src/analyze.py \
           --limit ${{ inputs.limit }} \
           --format json \
+          --github-token "${{ inputs.github-token }}" \
+          ${ANTHROPIC_KEY:+--anthropic-key "$ANTHROPIC_KEY"} \
           $FETCH_FILES_FLAG \
+          $NO_AI_FLAG \
+          $MODEL_FLAG \
           > /tmp/adla-report.json
 
         FIX_RATE=$(python3 -c "import json; d=json.load(open('/tmp/adla-report.json')); print(d['summary']['fix_rate'])")

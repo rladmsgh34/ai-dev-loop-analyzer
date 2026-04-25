@@ -121,6 +121,30 @@ Cursor 규칙 파일에도 동일하게 적용 가능합니다.
 
 ---
 
+## AI 규칙 생성
+
+별도 API 키 없이 **GitHub Token만으로** AI 규칙 생성이 가능합니다.
+
+| 방식 | 필요한 것 | 모델 |
+|------|-----------|------|
+| GitHub Models (기본) | `GITHUB_TOKEN` — Actions에서 자동 제공 | gpt-4o-mini |
+| Anthropic API (선택) | `ANTHROPIC_API_KEY` | claude-haiku |
+| 템플릿 폴백 | 없음 | — |
+
+```bash
+# GitHub Models (gh CLI 토큰 자동 사용)
+python3 src/analyze.py
+
+# Anthropic API
+ANTHROPIC_API_KEY=sk-ant-... python3 src/analyze.py
+
+# AI 없이 템플릿만
+python3 src/analyze.py --no-ai
+
+# 모델 지정
+python3 src/analyze.py --model gpt-4o
+```
+
 ## Requirements
 
 - Python 3.10+
