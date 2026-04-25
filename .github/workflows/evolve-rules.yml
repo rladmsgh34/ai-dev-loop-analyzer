@@ -175,11 +175,59 @@ jobs:
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
 
-      - name: Commit history file
+      # ── 3.5단계: diff 패턴 누적 저장 (RAG 임베딩용) ────────────────────────
+      - name: diff 패턴 저장
+        continue-on-error: true
+        run: |
+          python3 - <<'PYEOF'
+          import json, os
+          from pathlib import Path
+          from datetime import datetime
+
+          d = json.load(open('/tmp/report.json'))
+          date = os.environ.get('REPORT_DATE', datetime.now().strftime('%Y-%m-%d'))
+          repo = "rladmsgh34/gwangcheon-shop"
+
+          patterns_path = Path("data/diff-patterns.json")
+          existing = json.loads(patterns_path.read_text()) if patterns_path.exists() else {"patterns": []}
+
+          # 이미 저장된 PR 번호 목록
+          saved_prs = {(e["repo"], e["pr_number"]) for e in existing["patterns"]}
+
+          new_count = 0
+          for pr in d.get("fix_prs_with_diff", []):
+              key = (repo, pr["number"])
+              if key in saved_prs:
+                  continue
+              diff = pr.get("diff_snippet", "").strip()
+              if not diff:
+                  continue
+              existing["patterns"].append({
+                  "repo": repo,
+                  "pr_number": pr["number"],
+                  "title": pr.get("title", ""),
+                  "domain": pr.get("domain", "general"),
+                  "files": pr.get("files", []),
+                  "diff_snippet": diff[:800],  # 800자 제한
+                  "date": date,
+              })
+              new_count += 1
+
+          # 최대 500개 유지 (오래된 것부터 제거)
+          existing["patterns"] = existing["patterns"][-500:]
+          existing["updated_at"] = date
+
+          patterns_path.write_text(json.dumps(existing, ensure_ascii=False, indent=2))
+          print(f"diff 패턴 {new_count}개 추가 (누적 {len(existing['patterns'])}개)")
+          PYEOF
+        env:
+          REPORT_DATE: ${{ steps.analyze.outputs.date }}
+
+      - name: 히스토리 파일 커밋
         run: |
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
-          git add data/rules-history.json
+          git add data/rules-history.json data/diff-patterns.json
           git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }}"
           git push
 
