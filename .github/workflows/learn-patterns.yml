@@ -28,6 +28,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 사전 조건 확인
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "weekly-digest" --color "0075ca" --description "Weekly language pattern digest" 2>/dev/null || true
+          mkdir -p data
+          [ -f data/language-patterns.json ] || echo '{"updated_at":"","total_repos_analyzed":0,"languages":{},"repo_results":[]}' > data/language-patterns.json
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -65,6 +73,7 @@ jobs:
 
       - name: Post weekly digest issue
         if: ${{ inputs.dry_run != 'true' && steps.commit.outputs.changed == 'true' }}
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

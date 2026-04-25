@@ -26,6 +26,15 @@ jobs:
       - name: ai-dev-loop-analyzer 체크아웃
         uses: actions/checkout@v4
 
+      # ── 0단계: 사전 조건 확인 ──────────────────────────────────────────────
+      - name: 사전 조건 확인
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "daily-report" --color "e4e669" --description "일일 자동 분석 리포트" 2>/dev/null || true
+          mkdir -p data
+          touch data/rules-history.json
+
       - name: gwangcheon-shop 체크아웃
         uses: actions/checkout@v4
         with:
@@ -65,6 +74,7 @@ jobs:
 
       # ── 2단계: 이슈 리포트 ─────────────────────────────────────────────────
       - name: 일일 리포트 이슈 게시
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
@@ -132,6 +142,7 @@ jobs:
 
       # ── 3단계: 규칙 히스토리 스냅샷 기록 ─────────────────────────────────────
       - name: 규칙 효과 측정 스냅샷 저장
+        continue-on-error: true
         run: |
           python3 - <<'PYEOF'
           import json, sys
@@ -161,6 +172,7 @@ jobs:
 
       # ── 4단계: CLAUDE.md 패치 ──────────────────────────────────────────────
       - name: CLAUDE.md 패치 생성
+        continue-on-error: true
         id: patch
         run: |
           python3 src/patch_claude_md.py \

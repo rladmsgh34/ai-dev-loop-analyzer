@@ -1,0 +1,58 @@
+name: Lint
+
+on:
+  push:
+    paths:
+      - 'src/**/*.py'
+      - '.github/workflows/*.yml'
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - '.github/workflows/*.yml'
+
+jobs:
+  python-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Python 문법 검사
+        run: |
+          echo "=== src/*.py ==="
+          python3 -m py_compile src/analyze.py
+          python3 -m py_compile src/crawl_repos.py
+          python3 -m py_compile src/patch_claude_md.py
+          python3 -m py_compile src/rule_tracker.py
+          python3 -m py_compile src/mcp_server.py
+          echo "=== src/rag/*.py ==="
+          python3 -m py_compile src/rag/__init__.py
+          python3 -m py_compile src/rag/ingest.py
+          python3 -m py_compile src/rag/query.py
+          echo "모든 Python 파일 문법 검사 통과"
+
+  workflow-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 워크플로우 YAML 문법 검사
+        run: |
+          python3 -c "
+          import yaml, glob, sys
+          files = glob.glob('.github/workflows/*.yml')
+          errors = []
+          for f in files:
+              try:
+                  yaml.safe_load(open(f))
+                  print(f'  OK  {f}')
+              except yaml.YAMLError as e:
+                  errors.append(f'  ERR {f}: {e}')
+          if errors:
+              print('\n'.join(errors))
+              sys.exit(1)
+          print(f'{len(files)}개 워크플로우 파일 모두 통과')
+          "
