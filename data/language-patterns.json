@@ -1,6 +1,167 @@
 {
-  "updated_at": "",
-  "total_repos_analyzed": 0,
-  "languages": {},
-  "repo_results": []
+  "updated_at": "2026-04-25",
+  "total_repos_analyzed": 5,
+  "languages": {
+    "typescript": {
+      "repos_analyzed": 5,
+      "avg_fix_rate": 42.5,
+      "avg_clusters": 11.0,
+      "domain_avg_fix_rates": {
+        "general": 36.4,
+        "auth": 7.0,
+        "test/e2e": 1.0,
+        "payment": 0.5,
+        "ci/cd": 2.2,
+        "security": 0.5
+      },
+      "top_domains": [
+        "general",
+        "auth",
+        "ci/cd",
+        "test/e2e",
+        "payment"
+      ],
+      "sample_repos": [
+        "freeCodeCamp/freeCodeCamp",
+        "openclaw/openclaw",
+        "kamranahmedse/developer-roadmap",
+        "vuejs/vue",
+        "n8n-io/n8n"
+      ]
+    }
+  },
+  "repo_results": [
+    {
+      "owner": "freeCodeCamp",
+      "repo": "freeCodeCamp",
+      "total_prs": 200,
+      "fix_rate": 47.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 87,
+          "fix_rate": 43.5
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 12,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 443543
+    },
+    {
+      "owner": "openclaw",
+      "repo": "openclaw",
+      "total_prs": 200,
+      "fix_rate": 65.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 106,
+          "fix_rate": 53.0
+        },
+        "auth": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 16,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 363826
+    },
+    {
+      "owner": "kamranahmedse",
+      "repo": "developer-roadmap",
+      "total_prs": 200,
+      "fix_rate": 15.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 30,
+          "fix_rate": 15.0
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 353607
+    },
+    {
+      "owner": "vuejs",
+      "repo": "vue",
+      "total_prs": 200,
+      "fix_rate": 36.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 73,
+          "fix_rate": 36.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 209800
+    },
+    {
+      "owner": "n8n-io",
+      "repo": "n8n",
+      "total_prs": 200,
+      "fix_rate": 48.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 68,
+          "fix_rate": 34.0
+        },
+        "auth": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "ci/cd": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 185559
+    }
+  ]
 }
