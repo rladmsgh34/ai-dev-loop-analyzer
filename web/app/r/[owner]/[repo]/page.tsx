@@ -1,4 +1,4 @@
-import { fetchMergedPRs, validateRepo } from '@/lib/github'
+import { fetchMergedPRs, validateRepo, fetchLanguagePatterns } from '@/lib/github'
 import { analyze } from '@/lib/analyzer'
 import ResultClient from './ResultClient'
 
@@ -15,9 +15,10 @@ export default async function ResultPage({ params }: Props) {
   const { owner, repo } = await params
 
   try {
-    const [prs, repoMeta] = await Promise.all([
+    const [prs, repoMeta, langPatterns] = await Promise.all([
       fetchMergedPRs(owner, repo, 200),
       validateRepo(owner, repo),
+      fetchLanguagePatterns(),
     ])
 
     if (prs.length === 0) {
@@ -25,7 +26,20 @@ export default async function ResultPage({ params }: Props) {
     }
 
     const result = analyze(prs)
-    return <ResultClient result={result} owner={owner} repo={repo} meta={repoMeta} />
+    const langStats = langPatterns?.languages[repoMeta.language] ?? null
+    const allFixRates = langPatterns?.repo_results
+      .filter(r => r.language === repoMeta.language)
+      .map(r => r.fix_rate) ?? []
+
+    return (
+      <ResultClient
+        result={result}
+        owner={owner}
+        repo={repo}
+        meta={repoMeta}
+        benchmark={{ langStats, allFixRates, language: repoMeta.language }}
+      />
+    )
   } catch (e) {
     const msg = e instanceof Error ? e.message : '분석 중 오류가 발생했습니다.'
     return <ErrorPage message={msg} owner={owner} repo={repo} />

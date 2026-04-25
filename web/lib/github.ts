@@ -49,7 +49,10 @@ export async function fetchMergedPRs(owner: string, repo: string, limit = 200): 
   return prs.slice(0, limit).sort((a, b) => a.number - b.number)
 }
 
-export async function validateRepo(owner: string, repo: string): Promise<{ stars: number; description: string }> {
+export async function validateRepo(
+  owner: string,
+  repo: string
+): Promise<{ stars: number; description: string; language: string }> {
   const res = await fetch(`${GH_API}/repos/${owner}/${repo}`, {
     headers: {
       Accept: 'application/vnd.github.v3+json',
@@ -58,7 +61,40 @@ export async function validateRepo(owner: string, repo: string): Promise<{ stars
   })
   if (!res.ok) throw new Error('레포지토리를 찾을 수 없습니다.')
   const data: GHRepo = await res.json()
-  return { stars: data.stargazers_count, description: data.description ?? '' }
+  return {
+    stars: data.stargazers_count,
+    description: data.description ?? '',
+    language: (data.language ?? '').toLowerCase(),
+  }
+}
+
+const LANG_PATTERNS_URL =
+  'https://raw.githubusercontent.com/rladmsgh34/ai-dev-loop-analyzer/main/data/language-patterns.json'
+
+export async function fetchLanguagePatterns(): Promise<LanguagePatterns | null> {
+  try {
+    const res = await fetch(LANG_PATTERNS_URL, { next: { revalidate: 3600 } })
+    if (!res.ok) return null
+    return res.json()
+  } catch {
+    return null
+  }
+}
+
+export interface LangStats {
+  repos_analyzed: number
+  avg_fix_rate: number
+  avg_clusters: number
+  domain_avg_fix_rates: Record<string, number>
+  top_domains: string[]
+  sample_repos: string[]
+}
+
+export interface LanguagePatterns {
+  updated_at: string
+  total_repos_analyzed: number
+  languages: Record<string, LangStats>
+  repo_results: { owner: string; repo: string; fix_rate: number; language: string }[]
 }
 
 interface GHPull {
@@ -72,4 +108,5 @@ interface GHPull {
 interface GHRepo {
   stargazers_count: number
   description: string | null
+  language: string | null
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import type { AnalysisResult } from '@/lib/analyzer'
+import type { LangStats } from '@/lib/github'
 import { useState } from 'react'
 
 const DOMAIN_COLORS: Record<string, string> = {
@@ -23,14 +24,21 @@ function DomainBadge({ domain }: { domain: string }) {
   )
 }
 
+interface Benchmark {
+  langStats: LangStats | null
+  allFixRates: number[]
+  language: string
+}
+
 interface Props {
   result: AnalysisResult
   owner: string
   repo: string
-  meta: { stars: number; description: string }
+  meta: { stars: number; description: string; language: string }
+  benchmark: Benchmark
 }
 
-export default function ResultClient({ result, owner, repo, meta }: Props) {
+export default function ResultClient({ result, owner, repo, meta, benchmark }: Props) {
   const [copied, setCopied] = useState(false)
   const [badgeCopied, setBadgeCopied] = useState(false)
   const { summary, clusters, domainCounts, aiVsHuman, trend } = result
@@ -138,6 +146,83 @@ export default function ResultClient({ result, owner, repo, meta }: Props) {
             ))}
           </div>
         </section>
+
+        {/* 업계 벤치마크 */}
+        {benchmark.langStats && benchmark.langStats.repos_analyzed >= 5 && (() => {
+          const { langStats, allFixRates, language } = benchmark
+          const myRate = summary.fixRate
+          const avgRate = langStats.avg_fix_rate
+
+          // 백분위 계산 (낮을수록 좋음 → 내 값보다 높은 레포가 몇 %인지)
+          const sorted = [...allFixRates].sort((a, b) => a - b)
+          const rank = sorted.filter(r => r <= myRate).length
+          const percentile = Math.round((1 - rank / sorted.length) * 100)
+
+          const diff = myRate - avgRate
+          const isBetter = diff < 0
+          const diffText = `${Math.abs(diff).toFixed(1)}%p`
+
+          return (
+            <section className="mb-6 rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+              <h2 className="mb-4 text-sm font-semibold text-gray-300">
+                🏆 업계 벤치마크 — {language} 레포 {langStats.repos_analyzed}개 대비
+              </h2>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="rounded-xl border border-white/5 p-4">
+                  <div className="text-xs text-gray-500 mb-1">이 레포</div>
+                  <div className={`text-2xl font-bold ${myRate > 20 ? 'text-red-400' : myRate > 10 ? 'text-yellow-400' : 'text-green-400'}`}>
+                    {myRate}%
+                  </div>
+                </div>
+                <div className="rounded-xl border border-white/5 p-4">
+                  <div className="text-xs text-gray-500 mb-1">{language} 평균</div>
+                  <div className={`text-2xl font-bold ${avgRate > 20 ? 'text-red-400' : avgRate > 10 ? 'text-yellow-400' : 'text-green-400'}`}>
+                    {avgRate}%
+                  </div>
+                </div>
+              </div>
+
+              {/* 비교 바 */}
+              <div className="mb-3 space-y-2">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="w-16 text-gray-500 shrink-0">이 레포</span>
+                  <div className="flex-1 h-2 rounded-full bg-white/5">
+                    <div
+                      className={`h-2 rounded-full ${myRate > 20 ? 'bg-red-500/70' : myRate > 10 ? 'bg-yellow-500/70' : 'bg-green-500/70'}`}
+                      style={{ width: `${Math.min(myRate * 3, 100)}%` }}
+                    />
+                  </div>
+                  <span className="w-10 text-right text-gray-400">{myRate}%</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="w-16 text-gray-500 shrink-0">{language} 평균</span>
+                  <div className="flex-1 h-2 rounded-full bg-white/5">
+                    <div
+                      className="h-2 rounded-full bg-blue-500/50"
+                      style={{ width: `${Math.min(avgRate * 3, 100)}%` }}
+                    />
+                  </div>
+                  <span className="w-10 text-right text-gray-400">{avgRate}%</span>
+                </div>
+              </div>
+
+              <p className={`text-sm font-medium ${isBetter ? 'text-green-400' : 'text-red-400'}`}>
+                {isBetter
+                  ? `▼ 평균보다 ${diffText} 낮음 — 상위 ${percentile}% 수준`
+                  : `▲ 평균보다 ${diffText} 높음 — 하위 ${100 - percentile}% 수준`}
+              </p>
+
+              {langStats.top_domains.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-600 mb-2">{language} 레포에서 가장 자주 회귀하는 도메인:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {langStats.top_domains.slice(0, 4).map(d => <DomainBadge key={d} domain={d} />)}
+                  </div>
+                </div>
+              )}
+            </section>
+          )
+        })()}
 
         {/* 월별 fix율 트렌드 */}
         {trend.length >= 3 && (
