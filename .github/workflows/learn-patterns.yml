@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -46,14 +47,84 @@ jobs:
 
       - name: Commit updated patterns
         if: ${{ inputs.dry_run != 'true' }}
+        id: commit
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/language-patterns.json
           if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
             echo "변경 없음, 커밋 스킵"
           else
             REPO_COUNT=$(python3 -c "import json; d=json.load(open('data/language-patterns.json')); print(d.get('total_repos_analyzed', 0))")
             git commit -m "data: update language patterns (${REPO_COUNT} repos analyzed)"
             git push origin main
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "repo_count=${REPO_COUNT}" >> $GITHUB_OUTPUT
           fi
+
+      - name: Post weekly digest issue
+        if: ${{ inputs.dry_run != 'true' && steps.commit.outputs.changed == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WEEK=$(date '+%Y-%m-%d')
+          REPO_COUNT=${{ steps.commit.outputs.repo_count }}
+
+          BODY=$(python3 - <<'PYEOF'
+          import json, os
+          from datetime import datetime
+
+          data = json.load(open('data/language-patterns.json'))
+          week = os.environ.get('WEEK', datetime.now().strftime('%Y-%m-%d'))
+          total = data.get('total_repos_analyzed', 0)
+          langs = data.get('languages', {})
+
+          lines = [
+            f"## 📊 Weekly Pattern Digest — {week}",
+            "",
+            f"**분석 레포 누계: {total}개** | 언어: {len(langs)}개",
+            "",
+            "### 언어별 평균 fix율",
+            "",
+            "| 언어 | 평균 fix율 | 분석 레포 | 취약 도메인 Top 3 |",
+            "|------|-----------|----------|------------------|",
+          ]
+
+          for lang, stats in sorted(langs.items(), key=lambda x: -x[1].get('avg_fix_rate', 0)):
+            top = ', '.join(stats.get('top_domains', [])[:3])
+            lines.append(f"| {lang} | {stats['avg_fix_rate']}% | {stats['repos_analyzed']}개 | {top} |")
+
+          lines += [
+            "",
+            "### 전체 도메인 위험 순위",
+            "",
+          ]
+
+          domain_all: dict[str, list[float]] = {}
+          for stats in langs.values():
+            for d, r in stats.get('domain_avg_fix_rates', {}).items():
+              domain_all.setdefault(d, []).append(r)
+          domain_avg = sorted(
+            {d: sum(v)/len(v) for d, v in domain_all.items()}.items(),
+            key=lambda x: -x[1]
+          )[:5]
+          for d, r in domain_avg:
+            lines.append(f"- `{d}`: {r:.1f}%")
+
+          lines += [
+            "",
+            "---",
+            f"[📈 데모 사이트](https://ai-dev-loop-analyzer.rladmsgh34.org/languages) · "
+            f"[📦 데이터](https://github.com/rladmsgh34/ai-dev-loop-analyzer/blob/main/data/language-patterns.json)",
+          ]
+
+          print('\n'.join(lines))
+          PYEOF
+          )
+
+          gh issue create \
+            --repo rladmsgh34/ai-dev-loop-analyzer \
+            --title "Weekly Digest — $(date '+%Y-%m-%d') (${REPO_COUNT} repos)" \
+            --label "weekly-digest" \
+            --body "$BODY"

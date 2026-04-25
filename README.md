@@ -1,9 +1,31 @@
 # AI Dev Loop Analyzer
 
+[![patterns learned](https://ai-dev-loop-analyzer.rladmsgh34.org/api/badge/stats)](https://ai-dev-loop-analyzer.rladmsgh34.org/languages)
+
 > PR 히스토리에서 회귀 패턴을 감지하고, AI 코딩 어시스턴트(Claude Code 등)의 규칙을 자동으로 제안합니다.
 
 AI-assisted development에서 같은 실수가 반복되는 이유는 **과거 데이터가 피드백 루프에 연결되지 않기** 때문입니다.  
 이 도구는 PR 히스토리를 분석해 위험한 도메인과 회귀 클러스터를 감지하고, `CLAUDE.md` 또는 `.github/copilot-instructions.md`에 추가할 규칙을 자동 생성합니다.
+
+---
+
+## 왜 단순 키워드 매칭이 아닌 RAG인가
+
+초기 버전은 "fix PR 비율 높음 → ci/cd 규칙 추가" 같은 템플릿 기반 규칙을 생성했습니다. 이 방식의 한계는 **컨텍스트 부재**입니다. "TypeScript + Next.js + Docker" 스택의 ci/cd 회귀는 "Python + FastAPI + GitHub Actions" 스택의 ci/cd 회귀와 원인이 다릅니다.
+
+현재 시스템은 **생태계 지식 DB**로 진화했습니다:
+
+```
+8개 언어 × 30개 상위 레포 = 240개 레포 크롤링 (매주 자동)
+        ↓
+언어/도메인별 회귀 패턴 → ChromaDB 벡터 임베딩
+        ↓
+"TypeScript ci/cd 회귀" 쿼리 시 → 가장 유사한 실제 사례 검색
+        ↓
+Claude로 데이터 기반 정밀 규칙 생성
+```
+
+단순 통계가 아니라 "TypeScript 레포 상위 30개에서 ci/cd 도메인 평균 fix율 18%, 가장 흔한 트리거: Docker 이미지 태그 변경·musl 바이너리 누락" 같은 구체적 패턴을 컨텍스트로 주입합니다. **데이터가 쌓일수록 규칙 품질이 자동으로 향상됩니다.**
 
 ---
 
@@ -16,7 +38,9 @@ fix PR 클러스터 감지 (연속으로 같은 도메인에서 버그 발생)
         ↓
 고위험 도메인·파일 순위 산출
         ↓
-CLAUDE.md / AI 규칙 추가 제안 생성
+ChromaDB에서 유사 언어/도메인 패턴 검색 (RAG)
+        ↓
+Claude로 데이터 기반 CLAUDE.md 규칙 생성
         ↓
 PR 코멘트 or 주간 이슈로 자동 게시
 ```
