@@ -66,6 +66,7 @@ jobs:
       - name: 일일 리포트 이슈 게시
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT_DATE: ${{ steps.analyze.outputs.date }}
         run: |
           python3 - <<'PYEOF'
           import json, subprocess, os
@@ -127,8 +128,6 @@ jobs:
             subprocess.run(['gh', 'issue', 'create', '--title', title,
                             '--body', body, '--label', 'daily-report'], check=True)
           PYEOF
-        env:
-          REPORT_DATE: ${{ steps.analyze.outputs.date }}
 
       # ── 3단계: 규칙 히스토리 스냅샷 기록 ─────────────────────────────────────
       - name: 규칙 효과 측정 스냅샷 저장
