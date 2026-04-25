@@ -1,0 +1,118 @@
+name: AI Dev Loop Analyzer
+description: >
+  PR 히스토리에서 회귀 클러스터와 고위험 도메인을 감지하고
+  CLAUDE.md / AI assistant 규칙 추가를 자동 제안합니다.
+
+inputs:
+  limit:
+    description: 분석할 최근 PR 수
+    default: "200"
+  fetch-files:
+    description: fix PR의 변경 파일 목록 수집 (더 정확하지만 느림)
+    default: "false"
+  post-comment:
+    description: PR 코멘트로 결과 게시
+    default: "true"
+  github-token:
+    description: GitHub token
+    required: true
+
+outputs:
+  fix-rate:
+    description: fix PR 비율 (%)
+    value: ${{ steps.analyze.outputs.fix_rate }}
+  cluster-count:
+    description: 감지된 회귀 클러스터 수
+    value: ${{ steps.analyze.outputs.cluster_count }}
+  report:
+    description: 분석 리포트 (JSON)
+    value: ${{ steps.analyze.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - name: Python 환경 확인
+      shell: bash
+      run: python3 --version
+
+    - name: PR 데이터 수집 및 분석
+      id: analyze
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        cd ${{ github.action_path }}
+
+        FETCH_FILES_FLAG=""
+        if [ "${{ inputs.fetch-files }}" = "true" ]; then
+          FETCH_FILES_FLAG="--fetch-files"
+        fi
+
+        python3 src/analyze.py \
+          --limit ${{ inputs.limit }} \
+          --format json \
+          $FETCH_FILES_FLAG \
+          > /tmp/adla-report.json
+
+        FIX_RATE=$(python3 -c "import json; d=json.load(open('/tmp/adla-report.json')); print(d['summary']['fix_rate'])")
+        CLUSTER_COUNT=$(python3 -c "import json; d=json.load(open('/tmp/adla-report.json')); print(len(d['clusters']))")
+        REPORT=$(cat /tmp/adla-report.json)
+
+        echo "fix_rate=$FIX_RATE" >> $GITHUB_OUTPUT
+        echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
+        echo "report<<EOF" >> $GITHUB_OUTPUT
+        echo "$REPORT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: 리포트 콘솔 출력
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        python3 src/analyze.py --input /tmp/adla-report.json --format text 2>/dev/null || \
+        python3 -c "
+        import json
+        d = json.load(open('/tmp/adla-report.json'))
+        print('Fix rate:', d['summary']['fix_rate'], '%')
+        print('Clusters:', len(d['clusters']))
+        for r in d['claude_md_suggestions']:
+            print(' -', r)
+        "
+
+    - name: PR 코멘트 게시
+      if: inputs.post-comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        python3 -c "
+        import json, subprocess, os
+
+        d = json.load(open('/tmp/adla-report.json'))
+        s = d['summary']
+        clusters = d['clusters']
+        rules = d['claude_md_suggestions']
+
+        lines = []
+        lines.append('## 🔍 AI Dev Loop Analyzer')
+        lines.append('')
+        lines.append(f\"**총 PR** {s['total_prs']}개 | **fix PR** {s['fix_prs']}개 ({s['fix_rate']}%)\")
+        lines.append('')
+
+        if clusters:
+            lines.append('### 📍 회귀 클러스터')
+            lines.append('| 도메인 | PR 범위 | 크기 |')
+            lines.append('|--------|---------|------|')
+            for c in clusters:
+                lines.append(f\"| {c['domain']} | #{c['start']} → #{c['end']} | {c['size']}개 |\")
+            lines.append('')
+
+        if rules:
+            lines.append('### 💡 CLAUDE.md 규칙 추가 제안')
+            for r in rules:
+                lines.append(r)
+
+        body = '\n'.join(lines)
+        pr_number = os.environ.get('PR_NUMBER', '')
+        if pr_number:
+            subprocess.run(['gh', 'pr', 'comment', pr_number, '--body', body], check=True)
+        " PR_NUMBER=${{ github.event.pull_request.number }}

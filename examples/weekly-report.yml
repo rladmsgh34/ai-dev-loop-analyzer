@@ -1,0 +1,58 @@
+name: Weekly PR Quality Report
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'   # 매주 월요일 오전 9시
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PR 품질 분석
+        id: analysis
+        uses: your-username/ai-dev-loop-analyzer@main
+        with:
+          limit: "300"
+          fetch-files: "true"
+          post-comment: "false"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 이슈로 주간 리포트 게시
+        if: steps.analysis.outputs.cluster-count > 0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPORT='${{ steps.analysis.outputs.report }}'
+          python3 -c "
+          import json, subprocess, datetime
+
+          d = json.loads('$REPORT'.replace(\"'\", '\"'))
+          today = datetime.date.today().isoformat()
+          title = f'[주간 품질 리포트] {today} — fix율 {d[\"summary\"][\"fix_rate\"]}%'
+
+          body_lines = ['## AI Dev Loop Analyzer 주간 리포트', '']
+          body_lines.append(f'fix PR 비율이 **{d[\"summary\"][\"fix_rate\"]}%** 입니다.')
+          body_lines.append('')
+          if d['clusters']:
+              body_lines.append('### 이번 주 회귀 클러스터')
+              for c in d['clusters']:
+                  body_lines.append(f'- [{c[\"domain\"]}] #{c[\"start\"]} → #{c[\"end\"]}')
+          if d['claude_md_suggestions']:
+              body_lines.append('')
+              body_lines.append('### CLAUDE.md 추가 권장 규칙')
+              for r in d['claude_md_suggestions']:
+                  body_lines.append(r)
+
+          subprocess.run(
+              ['gh', 'issue', 'create', '--title', title, '--body', '\n'.join(body_lines)],
+              check=True
+          )
+          "
