@@ -11,6 +11,7 @@
 
 import json
 import os
+import re
 import sys
 import time
 import argparse
@@ -116,7 +117,7 @@ def fetch_merged_prs(owner: str, repo: str, limit: int, token: str) -> list[PR]:
         merged = [p for p in data if p.get("merged_at")]
         for p in merged:
             title = p["title"]
-            is_fix = bool(__import__("re").match(r"^fix", title, __import__("re").I))
+            is_fix = bool(re.match(r"^(fix|hotfix|bugfix|revert|regression|bug)\b", title, re.I))
             domain = classify_domain(title, [])
             prs.append(PR(
                 number=p["number"],

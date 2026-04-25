@@ -9,6 +9,7 @@ CLAUDE.md 패치 생성기.
 import json
 import re
 import sys
+from pathlib import Path
 
 SECTION_HEADER = "## 🤖 AI Dev Loop 자동 규칙"
 SECTION_FOOTER = "<!-- /ai-dev-loop -->"
