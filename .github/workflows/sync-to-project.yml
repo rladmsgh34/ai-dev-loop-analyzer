@@ -5,10 +5,14 @@ on:
     workflows: ["Daily PR Pattern Review"]
     types: [completed]
   workflow_dispatch:
+    inputs:
+      force:
+        description: "강제 실행"
+        default: "true"
 
 jobs:
   sync:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event.inputs.force == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
