@@ -47,6 +47,20 @@ PR 코멘트 or 주간 이슈로 자동 게시
 
 ---
 
+## 자동화 스케줄
+
+세 개의 GitHub Actions 워크플로우가 자동으로 실행됩니다.
+
+| 워크플로우 | 스케줄 | 역할 |
+|-----------|--------|------|
+| `evolve-rules.yml` | 매일 KST 10:00 | gwangcheon-shop PR 분석 → 일일 이슈 리포트 → CLAUDE.md 패치 PR |
+| `learn-patterns.yml` | 매주 일요일 KST 11:00 | 8개 언어 × 30개 레포 크롤링 → `data/language-patterns.json` 누적 |
+| `lint.yml` | push / PR | `src/**/*.py` 문법 검사 + `.github/workflows/*.yml` YAML 검증 |
+
+워크플로우는 모두 `workflow_dispatch`로 수동 실행도 가능합니다.
+
+---
+
 ## 실제 데이터 예시
 
 165개 PR 분석 결과 (Next.js + Prisma + Docker 커머스 프로젝트):
@@ -202,6 +216,16 @@ jobs:
 | test/e2e | e2e, playwright, vitest, coverage |
 | config | next.config, env.ts, tsconfig |
 
+### fix PR 감지 패턴
+
+PR 제목이 아래 접두사로 시작하면 fix PR로 분류됩니다.
+
+```
+fix / hotfix / bugfix / revert / regression / bug
+```
+
+예: `fix: 장바구니 수량 버그`, `revert: 결제 로직 롤백`, `regression: 로그인 세션 만료 이슈`
+
 ---
 
 ## AI 어시스턴트 통합
@@ -246,6 +270,14 @@ python3 src/analyze.py --model gpt-4o
 - Python 3.10+
 - `gh` CLI (인증된 상태)
 - 표준 라이브러리만 사용 (추가 패키지 불필요)
+
+RAG 기능 사용 시 추가 설치:
+
+```bash
+pip install chromadb sentence-transformers
+```
+
+RAG 없이도 GitHub Models / Anthropic API / 템플릿 폴백으로 규칙 생성이 가능합니다.
 
 ---
 
