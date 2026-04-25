@@ -44,6 +44,78 @@ PR 코멘트 or 주간 이슈로 자동 게시
 
 ---
 
+## 데모 사이트
+
+**🌐 [ai-dev-loop-analyzer.rladmsgh34.org](https://ai-dev-loop-analyzer.rladmsgh34.org)**
+
+GitHub 레포 URL을 입력하면 즉시 분석 결과를 확인할 수 있습니다. 별도 설치 없이 브라우저에서 바로 사용 가능합니다.
+
+- **단일 분석**: `https://ai-dev-loop-analyzer.rladmsgh34.org/r/vercel/next.js`
+- **레포 비교**: `https://ai-dev-loop-analyzer.rladmsgh34.org/compare`
+- **REST API**: `https://ai-dev-loop-analyzer.rladmsgh34.org/api/analyze?owner=vercel&repo=next.js`
+
+---
+
+## README 배지
+
+분석 결과를 배지로 README에 추가할 수 있습니다.
+
+```markdown
+[![AI fix rate](https://ai-dev-loop-analyzer.rladmsgh34.org/api/badge/owner/repo)](https://ai-dev-loop-analyzer.rladmsgh34.org/r/owner/repo)
+```
+
+fix율에 따라 색상이 자동으로 변경됩니다 (녹색 ≤10% / 노란색 ≤20% / 빨간색 >20%).
+
+---
+
+## PR 자동 경고 코멘트
+
+PR에 회귀 다발 도메인 파일이 포함되면 자동으로 경고 코멘트를 달아주는 GitHub Action입니다.
+
+```yaml
+# .github/workflows/risk-check.yml
+name: PR Risk Check
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  risk-check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rladmsgh34/ai-dev-loop-analyzer/.github/actions/check-risk-zones@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: '10'   # fix율 10% 이상 도메인에 경고
+```
+
+자세한 예시는 `examples/pr-risk-check.yml` 참고.
+
+---
+
+## MCP 서버
+
+Claude Code에 연결하면 코드 작성 시점에 실시간으로 위험 도메인을 경고합니다.
+
+```bash
+# 설치
+pip install mcp
+claude mcp add ai-dev-loop-analyzer -- python3 /path/to/src/mcp_server.py
+```
+
+사용 가능한 툴:
+| 툴 | 설명 |
+|----|------|
+| `check_risk_zones` | 편집하려는 파일이 회귀 다발 도메인인지 사전 경고 |
+| `analyze_pr_history` | 레포 전체 분석 실행 |
+| `get_active_rules` | 현재 적용 중인 규칙 조회 |
+
+---
+
 ## 사용법
 
 ### CLI (로컬)
