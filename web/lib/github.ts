@@ -1,4 +1,4 @@
-import { classifyDomain, type PR } from './analyzer'
+import { classifyDomain, isFixPR, type PR } from './analyzer'
 
 const GH_API = 'https://api.github.com'
 
@@ -29,7 +29,7 @@ export async function fetchMergedPRs(owner: string, repo: string, limit = 200): 
 
     for (const pr of merged) {
       const title = pr.title
-      const isFix = /^fix/i.test(title)
+      const isFix = isFixPR(title)
       prs.push({
         number: pr.number,
         title,

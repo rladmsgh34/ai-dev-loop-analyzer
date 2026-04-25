@@ -33,7 +33,7 @@ interface Props {
 export default function ResultClient({ result, owner, repo, meta }: Props) {
   const [copied, setCopied] = useState(false)
   const [badgeCopied, setBadgeCopied] = useState(false)
-  const { summary, clusters, domainCounts, aiVsHuman } = result
+  const { summary, clusters, domainCounts, aiVsHuman, trend } = result
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
   const badgeUrl = `https://ai-dev-loop-analyzer.rladmsgh34.org/api/badge/${owner}/${repo}`
   const badgeMarkdown = `[![AI fix rate](${badgeUrl})](https://ai-dev-loop-analyzer.rladmsgh34.org/r/${owner}/${repo})`
@@ -138,6 +138,54 @@ export default function ResultClient({ result, owner, repo, meta }: Props) {
             ))}
           </div>
         </section>
+
+        {/* 월별 fix율 트렌드 */}
+        {trend.length >= 3 && (
+          <section className="mb-6 rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+            <h2 className="mb-4 text-sm font-semibold text-gray-300">📈 월별 fix율 트렌드</h2>
+            <div className="flex items-end gap-1 h-20">
+              {trend.map(t => {
+                const maxRate = Math.max(...trend.map(x => x.fixRate), 1)
+                const height = Math.max((t.fixRate / maxRate) * 100, 4)
+                const color =
+                  t.fixRate > 20 ? 'bg-red-500/60' :
+                  t.fixRate > 10 ? 'bg-yellow-500/60' : 'bg-green-500/60'
+                return (
+                  <div key={t.month} className="flex-1 flex flex-col items-center gap-1 group relative">
+                    <div
+                      className={`w-full rounded-sm ${color} transition-all`}
+                      style={{ height: `${height}%` }}
+                    />
+                    {/* 툴팁 */}
+                    <div className="absolute bottom-full mb-1 hidden group-hover:block z-10 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-gray-200 shadow">
+                      {t.month}<br />{t.fixRate}% ({t.fixCount}/{t.total})
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="mt-2 flex justify-between text-xs text-gray-700">
+              <span>{trend[0]?.month}</span>
+              <span>{trend.at(-1)?.month}</span>
+            </div>
+            {/* 트렌드 방향 */}
+            {(() => {
+              const half = Math.floor(trend.length / 2)
+              const firstHalf = trend.slice(0, half)
+              const secondHalf = trend.slice(-half)
+              const avg = (pts: typeof trend) => pts.reduce((s, p) => s + p.fixRate, 0) / pts.length
+              const diff = avg(secondHalf) - avg(firstHalf)
+              if (Math.abs(diff) < 1) return null
+              return (
+                <p className={`mt-2 text-xs ${diff < 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {diff < 0
+                    ? `▼ 전반 대비 fix율 ${Math.abs(diff).toFixed(1)}%p 감소 — 개선 추세`
+                    : `▲ 전반 대비 fix율 ${diff.toFixed(1)}%p 증가 — 주의 필요`}
+                </p>
+              )
+            })()}
+          </section>
+        )}
 
         {/* AI vs 사람 */}
         {(aiVsHuman.ai.total > 0 || aiVsHuman.human.total > 0) && (

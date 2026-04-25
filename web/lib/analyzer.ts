@@ -18,6 +18,13 @@ export interface Cluster {
   end: number
 }
 
+export interface TrendPoint {
+  month: string   // "2024-01"
+  total: number
+  fixCount: number
+  fixRate: number
+}
+
 export interface AnalysisResult {
   summary: { totalPRs: number; fixPRs: number; fixRate: number }
   clusters: Cluster[]
@@ -27,6 +34,7 @@ export interface AnalysisResult {
     ai: { total: number; fixCount: number; fixRate: number; weakDomains: { domain: string; count: number }[] }
     human: { total: number; fixCount: number; fixRate: number }
   }
+  trend: TrendPoint[]
 }
 
 const DOMAIN_PATTERNS: [string, RegExp][] = [
@@ -39,6 +47,10 @@ const DOMAIN_PATTERNS: [string, RegExp][] = [
   ['test/e2e',     /\.test\.|\.spec\.|e2e|playwright|vitest|coverage/i],
   ['config',       /next\.config|env\.ts|tsconfig|biome|tailwind|npmrc/i],
 ]
+
+export function isFixPR(title: string): boolean {
+  return /^(fix|hotfix|bugfix|revert|regression|bug)\b/i.test(title)
+}
 
 export function classifyDomain(title: string, files: string[] = []): string {
   const combined = [title, ...files].join(' ')
@@ -72,6 +84,25 @@ export function detectClusters(prs: PR[], windowSize = 8, threshold = 2): Cluste
   return clusters
 }
 
+function analyzeTrend(prs: PR[]): TrendPoint[] {
+  const byMonth: Record<string, { total: number; fix: number }> = {}
+  for (const pr of prs) {
+    const month = pr.mergedAt.slice(0, 7)
+    if (!byMonth[month]) byMonth[month] = { total: 0, fix: 0 }
+    byMonth[month].total++
+    if (pr.isFix) byMonth[month].fix++
+  }
+  return Object.entries(byMonth)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, { total, fix }]) => ({
+      month,
+      total,
+      fixCount: fix,
+      fixRate: total > 0 ? Math.round((fix / total) * 1000) / 10 : 0,
+    }))
+    .slice(-12)
+}
+
 export function analyze(prs: PR[]): AnalysisResult {
   const fixPRs = prs.filter(p => p.isFix)
   const fixRate = prs.length ? Math.round((fixPRs.length / prs.length) * 1000) / 10 : 0
@@ -96,6 +127,7 @@ export function analyze(prs: PR[]): AnalysisResult {
     clusters,
     riskyFiles: [],
     domainCounts,
+    trend: analyzeTrend(prs),
     aiVsHuman: {
       ai: {
         total: aiPRs.length,
