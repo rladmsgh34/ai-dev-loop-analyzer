@@ -15,6 +15,7 @@ import urllib.request
 import urllib.error
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 # ── gh CLI 토큰 자동 감지 ────────────────────────────────────────────────────
@@ -345,12 +346,38 @@ def generate_rules_with_ai(
     anthropic_key: Optional[str] = None,
     github_token: Optional[str] = None,
     model: str = "",
+    language: str = "",
 ) -> list[str]:
     """
     AI 기반 규칙 생성. 우선순위:
-      1. ANTHROPIC_API_KEY → Anthropic API (claude-haiku)
-      2. GITHUB_TOKEN      → GitHub Models API (OpenAI-compatible, 무료)
+      1. RAG (ChromaDB) + Claude Code CLI  — 가장 정밀
+      2. ANTHROPIC_API_KEY → Anthropic API
+      3. GITHUB_TOKEN      → GitHub Models API (무료)
+      4. 템플릿 폴백
     """
+    # RAG 시도
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(Path(__file__).parent))
+        from rag.query import RagEngine
+        from rag.ingest import CHROMA_DIR
+        if CHROMA_DIR.exists():
+            engine = RagEngine()
+            total_prs = len(fix_prs) + sum(c.size for c in clusters)
+            fix_rate = round(len(fix_prs) / total_prs * 100, 1) if total_prs else 0
+            top_domain = domain_counts[0][0] if domain_counts else "general"
+            rules = engine.generate_rules(
+                domain=top_domain,
+                fix_rate=fix_rate,
+                language=language,
+                extra_context=f"회귀 클러스터 {len(clusters)}개, 위험 파일 {len(risky_files)}개",
+            )
+            if rules:
+                print(f"[RAG] {len(rules)}개 규칙 생성 완료", file=sys.stderr)
+                return rules
+    except Exception as e:
+        print(f"[RAG] 폴백: {e}", file=sys.stderr)
+
     prompt = _build_prompt(clusters, domain_counts, risky_files, fix_prs)
 
     if anthropic_key:
