@@ -4,6 +4,7 @@ __pycache__/
 .env
 *.json
 !package.json
+!data/language-patterns.json
+!data/rules-history.json
 .DS_Store
-data/analysis-cache.json
 data/chroma/
