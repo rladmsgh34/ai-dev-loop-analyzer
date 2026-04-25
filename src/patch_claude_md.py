@@ -113,3 +113,23 @@ if __name__ == "__main__":
         with open(args.claude_md, "w") as f:
             f.write(patched)
         print("CLAUDE.md 업데이트 완료")
+
+        # 규칙 히스토리 등록
+        try:
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent))
+            from rule_tracker import record_new_rules
+            domain_rates = {
+                dc["domain"]: dc["fix_count"]
+                for dc in report.get("domain_counts", [])
+            }
+            new_ids = record_new_rules(
+                added,
+                domain_rates,
+                report["summary"]["fix_rate"],
+                args.date,
+            )
+            if new_ids:
+                print(f"규칙 히스토리 등록: {len(new_ids)}개 ({', '.join(new_ids)})")
+        except Exception as e:
+            print(f"[히스토리 등록 스킵] {e}", file=sys.stderr)

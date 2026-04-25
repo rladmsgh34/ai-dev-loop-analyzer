@@ -130,7 +130,36 @@ jobs:
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
 
-      # ── 3단계: CLAUDE.md 패치 ──────────────────────────────────────────────
+      # ── 3단계: 규칙 히스토리 스냅샷 기록 ─────────────────────────────────────
+      - name: 규칙 효과 측정 스냅샷 저장
+        run: |
+          python3 - <<'PYEOF'
+          import json, sys
+          sys.path.insert(0, 'src')
+          from rule_tracker import record_snapshot
+          import os
+
+          d = json.load(open('/tmp/report.json'))
+          date = os.environ.get('REPORT_DATE', '')
+          domain_rates = {
+              dc['domain']: dc['fix_count']
+              for dc in d.get('domain_counts', [])
+          }
+          record_snapshot(domain_rates, d['summary']['fix_rate'], date)
+          print(f"스냅샷 기록 완료: {date}")
+          PYEOF
+        env:
+          REPORT_DATE: ${{ steps.analyze.outputs.date }}
+
+      - name: 히스토리 파일 커밋
+        run: |
+          git config user.name "ai-dev-loop-analyzer[bot]"
+          git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
+          git add data/rules-history.json
+          git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }}"
+          git push
+
+      # ── 4단계: CLAUDE.md 패치 ──────────────────────────────────────────────
       - name: CLAUDE.md 패치 생성
         id: patch
         run: |

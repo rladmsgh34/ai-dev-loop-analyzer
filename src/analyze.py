@@ -61,6 +61,7 @@ class PR:
     domain: str
     files: list[str] = field(default_factory=list)
     review_comments: list[str] = field(default_factory=list)
+    is_ai_generated: bool = False  # Co-Authored-By: Claude 커밋 포함 여부
 
 @dataclass
 class Cluster:
@@ -111,6 +112,23 @@ def fetch_pr_files(pr_number: int) -> list[str]:
         return []
     data = json.loads(result.stdout)
     return [f["path"] for f in data.get("files", [])]
+
+
+def fetch_pr_is_ai_generated(pr_number: int) -> bool:
+    """PR의 커밋에 'Co-Authored-By: Claude' 태그가 있으면 AI 생성 PR로 판정"""
+    result = subprocess.run(
+        ["gh", "pr", "view", str(pr_number), "--json", "commits"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return False
+    data = json.loads(result.stdout)
+    for commit in data.get("commits", []):
+        body = commit.get("messageBody", "") or ""
+        headline = commit.get("messageHeadline", "") or ""
+        if "Co-Authored-By: Claude" in body or "Co-Authored-By: Claude" in headline:
+            return True
+    return False
 
 
 def fetch_pr_review_comments(pr_number: int) -> list[str]:
@@ -182,6 +200,36 @@ def rank_risky_files(prs: list[PR]) -> list[tuple[str, int]]:
 def rank_risky_domains(prs: list[PR]) -> list[tuple[str, int]]:
     counter = Counter(p.domain for p in prs if p.is_fix)
     return counter.most_common()
+
+
+def analyze_ai_vs_human(prs: list[PR]) -> dict:
+    """AI 생성 PR vs 사람 PR의 fix 패턴 비교"""
+    ai_prs = [p for p in prs if p.is_ai_generated]
+    human_prs = [p for p in prs if not p.is_ai_generated]
+
+    def fix_rate(lst: list[PR]) -> float:
+        if not lst:
+            return 0.0
+        return round(sum(1 for p in lst if p.is_fix) / len(lst) * 100, 1)
+
+    def domain_breakdown(lst: list[PR]) -> list[dict]:
+        counter = Counter(p.domain for p in lst if p.is_fix)
+        return [{"domain": d, "count": n} for d, n in counter.most_common()]
+
+    return {
+        "ai": {
+            "total": len(ai_prs),
+            "fix_count": sum(1 for p in ai_prs if p.is_fix),
+            "fix_rate": fix_rate(ai_prs),
+            "weak_domains": domain_breakdown(ai_prs),
+        },
+        "human": {
+            "total": len(human_prs),
+            "fix_count": sum(1 for p in human_prs if p.is_fix),
+            "fix_rate": fix_rate(human_prs),
+            "weak_domains": domain_breakdown(human_prs),
+        },
+    }
 
 
 # ── CLAUDE.md 규칙 생성 ──────────────────────────────────────────────────────
@@ -377,6 +425,8 @@ def print_report(
     fix_count = sum(1 for p in prs if p.is_fix)
     fix_rate = fix_count / total * 100 if total else 0
 
+    ai_stats = analyze_ai_vs_human(prs)
+
     if output_format == "json":
         print(json.dumps({
             "summary": {"total_prs": total, "fix_prs": fix_count, "fix_rate": round(fix_rate, 1)},
@@ -384,6 +434,7 @@ def print_report(
             "risky_files": [{"file": f, "fix_count": n} for f, n in risky_files],
             "domain_counts": [{"domain": d, "fix_count": n} for d, n in domain_counts],
             "claude_md_suggestions": rules,
+            "ai_vs_human": ai_stats,
         }, ensure_ascii=False, indent=2))
         return
 
@@ -418,6 +469,20 @@ def print_report(
         for f, count in risky_files:
             print(f"  {count:2}회  {f}")
 
+    # AI vs 사람 분리 (fetch-files 모드에서만 의미 있음)
+    if ai_stats["ai"]["total"] > 0 or ai_stats["human"]["total"] > 0:
+        print("\n" + "─" * 60)
+        print("  🤖 AI 생성 PR vs 사람 PR 비교")
+        print("─" * 60)
+        ai = ai_stats["ai"]
+        hu = ai_stats["human"]
+        print(f"  AI 생성   {ai['total']:3}개  fix {ai['fix_count']}개 ({ai['fix_rate']}%)")
+        print(f"  사람 작성 {hu['total']:3}개  fix {hu['fix_count']}개 ({hu['fix_rate']}%)")
+        if ai["weak_domains"]:
+            print(f"\n  AI가 특히 약한 도메인:")
+            for d in ai["weak_domains"][:3]:
+                print(f"    {d['domain']:15} {d['count']}회")
+
     print("\n" + "─" * 60)
     print("  💡 CLAUDE.md 추가 규칙 제안")
     print("─" * 60)
@@ -426,6 +491,16 @@ def print_report(
             print(f"  {rule}")
     else:
         print("  제안 없음 (패턴 충분하지 않음)")
+
+    # 규칙 효과 측정
+    try:
+        from rule_tracker import effectiveness_summary
+        eff = effectiveness_summary()
+        if "아직" not in eff:
+            print("\n" + "─" * 60)
+            print(eff)
+    except Exception:
+        pass
 
     print("\n" + "═" * 60 + "\n")
 
@@ -509,10 +584,11 @@ def main():
 
     if args.fetch_files:
         fix_prs = [p for p in prs if p.is_fix]
-        print(f"fix PR {len(fix_prs)}개 파일 + 리뷰 코멘트 수집 중...", file=sys.stderr)
+        print(f"fix PR {len(fix_prs)}개 파일 + 리뷰 코멘트 + AI 여부 수집 중...", file=sys.stderr)
         for pr in fix_prs:
             pr.files = fetch_pr_files(pr.number)
             pr.review_comments = fetch_pr_review_comments(pr.number)
+            pr.is_ai_generated = fetch_pr_is_ai_generated(pr.number)
             domain = classify_domain(pr.title, pr.files)
             pr.domain = domain
 
