@@ -7,9 +7,12 @@ CLAUDE.md 규칙 후보를 생성합니다.
 """
 
 import json
+import os
 import re
 import sys
 import subprocess
+import urllib.request
+import urllib.error
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Optional
@@ -186,6 +189,7 @@ RULE_TEMPLATES = {
 }
 
 def generate_rules(domain_counts: list[tuple[str, int]]) -> list[str]:
+    """템플릿 기반 규칙 생성 (Claude API 없을 때 폴백)"""
     rules = []
     for domain, count in domain_counts:
         if count < 2:
@@ -198,6 +202,81 @@ def generate_rules(domain_counts: list[tuple[str, int]]) -> list[str]:
                 f"- `{domain}` 도메인: fix PR {count}회 — 변경 전 관련 테스트 전체 실행 필수"
             )
     return rules
+
+
+def generate_rules_with_claude(
+    clusters: list[Cluster],
+    domain_counts: list[tuple[str, int]],
+    risky_files: list[tuple[str, int]],
+    fix_prs: list[PR],
+    api_key: str,
+) -> list[str]:
+    """Claude API를 사용해 문맥을 이해한 규칙 생성"""
+
+    fix_summary = "\n".join(
+        f"- #{p.number}: {p.title}" + (f" (파일: {', '.join(p.files[:3])})" if p.files else "")
+        for p in fix_prs
+    )
+    cluster_summary = "\n".join(
+        f"- [{c.domain}] PR #{c.start}~#{c.end} ({c.size}개 연속 fix)"
+        for c in clusters
+    )
+    domain_summary = "\n".join(f"- {d}: {n}회" for d, n in domain_counts if n >= 2)
+    file_summary = "\n".join(f"- {f}: {n}회" for f, n in risky_files[:8])
+
+    prompt = f"""당신은 소프트웨어 품질 분석 전문가입니다.
+아래는 한 GitHub 레포지토리의 PR 히스토리 분석 결과입니다.
+
+## fix PR 목록
+{fix_summary}
+
+## 회귀 클러스터 (연속 fix 발생 구간)
+{cluster_summary if cluster_summary else "없음"}
+
+## 도메인별 fix 횟수
+{domain_summary if domain_summary else "없음"}
+
+## 고위험 파일 (fix PR에 자주 등장)
+{file_summary if file_summary else "없음"}
+
+위 데이터를 바탕으로 AI 코딩 어시스턴트(Claude Code)의 CLAUDE.md에 추가할 규칙을 3~5개 작성해주세요.
+
+요구사항:
+1. 각 규칙은 "- " 로 시작하는 한 줄
+2. 반복된 실수 패턴을 방지하는 구체적인 행동 지침
+3. 파일명·도메인·횟수 등 데이터 기반 근거 포함
+4. 한국어로 작성
+5. 과도하게 일반적인 규칙("테스트를 잘 하세요") 금지
+
+규칙 목록만 출력하세요 (설명 없이):"""
+
+    payload = json.dumps({
+        "model": "claude-haiku-4-5-20251001",
+        "max_tokens": 1024,
+        "messages": [{"role": "user", "content": prompt}],
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        headers={
+            "x-api-key": api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read())
+            text = result["content"][0]["text"].strip()
+            return [line.strip() for line in text.splitlines() if line.strip().startswith("-")]
+    except urllib.error.HTTPError as e:
+        print(f"[Claude API 오류] {e.code}: {e.read().decode()}", file=sys.stderr)
+        return []
+    except Exception as e:
+        print(f"[Claude API 오류] {e}", file=sys.stderr)
+        return []
 
 
 # ── 리포트 출력 ──────────────────────────────────────────────────────────────
@@ -274,11 +353,46 @@ def main():
     parser.add_argument("--fetch-files", action="store_true", help="각 fix PR의 파일 목록 수집 (느림)")
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--input", help="미리 받은 PR JSON 파일 (gh 생략)")
+    parser.add_argument(
+        "--claude-api-key",
+        default=os.environ.get("ANTHROPIC_API_KEY"),
+        help="Claude API 키 (ANTHROPIC_API_KEY 환경변수 대체 가능)",
+    )
     args = parser.parse_args()
 
     if args.input:
         with open(args.input) as f:
             raw = json.load(f)
+        # 분석 결과 JSON(report format)이면 바로 출력
+        if isinstance(raw, dict) and "summary" in raw:
+            if args.format == "json":
+                print(json.dumps(raw, ensure_ascii=False, indent=2))
+            else:
+                d = raw
+                s = d["summary"]
+                clusters_data = d.get("clusters", [])
+                domain_counts = [(c["domain"], c["fix_count"]) for c in d.get("domain_counts", [])]
+                risky_files = [(f["file"], f["fix_count"]) for f in d.get("risky_files", [])]
+                rules = d.get("claude_md_suggestions", [])
+                # 간이 출력
+                print(f"\n총 PR: {s['total_prs']}개 | fix PR: {s['fix_prs']}개 ({s['fix_rate']}%)\n")
+                if clusters_data:
+                    print("회귀 클러스터:")
+                    for c in clusters_data:
+                        print(f"  [{c['domain']:12}] #{c['start']} → #{c['end']} ({c['size']}개)")
+                print("\n도메인별 fix:")
+                for domain, cnt in domain_counts:
+                    print(f"  {domain:15} {cnt}회")
+                if risky_files:
+                    print("\n고위험 파일:")
+                    for f, cnt in risky_files:
+                        print(f"  {cnt:2}회  {f}")
+                if rules:
+                    print("\nCLAUDE.md 추가 규칙 제안:")
+                    for r in rules:
+                        print(f"  {r}")
+            return
+        # 원시 PR 목록 JSON
         prs = []
         for item in raw:
             is_fix = bool(re.match(r'^fix', item["title"], re.I))
@@ -304,7 +418,18 @@ def main():
     clusters = detect_clusters(prs)
     risky_files = rank_risky_files(prs)
     domain_counts = rank_risky_domains(prs)
-    rules = generate_rules(domain_counts)
+
+    if args.claude_api_key:
+        print("Claude API로 규칙 생성 중...", file=sys.stderr)
+        fix_prs = [p for p in prs if p.is_fix]
+        rules = generate_rules_with_claude(
+            clusters, domain_counts, risky_files, fix_prs, args.claude_api_key
+        )
+        if not rules:
+            print("Claude API 실패, 템플릿 폴백", file=sys.stderr)
+            rules = generate_rules(domain_counts)
+    else:
+        rules = generate_rules(domain_counts)
 
     print_report(prs, clusters, risky_files, domain_counts, rules, args.format)
 
