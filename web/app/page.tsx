@@ -76,7 +76,7 @@ export default function Home() {
           {error && <p className="text-sm text-red-400">{error}</p>}
         </form>
 
-        <div className="mt-4 flex flex-wrap gap-3">
+        <div className="mt-4 flex flex-wrap items-center gap-3">
           <span className="text-xs text-gray-600">예시:</span>
           {examples.map(ex => (
             <button
@@ -88,6 +88,10 @@ export default function Home() {
               {ex}
             </button>
           ))}
+          <span className="text-gray-700">|</span>
+          <a href="/compare" className="text-xs text-gray-500 transition hover:text-gray-300 underline underline-offset-2">
+            여러 레포 비교 →
+          </a>
         </div>
 
         <div className="mt-16 grid gap-4 sm:grid-cols-3">

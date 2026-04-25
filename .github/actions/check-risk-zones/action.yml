@@ -1,0 +1,122 @@
+name: 'AI Dev Loop — Check Risk Zones'
+description: 'PR에 포함된 파일이 회귀 다발 도메인과 겹치면 자동으로 경고 코멘트를 달아줍니다.'
+
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+    default: ${{ github.token }}
+  analyzer-url:
+    description: 'AI Dev Loop Analyzer API base URL'
+    required: false
+    default: 'https://ai-dev-loop-analyzer.rladmsgh34.org'
+  threshold:
+    description: 'fix rate(%) 이상일 때 경고 (기본 10)'
+    required: false
+    default: '10'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get changed files
+      id: files
+      uses: tj-actions/changed-files@v44
+      with:
+        separator: ','
+
+    - name: Fetch analysis & post comment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        ANALYZER_URL: ${{ inputs.analyzer-url }}
+        THRESHOLD: ${{ inputs.threshold }}
+        CHANGED_FILES: ${{ steps.files.outputs.all_changed_files }}
+        REPO: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        OWNER=$(echo "$REPO" | cut -d'/' -f1)
+        REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
+
+        # 분석 결과 fetch
+        RESULT=$(curl -sf "$ANALYZER_URL/api/analyze?owner=$OWNER&repo=$REPO_NAME" 2>/dev/null || echo "")
+        if [ -z "$RESULT" ]; then
+          echo "분석 결과를 가져올 수 없습니다. 스킵합니다."
+          exit 0
+        fi
+
+        # 변경된 파일에서 도메인 추출 후 위험 도메인 매칭
+        WARNING=$(python3 - <<'PYEOF'
+        import json, os, re, sys
+
+        result = json.loads(os.environ["RESULT"])
+        changed = os.environ["CHANGED_FILES"].split(",")
+        threshold = int(os.environ.get("THRESHOLD", "10"))
+        analyzer_url = os.environ["ANALYZER_URL"]
+        owner = os.environ["OWNER"]
+        repo_name = os.environ["REPO_NAME"]
+
+        domain_patterns = [
+            ("ci/cd",        r"deploy|docker|dockerfile|ci\b|workflow|action|pipeline|\.github"),
+            ("auth",         r"auth|login|logout|session|jwt|token|oauth|password"),
+            ("payment",      r"payment|pay|checkout|portone|iamport|order|cart"),
+            ("database",     r"prisma|migration|schema|db|database|sql|seed"),
+            ("security",     r"security|xss|csrf|sanitize|escape|helmet|cors"),
+            ("external-api", r"api|webhook|fetch|axios|http|client|sdk"),
+            ("test/e2e",     r"test|spec|e2e|cypress|playwright|vitest|jest"),
+            ("config",       r"config|env|\.env|setting|constant"),
+        ]
+
+        def classify(path):
+            p = path.lower()
+            for domain, pattern in domain_patterns:
+                if re.search(pattern, p):
+                    return domain
+            return "config"
+
+        domain_counts = {d["domain"]: d["fixCount"] for d in result.get("domainCounts", [])}
+        total_prs = result.get("summary", {}).get("totalPRs", 1) or 1
+
+        risky = []
+        seen = set()
+        for f in changed:
+            d = classify(f.strip())
+            if d in seen:
+                continue
+            fix_count = domain_counts.get(d, 0)
+            fix_rate = round(fix_count / total_prs * 100, 1)
+            if fix_rate >= threshold:
+                seen.add(d)
+                risky.append((d, fix_rate, fix_count))
+
+        if not risky:
+            sys.exit(0)
+
+        lines = ["## ⚠️ AI Dev Loop Analyzer — 회귀 위험 경고", ""]
+        lines.append("이 PR은 과거 fix PR이 자주 발생했던 도메인을 수정합니다. 추가 검토를 권장합니다.")
+        lines.append("")
+        lines.append("| 도메인 | fix율 | fix 횟수 |")
+        lines.append("|--------|-------|----------|")
+        for d, rate, count in sorted(risky, key=lambda x: -x[1]):
+            lines.append(f"| `{d}` | {rate}% | {count}회 |")
+        lines.append("")
+        lines.append(f"[📊 전체 분석 보기]({analyzer_url}/r/{owner}/{repo_name})")
+
+        print("\n".join(lines))
+        PYEOF
+        )
+
+        if [ -z "$WARNING" ]; then
+          echo "위험 도메인 없음. 코멘트 스킵."
+          exit 0
+        fi
+
+        # 기존 봇 코멘트 삭제 후 새로 달기
+        EXISTING=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" \
+          --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("## ⚠️ AI Dev Loop"))) | .id' \
+          2>/dev/null | head -1)
+
+        if [ -n "$EXISTING" ]; then
+          gh api -X DELETE "repos/$REPO/issues/comments/$EXISTING" 2>/dev/null || true
+        fi
+
+        gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$WARNING"

@@ -32,8 +32,17 @@ interface Props {
 
 export default function ResultClient({ result, owner, repo, meta }: Props) {
   const [copied, setCopied] = useState(false)
+  const [badgeCopied, setBadgeCopied] = useState(false)
   const { summary, clusters, domainCounts, aiVsHuman } = result
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const badgeUrl = `https://ai-dev-loop-analyzer.rladmsgh34.org/api/badge/${owner}/${repo}`
+  const badgeMarkdown = `[![AI fix rate](${badgeUrl})](https://ai-dev-loop-analyzer.rladmsgh34.org/r/${owner}/${repo})`
+
+  function copyBadge() {
+    navigator.clipboard.writeText(badgeMarkdown)
+    setBadgeCopied(true)
+    setTimeout(() => setBadgeCopied(false), 2000)
+  }
 
   function copyShare() {
     navigator.clipboard.writeText(shareUrl)
@@ -161,6 +170,26 @@ export default function ResultClient({ result, owner, repo, meta }: Props) {
             )}
           </section>
         )}
+
+        {/* 배지 embed */}
+        <section className="mb-6 rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+          <h2 className="mb-3 text-sm font-semibold text-gray-300">🏷️ README 배지</h2>
+          <div className="mb-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={badgeUrl} alt="AI fix rate badge" />
+          </div>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 truncate rounded-lg bg-black/30 px-3 py-2 text-xs text-gray-400">
+              {badgeMarkdown}
+            </code>
+            <button
+              onClick={copyBadge}
+              className="shrink-0 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs transition hover:bg-white/10"
+            >
+              {badgeCopied ? '✓ 복사됨' : '복사'}
+            </button>
+          </div>
+        </section>
 
         {/* 푸터 */}
         <div className="mt-8 text-center text-xs text-gray-700">
