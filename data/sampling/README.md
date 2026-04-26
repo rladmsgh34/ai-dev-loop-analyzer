@@ -2,15 +2,32 @@
 
 도메인 분류기가 `general`로 떨어뜨린 fix PR 샘플. 사람이 직접 보고 진짜 도메인을 라벨링해 ground truth를 만든다.
 
-## 데이터셋 (2026-04-26 기준)
+## 데이터셋 (2026-04-26 기준 — `fix_pr_regex` v2 적용)
 
 | 파일 | 레포 | 프로파일 | scan | fix PR | general | 수집율 |
 |---|---|---|---|---|---|---|
-| `vuejs-core-2026-04-26.csv` | vuejs/core | 없음 (default) | 1500 | 684 (45.6%) | **100건** | 14.6% |
-| `vercel-nextjs-2026-04-26.csv` | vercel/next.js | 없음 (default) | 1500 | 63 (4.2%) | **8건** | 12.7% |
-| `gwangcheon-shop-control-2026-04-26.csv` | rladmsgh34/gwangcheon-shop | korean-nextjs-shop | 178 | 31 (17.4%) | **1건** | 3.2% |
+| `vuejs-core-2026-04-26.csv` | vuejs/core | 없음 (default) | 1500 | 719 (47.9%) | **100건** | 13.9% |
+| `vercel-nextjs-2026-04-26.csv` | vercel/next.js | 없음 (default) | 1500 | 210 (14.0%) | **41건** | 19.5% |
+| `gwangcheon-shop-control-2026-04-26.csv` | rladmsgh34/gwangcheon-shop | korean-nextjs-shop | 178 | 34 (19.1%) | **1건** | 2.9% |
 
-**총 109건** — 사람이 한 시간 안에 라벨링 가능한 분량.
+**총 142건** — `fix_pr_regex` v2로 unlock된 next.js +33건 포함.
+
+### `fix_pr_regex` v2 변경 (이 데이터셋의 전제)
+
+이전 정규식 `^(fix|hotfix|bugfix)(\([^)]*\))?:`은 conventional commit만 잡아 next.js 같은 비표준 컨벤션 레포의 fix PR을 대량 누락(1500개 중 63개만 매칭).
+
+새 정규식 `(?i)^(\[[^\]]+\][:\s]*|[a-z][\w-]*:\s*)?(fix|hotfix|bugfix|patch)\b`은 다음을 추가로 잡는다:
+- `[ci]: fix permissions` — 대괄호 + 콜론
+- `[turbopack] Fix max_level_hint` — 대괄호 + 공백 + 대문자
+- `Patch setHeader` — Patch 키워드
+- `Fix dev mode hydration` — 콜론 없는 capital Fix
+- `webpack: fix swcPlugins` — 단어 prefix + fix
+- `turbo-tasks: Fix recomputation` — 하이픈 prefix + Fix
+
+영향 (벤치마크):
+- vercel/next.js: 63 → 210 fix PR (**+233%**, 핵심 unlock)
+- vuejs/core: 684 → 719 (+5%, 안전)
+- gwangcheon-shop control: 31 → 34 (+3, control 안전)
 
 ## 라벨링 방법
 
@@ -44,13 +61,9 @@
 
 이 집계가 `profiles/examples/vuejs-core.json`, `profiles/examples/vercel-nextjs.json` 신규 프로파일의 입력이 된다.
 
-## 별도 발견 — `fix_pr_regex` 개선 필요
+## 별도 발견 — `fix_pr_regex` v2 적용 완료
 
-`vercel/next.js`는 `[ci]:`, `[turbopack] Fix`, `Patch X`, `Backport` 같은 비표준 prefix를 사용해 현재 정규식 `^(fix|hotfix|bugfix)(\([^)]*\))?:`이 fix PR의 상당수를 놓친다 (1500 PR 중 63개만 매칭).
-
-**해결 후보** (이 PR 범위 밖, 별도 이슈):
-- 정규식 확장: `^(\[[\w/-]+\][:\s]*)?(fix|patch|hotfix|bugfix|bug)\b`
-- 또는 GitHub 라벨/마일스톤 신호 보조 활용
+위 "fix_pr_regex v2 변경" 섹션 참고. 이 PR에서 함께 처리됨.
 
 ## 도구 재실행
 

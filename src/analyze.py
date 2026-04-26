@@ -46,9 +46,21 @@ DOMAIN_PATTERNS: list[tuple[str, str]] = [
     ("ui",           r"components?/|pages?/|page\.tsx|page\.jsx|layout|modal|dialog|sidebar|navbar|header|footer|/styles?/|/theme/|/hooks?/|/context/|/store/"),
 ]
 
-# fix PR 판별 정규식 — conventional commit scope 포함. load_profile()로 오버라이드 가능.
-# 예: fix: ... / fix(auth): ... / hotfix: ... / bugfix(payment): ...
-FIX_PR_REGEX: str = r"^(fix|hotfix|bugfix)(\([^)]*\))?:"
+# fix PR 판별 정규식 — 비표준 컨벤션 포괄. load_profile()로 오버라이드 가능.
+# 매칭 케이스:
+#   fix: foo                               (conventional)
+#   fix(scope): foo                        (conventional w/ scope)
+#   [ci]: fix permissions                  (bracket + colon prefix)
+#   [turbopack] Fix max_level_hint         (bracket + space, capital F)
+#   Patch setHeader                        (Patch keyword, no prefix)
+#   Fix dev mode hydration                 (capital F, no colon)
+#   webpack: fix swcPlugins                (single-word prefix + fix)
+#   turbo-tasks: Fix recomputation         (hyphenated prefix + Fix)
+# 미매칭 (의도적):
+#   Turbopack: optimize ... and fix range  (fix가 제목 중간)
+#   Fixes #123                             (Fixes 복수형)
+#   fixture: add new test                  (fixture 단어)
+FIX_PR_REGEX: str = r"(?i)^(\[[^\]]+\][:\s]*|[a-z][\w-]*:\s*)?(fix|hotfix|bugfix|patch)\b"
 
 # conventional commit scope → 도메인 직접 매핑
 # classify_domain()에서 keyword 매칭보다 먼저 시도

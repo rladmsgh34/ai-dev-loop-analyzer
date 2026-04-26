@@ -1,7 +1,7 @@
 {
   "name": "nextjs-prisma",
   "description": "Next.js + Prisma 스택 프리셋. 프로젝트별 외부 서비스 키워드(결제사, 지도 등)는 이 파일을 복사해서 추가하세요.",
-  "fix_pr_regex": "^fix",
+  "fix_pr_regex": "(?i)^(\\[[^\\]]+\\][:\\s]*|[a-z][\\w-]*:\\s*)?(fix|hotfix|bugfix|patch)\\b",
   "domain_patterns": [
     ["ci/cd",        "deploy|docker|dockerfile|ci\\b|workflow|buildx|healthcheck|compose|prisma.cli|binary.target|musl|alpine"],
     ["auth",         "auth|login|signup|session|jwt|credential|credentials|signin|nextauth"],

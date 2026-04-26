@@ -1,7 +1,7 @@
 {
   "name": "default",
   "description": "범용 프로필 — 스택 무관. 영어·한국어 키워드 공통 포함. 프로젝트별 키워드는 별도 파일에 추가.",
-  "fix_pr_regex": "^(fix|hotfix|bugfix)(\\([^)]*\\))?:",
+  "fix_pr_regex": "(?i)^(\\[[^\\]]+\\][:\\s]*|[a-z][\\w-]*:\\s*)?(fix|hotfix|bugfix|patch)\\b",
   "domain_patterns": [
     ["ci/cd",        "deploy|docker|dockerfile|ci\\b|workflow|buildx|healthcheck|compose|github.action|pipeline|배포|도커|파이프라인|워크플로우|헬스체크"],
     ["auth",         "auth|login|signup|session|jwt|credential|credentials|signin|oauth|permission|role\\b|로그인|회원가입|로그아웃|비밀번호|인증|세션|탈퇴|소셜.로그인|마이페이지|계정"],
