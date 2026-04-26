@@ -8,9 +8,11 @@
     ["payment",      "payment|checkout|order|cart|purchase"],
     ["database",     "migration|schema\\.|migrate\\b"],
     ["security",     "csp|xss|csrf|rate.limit|sanitize|escape|content.security"],
-    ["external-api", "stripe|twilio|sendgrid|s3\\b|cloudfront|firebase|slack|webhook"],
+    ["external-api", "stripe|twilio|sendgrid|s3\\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs|gcp\\b|aws\\b|azure"],
     ["test/e2e",     "\\.test\\.|\\.spec\\.|e2e|playwright|vitest|jest|coverage|flaky"],
-    ["config",       "\\.config\\.|env\\.ts|tsconfig|biome|tailwind"],
+    ["maintenance",  "refactor|cleanup|rename|deprecat|reorganize|remov\\b|rewrite"],
+    ["docs",         "readme|changelog|docs?\\b|document|comment"],
+    ["config",       "\\.config\\.|env\\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\\b"],
     ["api",          "api/|route\\.ts|route\\.js"],
     ["ui",           "components/|page\\.tsx|page\\.jsx"]
   ],
@@ -22,6 +24,8 @@
     "security":     "보안 관련 수정 후 외부 도메인 allowlist 누락 여부 확인 — {count}회 회귀",
     "external-api": "외부 API 연동 변경 시 로컬과 배포 환경 동작이 다를 수 있음 — {count}회 회귀, 반드시 배포 후 검증",
     "test/e2e":     "테스트 환경 변경 시 프로덕션 빌드 서버 기준으로만 실행 — {count}회 플레이키 발생",
+    "maintenance":  "리팩터링·정리 작업 후 관련 테스트 전체 실행 필수 — {count}회 회귀",
+    "docs":         "문서 변경 시 코드·설정과 내용 일치 여부 확인 — {count}회 불일치 발생",
     "config":       "설정 파일 변경 후 반드시 dev 서버 재시작 및 빌드 확인 — {count}회 회귀"
   },
   "rule_hints": {
@@ -32,6 +36,8 @@
     "security":     "→ 보안 변경 후 외부 도메인 allowlist 누락 여부 확인",
     "external-api": "→ 로컬 ≠ 배포 환경 동작 가능 — 반드시 배포 후 검증",
     "test/e2e":     "→ 테스트 서버는 프로덕션 빌드 기준으로만 실행",
+    "maintenance":  "→ 리팩터링 후 관련 테스트 전체 실행 필수",
+    "docs":         "→ 문서와 실제 코드·설정 내용 일치 여부 확인",
     "config":       "→ 설정 파일 변경 후 dev 서버 재시작 필수"
   },
   "prompt_hints": {

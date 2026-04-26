@@ -243,7 +243,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: your-username/ai-dev-loop-analyzer@main
+      - uses: rladmsgh34/ai-dev-loop-analyzer@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           limit: "200"
