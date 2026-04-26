@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { fetchMergedPRs } from '@/lib/github'
 import { analyze } from '@/lib/analyzer'
+import { getProfileForRepo, isTrackedRepo } from '@/lib/profiles'
+import { loadCachedResult } from '@/lib/cache'
 
 export const maxDuration = 30
 
@@ -36,10 +38,25 @@ export async function GET(
   { params }: { params: Promise<{ owner: string; repo: string }> }
 ) {
   const { owner, repo } = await params
+  const fullRepo = `${owner}/${repo}`
 
   try {
-    const prs = await fetchMergedPRs(owner, repo, 200)
-    const { summary } = analyze(prs)
+    let summary: { fixRate: number }
+
+    if (await isTrackedRepo(fullRepo)) {
+      const cached = await loadCachedResult(fullRepo)
+      if (cached) {
+        summary = cached.summary
+      } else {
+        const profile = await getProfileForRepo(fullRepo)
+        const prs = await fetchMergedPRs(owner, repo, 200, profile)
+        summary = analyze(prs).summary
+      }
+    } else {
+      const profile = await getProfileForRepo(fullRepo)
+      const prs = await fetchMergedPRs(owner, repo, 200, profile)
+      summary = analyze(prs).summary
+    }
 
     const color =
       summary.fixRate > 20 ? '#e05d44' :

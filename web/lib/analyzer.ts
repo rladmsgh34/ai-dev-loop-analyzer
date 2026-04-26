@@ -1,4 +1,7 @@
-// PR 히스토리 분석 엔진 — analyze.py의 TypeScript 포트
+// PR 히스토리 분석 엔진 — analyze.py의 TypeScript 포트.
+// 분류 정책은 profile-driven (scope-first → file/title pattern). hardcoded regex 제거.
+
+import type { Profile } from './profiles'
 
 export interface PR {
   number: number
@@ -37,26 +40,23 @@ export interface AnalysisResult {
   trend: TrendPoint[]
 }
 
-const DOMAIN_PATTERNS: [string, RegExp][] = [
-  ['ci/cd',        /deploy|docker|dockerfile|ci\b|workflow|buildx|healthcheck|compose|musl|alpine/i],
-  ['auth',         /auth|login|signup|session|jwt|credential|signin/i],
-  ['payment',      /payment|portone|checkout|order|cart|purchase|결제|주문|장바구니/i],
-  ['database',     /prisma|migration|schema/i],
-  ['security',     /csp|xss|csrf|rate.?limit|sanitize|allowlist/i],
-  ['external-api', /stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook|kakao|postcode|우편번호|google.?maps|gcs|sentry|daum|portone|toss|naver|coolsms|gcp\b|aws\b|azure/i],
-  ['test/e2e',     /\.test\.|\.spec\.|e2e|playwright|vitest|coverage/i],
-  ['maintenance',  /refactor|cleanup|rename|deprecat|rewrite|reorganize/i],
-  ['docs',         /readme|changelog|docs?\b|document/i],
-  ['config',       /next\.config|env\.ts|tsconfig|biome|tailwind|npmrc|eslint|prettier|lint\b/i],
-]
+const SCOPE_RE = /^\w+\(([^)]+)\):?/i
 
-export function isFixPR(title: string): boolean {
-  return /^(fix|hotfix|bugfix|revert|regression|bug)\b/i.test(title)
+export function isFixPR(title: string, profile: Profile): boolean {
+  return profile.fixPrRegex.test(title)
 }
 
-export function classifyDomain(title: string, files: string[] = []): string {
+/** scope-first: `fix(scope):` → scope_to_domain → 매칭 없으면 file/title regex. */
+export function classifyDomain(title: string, files: string[], profile: Profile): string {
+  const scopeMatch = title.match(SCOPE_RE)
+  if (scopeMatch) {
+    const scope = scopeMatch[1].toLowerCase()
+    for (const [key, domain] of Object.entries(profile.scopeToDomain)) {
+      if (scope.includes(key)) return domain
+    }
+  }
   const combined = [title, ...files].join(' ')
-  for (const [domain, pattern] of DOMAIN_PATTERNS) {
+  for (const [domain, pattern] of profile.domainPatterns) {
     if (pattern.test(combined)) return domain
   }
   return 'general'
@@ -116,7 +116,8 @@ export function analyze(prs: PR[]): AnalysisResult {
     .map(([domain, fixCount]) => ({ domain, fixCount }))
     .sort((a, b) => b.fixCount - a.fixCount)
 
-  // AI vs human
+  // AI vs human (Co-Authored-By: Claude만 감지) — single-arm 환경에서 노이즈 큼.
+  // 캐시 경로에서는 비어있고 live 경로에서만 채워진다.
   const aiPRs = prs.filter(p => p.isAiGenerated)
   const humanPRs = prs.filter(p => !p.isAiGenerated)
   const aiFixPRs = aiPRs.filter(p => p.isFix)
