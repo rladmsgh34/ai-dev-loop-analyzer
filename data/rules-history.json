@@ -33,6 +33,19 @@
           "playground": 0.5,
           "docs": 0.5,
           "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
         }
       ]
     },
@@ -69,6 +82,19 @@
           "playground": 0.5,
           "docs": 0.5,
           "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
         }
       ]
     },
@@ -105,6 +131,19 @@
           "playground": 0.5,
           "docs": 0.5,
           "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
         }
       ]
     },
@@ -141,6 +180,19 @@
           "playground": 0.5,
           "docs": 0.5,
           "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
         }
       ]
     },
@@ -177,6 +229,19 @@
           "playground": 0.5,
           "docs": 0.5,
           "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
         }
       ]
     },
@@ -201,7 +266,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
     },
     {
       "id": "a13e1029",
@@ -224,7 +303,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
     },
     {
       "id": "8607b6a2",
@@ -247,7 +340,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
     },
     {
       "id": "aeaaa483",
@@ -270,7 +377,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
     },
     {
       "id": "be61b6cd",
@@ -293,26 +414,131 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "53a34351",
+      "rule": "- PR에 관련된 `type-only ExportNamed` 기능이 변경될 때는 반드시 관련 테스트를 확인하고 추가해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "7a741814",
+      "rule": "- `devlow-bench`와 같은 설정 파일의 `rootDir` 값이 `package.json`과 불일치할 경우, 수정 전에 영향을 받는 모든 파일을 점검해야 한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "af1a86d6",
+      "rule": "- `next/image`의 `images.maximumResponseBody` 설정이 로컬 이미지에도 적용되도록 변화를 줄 경우, 관련된 모든 경우의 수를 테스트하여 누락된 부분이 없는지 확인해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "ca8aa38f",
+      "rule": "- CI/CD 관련 PR에서는 Docker 이미지 캐시와 관련된 변경사항이 있을 때, 성능 측정을 위한 벤치마크 테스트를 반드시 수행해야 한다.",
+      "domain": "ci/cd",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "ab744e04",
+      "rule": "- `cache-components.test.ts`와 같이 테스트 파일에서 발생하는 타입 오류를 사전에 예방하기 위해, 개발 중에 정적 타입 검사 도구를 적극 활용해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
       "snapshots": []
     }
   ],
   "snapshots": [
     {
       "date": "2026-04-26",
-      "total_fix_rate": 58.5,
-      "vapor": 22.0,
+      "total_fix_rate": 17.5,
       "general": 12.5,
-      "compiler": 9.5,
-      "runtime": 3.5,
-      "hydration": 3.0,
-      "types": 2.0,
-      "reactivity": 1.5,
-      "maintenance": 1.0,
-      "ssr": 1.0,
-      "hmr": 1.0,
-      "playground": 0.5,
-      "docs": 0.5,
-      "runtime-dom": 0.5
+      "monorepo": 1.0,
+      "ci/cd": 1.0,
+      "font": 0.5,
+      "cache": 0.5,
+      "maintenance": 0.5,
+      "scripts": 0.5,
+      "cli": 0.5,
+      "test/e2e": 0.5
     }
   ]
 }
