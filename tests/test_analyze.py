@@ -221,3 +221,38 @@ def test_load_profile_fix_pr_regex():
     load_profile(profile_path)
     assert re.match(analyze.FIX_PR_REGEX, "fix(auth): bug", re.I)
     assert not re.match(analyze.FIX_PR_REGEX, "feat: new thing", re.I)
+
+
+# ── Korean PR title classification tests ─────────────────────────────────────
+
+def test_classify_domain_korean_auth():
+    """Korean auth keywords (로그인, 비밀번호, 탈퇴) map to 'auth'."""
+    assert classify_domain("feat: 로그인 소셜 버튼 추가", []) == "auth"
+    assert classify_domain("fix: 비밀번호 변경 기능", []) == "auth"
+    assert classify_domain("feat: 회원 탈퇴 (soft-delete)", []) == "auth"
+
+
+def test_classify_domain_korean_payment():
+    """Korean payment keywords (결제, 주문, 장바구니) map to 'payment'."""
+    assert classify_domain("fix: 결제 금액 불일치 수정", []) == "payment"
+    assert classify_domain("feat: 장바구니 수량 변경", []) == "payment"
+    assert classify_domain("fix: 주문 상태 업데이트", []) == "payment"
+
+
+def test_classify_domain_korean_ui():
+    """Korean UI keywords (페이지, 화면, 스켈레톤, 상품) map to 'ui'."""
+    assert classify_domain("feat: 페이지 로딩 스켈레톤 구현", []) == "ui"
+    assert classify_domain("feat: 상품 목록 페이지네이션", []) == "ui"
+    assert classify_domain("feat: 에러/404 전용 화면 구현", []) == "ui"
+
+
+def test_classify_domain_korean_external_api():
+    """Korean external service names (카카오, 네이버) map to 'external-api'."""
+    assert classify_domain("fix: 카카오 우편번호 팝업 수정", []) == "external-api"
+    assert classify_domain("feat: 네이버 지도 연동", []) == "external-api"
+
+
+def test_classify_domain_korean_cicd():
+    """Korean deploy keywords (배포, 도커) map to 'ci/cd'."""
+    assert classify_domain("fix: 스테이징 배포 실패 수정", []) == "ci/cd"
+    assert classify_domain("chore: 도커 이미지 최적화", []) == "ci/cd"
