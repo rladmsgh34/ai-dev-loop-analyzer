@@ -51,6 +51,15 @@ async function loadRepoConfig(): Promise<RepoConfig[]> {
   return _configCache
 }
 
+/**
+ * Python regex pattern → JS-compatible.
+ * Python의 `(?i)` 같은 inline flag는 JS RegExp가 못 읽음 — strip하고 'i' arg로 대체.
+ * 다른 Python-only 구문이 추가되면 여기서 함께 처리.
+ */
+function pythonRegexToJs(pattern: string): string {
+  return pattern.replace(/^\(\?[ims]+\)/, '')
+}
+
 async function loadProfileByRelPath(relPath: string): Promise<Profile | null> {
   if (_profileCache.has(relPath)) {
     return _profileCache.get(relPath)!
@@ -60,10 +69,10 @@ async function loadProfileByRelPath(relPath: string): Promise<Profile | null> {
   const profile: Profile = {
     name: parsed.name ?? relPath,
     fixPrRegex: parsed.fix_pr_regex
-      ? new RegExp(parsed.fix_pr_regex, 'i')
+      ? new RegExp(pythonRegexToJs(parsed.fix_pr_regex), 'i')
       : /^(fix|hotfix|bugfix|patch)\b/i,
     domainPatterns: (parsed.domain_patterns ?? []).map(
-      ([name, pat]) => [name, new RegExp(pat, 'i')] as [string, RegExp]
+      ([name, pat]) => [name, new RegExp(pythonRegexToJs(pat), 'i')] as [string, RegExp]
     ),
     scopeToDomain: parsed.scope_to_domain ?? {},
   }
