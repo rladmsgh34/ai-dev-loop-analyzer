@@ -31,22 +31,43 @@ def _get_gh_token() -> str:
 # ── 도메인 분류 규칙 (프로파일로 오버라이드 가능) ────────────────────────────
 DOMAIN_PATTERNS: list[tuple[str, str]] = [
     # PR 제목 키워드 + 파일 경로 모두 매칭 — 기본값은 범용. load_profile()로 교체 가능.
-    ("ci/cd",        r"deploy|docker|dockerfile|ci\b|workflow|buildx|healthcheck|compose"),
-    ("auth",         r"auth|login|signup|session|jwt|credential|credentials|signin"),
-    ("payment",      r"payment|checkout|order|cart|purchase"),
-    ("database",     r"migration|schema\.|migrate\b"),
-    ("security",     r"csp|xss|csrf|rate.limit|sanitize|escape|content.security"),
-    ("external-api", r"stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs|gcp\b|aws\b|azure"),
-    ("test/e2e",     r"\.test\.|\.spec\.|e2e|playwright|vitest|jest|coverage|flaky"),
-    ("maintenance",  r"refactor|cleanup|rename|deprecat|reorganize|remov\b|rewrite"),
-    ("docs",         r"readme|changelog|docs?\b|document|comment"),
-    ("config",       r"\.config\.|env\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\b"),
-    ("api",          r"api/|route\.ts|route\.js"),
-    ("ui",           r"components/|page\.tsx|page\.jsx"),
+    ("ci/cd",        r"deploy|docker|dockerfile|ci\b|workflow|buildx|healthcheck|compose|github.action|pipeline"),
+    ("auth",         r"auth|login|signup|session|jwt|credential|credentials|signin|oauth|permission|role\b"),
+    ("payment",      r"payment|checkout|order|cart|purchase|invoice|billing|subscription"),
+    ("database",     r"migration|schema\.|migrate\b|prisma|seed\.ts|seed\.js"),
+    ("security",     r"csp|xss|csrf|rate.limit|sanitize|escape|content.security|vulnerabilit|injection"),
+    ("external-api", r"stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs\b|gcp\b|aws\b|azure|openai|anthropic"),
+    ("test/e2e",     r"\.test\.|\.spec\.|/tests?/|e2e|playwright|vitest|jest|coverage|flaky|mock|fixture"),
+    ("maintenance",  r"refactor|cleanup|rename|deprecat|reorganize|remov\b|rewrite|chore\b|bump\b|upgrade|downgrade|update.dep|dependen|package\.json"),
+    ("docs",         r"readme|changelog|docs?\b|document|comment|jsdoc"),
+    ("config",       r"\.config\.|env\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\b|next\.config|vite\.config|webpack|babel|postcss"),
+    ("api",          r"api/|route\.ts|route\.js|endpoint|middleware"),
+    ("ui",           r"components?/|pages?/|page\.tsx|page\.jsx|layout|modal|dialog|sidebar|navbar|header|footer|/styles?/|/theme/|/hooks?/|/context/|/store/"),
 ]
 
-# fix PR 판별 정규식 — load_profile()로 오버라이드 가능
-FIX_PR_REGEX: str = r"^fix"
+# fix PR 판별 정규식 — conventional commit scope 포함. load_profile()로 오버라이드 가능.
+# 예: fix: ... / fix(auth): ... / hotfix: ... / bugfix(payment): ...
+FIX_PR_REGEX: str = r"^(fix|hotfix|bugfix)(\([^)]*\))?:"
+
+# conventional commit scope → 도메인 직접 매핑
+# classify_domain()에서 keyword 매칭보다 먼저 시도
+_SCOPE_TO_DOMAIN: dict[str, str] = {
+    "auth": "auth", "login": "auth", "session": "auth", "oauth": "auth",
+    "payment": "payment", "checkout": "payment", "order": "payment",
+    "cart": "payment", "billing": "payment",
+    "ci": "ci/cd", "cd": "ci/cd", "deploy": "ci/cd", "docker": "ci/cd",
+    "workflow": "ci/cd", "pipeline": "ci/cd",
+    "db": "database", "schema": "database", "migration": "database",
+    "prisma": "database", "seed": "database",
+    "security": "security", "csp": "security", "xss": "security",
+    "api": "api", "route": "api", "endpoint": "api",
+    "ui": "ui", "component": "ui", "layout": "ui", "page": "ui",
+    "modal": "ui", "style": "ui", "theme": "ui",
+    "test": "test/e2e", "e2e": "test/e2e", "spec": "test/e2e",
+    "config": "config", "env": "config", "setup": "config",
+    "docs": "docs", "doc": "docs", "readme": "docs",
+    "external": "external-api", "webhook": "external-api",
+}
 
 # MCP rule_hints / LLM 프롬프트 힌트 — load_profile()로 채워짐
 RULE_HINTS: dict[str, str] = {}
@@ -75,6 +96,15 @@ def load_profile(path: str | Path) -> None:
         PROMPT_HINTS.update(data["prompt_hints"])
 
 def classify_domain(title: str, files: list[str]) -> str:
+    # 1단계: conventional commit scope 추출 → 직접 매핑 (가장 정밀)
+    scope_match = re.match(r"^\w+\(([^)]+)\):", title, re.I)
+    if scope_match:
+        scope = scope_match.group(1).lower()
+        for key, domain in _SCOPE_TO_DOMAIN.items():
+            if key in scope:
+                return domain
+
+    # 2단계: 제목 + 파일 경로 키워드 매칭
     combined = " ".join([title] + files).lower()
     for domain, pattern in DOMAIN_PATTERNS:
         if re.search(pattern, combined, re.I):
@@ -123,7 +153,6 @@ def fetch_prs(limit: int = 300) -> list[PR]:
 
     raw = json.loads(result.stdout)
     prs = []
-    _FIX_RE = re.compile(r'^fix|^hotfix|수정|버그|bug\b|regression|revert', re.I)
     for item in raw:
         is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
         domain = classify_domain(item["title"], [])
@@ -162,8 +191,8 @@ def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
             if body and len(body) > 10:
                 comments.append(body[:300])
         is_ai = any(
-            "Co-Authored-By: Claude" in (commit.get("messageBody", "") or "")
-            or "Co-Authored-By: Claude" in (commit.get("messageHeadline", "") or "")
+            "co-authored-by: claude" in (commit.get("messageBody", "") or "").lower()
+            or "co-authored-by: claude" in (commit.get("messageHeadline", "") or "").lower()
             for commit in data.get("commits", [])
         )
 
@@ -204,8 +233,8 @@ def _fetch_ai_flag(pr_number: int) -> tuple[int, bool]:
     try:
         data = json.loads(result.stdout)
         is_ai = any(
-            "Co-Authored-By: Claude" in (commit.get("messageBody", "") or "")
-            or "Co-Authored-By: Claude" in (commit.get("messageHeadline", "") or "")
+            "co-authored-by: claude" in (commit.get("messageBody", "") or "").lower()
+            or "co-authored-by: claude" in (commit.get("messageHeadline", "") or "").lower()
             for commit in data.get("commits", [])
         )
         return (pr_number, is_ai)
@@ -695,7 +724,6 @@ def main():
             return
         # 원시 PR 목록 JSON
         prs = []
-        _FIX_RE = re.compile(r'^fix|^hotfix|수정|버그|bug\b|regression|revert', re.I)
         for item in raw:
             is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
             prs.append(PR(
