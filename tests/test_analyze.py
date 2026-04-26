@@ -256,3 +256,51 @@ def test_classify_domain_korean_cicd():
     """Korean deploy keywords (배포, 도커) map to 'ci/cd'."""
     assert classify_domain("fix: 스테이징 배포 실패 수정", []) == "ci/cd"
     assert classify_domain("chore: 도커 이미지 최적화", []) == "ci/cd"
+
+
+# ── scope_to_domain profile override tests ───────────────────────────────────
+
+def test_load_profile_scope_to_domain_merge():
+    """scope_to_domain in profile merges into existing mappings (does not replace)."""
+    import analyze
+    import json, tempfile, os
+
+    profile = {
+        "scope_to_domain": {
+            "sms":    "external-api",
+            "cron":   "database",
+            "pitr":   "database",
+            "studio": "ui",
+        }
+    }
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+        json.dump(profile, f)
+        tmp = f.name
+
+    try:
+        load_profile(tmp)
+        assert analyze._SCOPE_TO_DOMAIN["sms"] == "external-api"
+        assert analyze._SCOPE_TO_DOMAIN["cron"] == "database"
+        assert analyze._SCOPE_TO_DOMAIN["pitr"] == "database"
+        assert analyze._SCOPE_TO_DOMAIN["studio"] == "ui"
+        assert analyze._SCOPE_TO_DOMAIN["auth"] == "auth"
+        assert analyze._SCOPE_TO_DOMAIN["payment"] == "payment"
+    finally:
+        os.unlink(tmp)
+
+
+def test_classify_domain_profile_scope_override():
+    """Custom scope_to_domain from profile is used in classify_domain()."""
+    import analyze, json, tempfile, os
+
+    profile = {"scope_to_domain": {"sms": "external-api", "pitr": "database"}}
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+        json.dump(profile, f)
+        tmp = f.name
+
+    try:
+        load_profile(tmp)
+        assert classify_domain("fix(sms): hook validation", []) == "external-api"
+        assert classify_domain("fix(pitr): restore duration input", []) == "database"
+    finally:
+        os.unlink(tmp)

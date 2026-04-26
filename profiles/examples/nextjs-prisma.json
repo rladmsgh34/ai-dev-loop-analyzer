@@ -34,6 +34,22 @@
     "test/e2e":     "→ E2E 서버는 `next start`(standalone) 기준으로만 실행",
     "config":       "→ next.config.ts 변경 후 dev 서버 재시작 필수"
   },
+  "scope_to_domain": {
+    "nextauth":  "auth",
+    "middleware": "auth",
+    "payment":   "payment",
+    "checkout":  "payment",
+    "order":     "payment",
+    "cart":      "payment",
+    "prisma":    "database",
+    "migration": "database",
+    "seed":      "database",
+    "docker":    "ci/cd",
+    "deploy":    "ci/cd",
+    "workflow":  "ci/cd",
+    "e2e":       "test/e2e",
+    "playwright":"test/e2e"
+  },
   "prompt_hints": {
     "language":     "ko",
     "ai_assistant": "Claude Code",
