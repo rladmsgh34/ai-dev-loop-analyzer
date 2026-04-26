@@ -163,20 +163,23 @@ def load_analysis_cache() -> list[dict]:
     except Exception:
         return []
 
+    repo_full = data.get("repo", "unknown")
+    repo_short = repo_full.split("/")[-1] if "/" in repo_full else repo_full
+
     chunks = []
     summary = data.get("summary", {})
     if summary:
         chunks.append({
-            "id": "cache_summary",
+            "id": f"cache_summary_{repo_short}",
             "text": (
-                f"gwangcheon-shop 최신 분석: "
+                f"{repo_short} 최신 분석: "
                 f"총 PR {summary.get('total_prs', '?')}개, "
                 f"fix PR {summary.get('fix_prs', '?')}개, "
                 f"fix율 {summary.get('fix_rate', '?')}%."
             ),
             "metadata": {
                 "type": "project_summary",
-                "repo": "gwangcheon-shop",
+                "repo": repo_short,
                 "fix_rate": summary.get("fix_rate", 0),
                 "date": data.get("analyzed_at", ""),
             },
@@ -184,9 +187,9 @@ def load_analysis_cache() -> list[dict]:
 
     for cluster in data.get("clusters", []):
         chunks.append({
-            "id": f"cache_cluster_{cluster.get('start', 0)}_{cluster.get('end', 0)}",
+            "id": f"cache_cluster_{repo_short}_{cluster.get('start', 0)}_{cluster.get('end', 0)}",
             "text": (
-                f"gwangcheon-shop 회귀 클러스터: "
+                f"{repo_short} 회귀 클러스터: "
                 f"{cluster.get('domain', 'unknown')} 도메인에서 "
                 f"#{cluster.get('start')} ~ #{cluster.get('end')} "
                 f"({cluster.get('size', '?')}개 연속 fix PR)."
@@ -194,7 +197,7 @@ def load_analysis_cache() -> list[dict]:
             "metadata": {
                 "type": "cluster",
                 "domain": cluster.get("domain", ""),
-                "repo": "gwangcheon-shop",
+                "repo": repo_short,
                 "date": data.get("analyzed_at", ""),
             },
         })

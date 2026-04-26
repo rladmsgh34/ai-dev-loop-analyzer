@@ -5,6 +5,10 @@ on:
     - cron: '0 1 * * *'   # 매일 오전 10시 KST
   workflow_dispatch:
     inputs:
+      target_repo:
+        description: '분석할 레포 (예: owner/repo). 미입력 시 vars.TARGET_REPO 사용.'
+        required: false
+        default: ''
       dry_run:
         description: 'Dry run — 분석만 하고 PR 생성 생략'
         type: boolean
@@ -24,6 +28,7 @@ jobs:
       issues: write
       pull-requests: write
     env:
+      TARGET_REPO: ${{ inputs.target_repo || vars.TARGET_REPO || 'rladmsgh34/gwangcheon-shop' }}
       IS_PR_TRIGGER: ${{ github.event_name == 'repository_dispatch' }}
 
     steps:
@@ -39,19 +44,19 @@ jobs:
           mkdir -p data
           touch data/rules-history.json
 
-      - name: Checkout gwangcheon-shop
+      - name: Checkout target repo
         uses: actions/checkout@v4
         with:
-          repository: rladmsgh34/gwangcheon-shop
+          repository: ${{ env.TARGET_REPO }}
           token: ${{ secrets.GH_PAT }}
-          path: gwangcheon-shop
+          path: target-repo
 
       # ── Step 1: analyze ─────────────────────────────────────────────────────
       - name: Collect and analyze PR history
         id: analyze
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-          AI_DEV_LOOP_PROFILE: gwangcheon-shop/.claude/ai-dev-loop-profile.json
+          AI_DEV_LOOP_PROFILE: target-repo/.claude/ai-dev-loop-profile.json
         run: |
           LIMIT=300
           FETCH_FLAG="--fetch-files"
@@ -63,7 +68,7 @@ jobs:
           fi
 
           gh pr list \
-            --repo rladmsgh34/gwangcheon-shop \
+            --repo "$TARGET_REPO" \
             --state merged --limit $LIMIT \
             --json number,title,mergedAt,additions,deletions \
             > /tmp/prs.json
@@ -196,7 +201,7 @@ jobs:
 
           d = json.load(open('/tmp/report.json'))
           date = os.environ.get('REPORT_DATE', datetime.now().strftime('%Y-%m-%d'))
-          repo = "rladmsgh34/gwangcheon-shop"
+          repo = os.environ.get('TARGET_REPO', 'unknown')
 
           patterns_path = Path("data/diff-patterns.json")
           existing = json.loads(patterns_path.read_text()) if patterns_path.exists() else {"patterns": []}
@@ -232,6 +237,7 @@ jobs:
           PYEOF
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
+          TARGET_REPO: ${{ env.TARGET_REPO }}
 
       - name: 히스토리 파일 커밋
         run: |
@@ -249,7 +255,7 @@ jobs:
         run: |
           python3 src/patch_claude_md.py \
             --report /tmp/report.json \
-            --claude-md gwangcheon-shop/CLAUDE.md \
+            --claude-md target-repo/CLAUDE.md \
             --date "${{ steps.analyze.outputs.date }}" \
             ${{ inputs.dry_run == 'true' && '--dry-run' || '' }} \
             2>&1 | tee /tmp/patch-log.txt
@@ -261,12 +267,12 @@ jobs:
           fi
 
       # ── Step 4b: open PR (only when dry_run=false and changes exist) ────────
-      - name: Open gwangcheon-shop PR
+      - name: Open target repo PR
         if: steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GH_PAT }}
-          path: gwangcheon-shop
+          path: target-repo
           commit-message: "chore: AI Dev Loop 자동 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
           branch: chore/ai-loop-rules-${{ steps.analyze.outputs.date }}
           title: "🤖 CLAUDE.md 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
