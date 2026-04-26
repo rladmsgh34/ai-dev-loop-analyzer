@@ -16,7 +16,25 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        }
+      ]
     },
     {
       "id": "afe62a64",
@@ -34,7 +52,25 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        }
+      ]
     },
     {
       "id": "09a27d86",
@@ -52,7 +88,25 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        }
+      ]
     },
     {
       "id": "c6e0595d",
@@ -70,7 +124,25 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        }
+      ]
     },
     {
       "id": "b89b775d",
@@ -88,21 +160,159 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        }
+      ]
+    },
+    {
+      "id": "32699aeb",
+      "rule": "- PR 작성 시, `vapor` 관련 코드 변경이 있을 경우, 연속된 `fix` PR 발행 없이 한 번에 해결하도록 한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "a13e1029",
+      "rule": "- `compiler` 관련 코드를 수정할 때는 다른 `fix`와의 종속 관계를 명확히 하고, 관련된 변화가 있는 부분을 모두 수정하여 연쇄적인 `fix` 발생을 예방한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "8607b6a2",
+      "rule": "- `hydration` 작업 시, 유사한 수정사항에 대해 그룹화하여 한번에 수정함으로써 반복적인 `fix`를 줄인다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "aeaaa483",
+      "rule": "- `runtime` 수정 시, 특정 함수 (`createPlainElement`, `hydrate`)의 변경이 있을 경우, 이들 함수와 관련된 모든 속성을 점검하고 수정하여 후속 `fix`를 방지한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "be61b6cd",
+      "rule": "- 동일한 파일에서 `vFor`나 `transition` 관련 수정이 다수 발생할 경우, 여러 이슈를 통합하여 다루도록 하여 반복적인 수정 부담을 줄인다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
       "snapshots": []
     }
   ],
   "snapshots": [
     {
       "date": "2026-04-26",
-      "total_fix_rate": 16.9,
-      "ci/cd": 6.7,
-      "general": 2.2,
-      "external-api": 1.7,
-      "security": 1.7,
-      "payment": 1.7,
-      "database": 1.1,
-      "test/e2e": 1.1,
-      "auth": 0.6
+      "total_fix_rate": 58.5,
+      "vapor": 22.0,
+      "general": 12.5,
+      "compiler": 9.5,
+      "runtime": 3.5,
+      "hydration": 3.0,
+      "types": 2.0,
+      "reactivity": 1.5,
+      "maintenance": 1.0,
+      "ssr": 1.0,
+      "hmr": 1.0,
+      "playground": 0.5,
+      "docs": 0.5,
+      "runtime-dom": 0.5
     }
   ]
 }
