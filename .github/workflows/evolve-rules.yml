@@ -148,17 +148,29 @@ jobs:
           python3 - <<'PYEOF'
           import json, sys
           sys.path.insert(0, 'src')
-          from rule_tracker import record_snapshot
+          from rule_tracker import record_snapshot, record_new_rules
           import os
 
           d = json.load(open('/tmp/report.json'))
           date = os.environ.get('REPORT_DATE', '')
-          domain_rates = {
-              dc['domain']: dc['fix_count']
-              for dc in d.get('domain_counts', [])
-          }
-          record_snapshot(domain_rates, d['summary']['fix_rate'], date)
+          total_fix = d['summary']['fix_rate']
+          total_prs = d['summary']['total_prs']
+
+          # domain_counts는 raw count → 비율(%)로 변환
+          domain_rates = {}
+          for dc in d.get('domain_counts', []):
+              if total_prs > 0:
+                  domain_rates[dc['domain']] = round(dc['fix_count'] / total_prs * 100, 1)
+
+          # 1) 스냅샷 기록
+          record_snapshot(domain_rates, total_fix, date)
           print(f"스냅샷 기록 완료: {date}")
+
+          # 2) 오늘 제안된 규칙을 히스토리에 등록 (추가 시점 fix-rate 기준점 저장)
+          rules = d.get('claude_md_suggestions', [])
+          if rules:
+              added = record_new_rules(rules, domain_rates, total_fix, date)
+              print(f"신규 규칙 등록: {len(added)}개")
           PYEOF
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
