@@ -483,6 +483,11 @@ jobs:
 
           d = json.load(open('/tmp/report.json'))
           date = os.environ.get('REPORT_DATE', '')
+          target_repo = os.environ.get('TARGET_REPO', '')
+          # analyzer 본인 분석 시 self 태그 — workflow 매트릭스에서는 절대 발생 안 하지만
+          # 로컬 self-analysis 진입점 보호용. (workflow는 항상 외부 repo 분석)
+          analyzer_repo = 'rladmsgh34/ai-dev-loop-analyzer'
+          origin = 'self' if target_repo == analyzer_repo else target_repo
           total_fix = d['summary']['fix_rate']
           total_prs = d['summary']['total_prs']
 
@@ -492,18 +497,21 @@ jobs:
               if total_prs > 0:
                   domain_rates[dc['domain']] = round(dc['fix_count'] / total_prs * 100, 1)
 
-          # 1) 스냅샷 기록
-          record_snapshot(domain_rates, total_fix, date)
-          print(f"스냅샷 기록 완료: {date}")
+          # 1) 스냅샷 기록 — repo 태그로 cross-repo pollution 차단
+          record_snapshot(domain_rates, total_fix, date, repo=origin)
+          print(f"스냅샷 기록 완료: {date} [{origin}]")
 
           # 2) 오늘 제안된 규칙을 히스토리에 등록 (추가 시점 fix-rate 기준점 저장)
+          # 새 rule은 항상 explicit fact (분석 시점에 어느 repo 분석 중인지 확실).
           rules = d.get('claude_md_suggestions', [])
           if rules:
-              added = record_new_rules(rules, domain_rates, total_fix, date)
-              print(f"신규 규칙 등록: {len(added)}개")
+              added = record_new_rules(rules, domain_rates, total_fix, date,
+                                        repo=origin, origin_confidence='explicit')
+              print(f"신규 규칙 등록: {len(added)}개 [origin={origin}]")
           PYEOF
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
+          TARGET_REPO: ${{ env.TARGET_REPO }}
 
       # ── 3.5단계: diff 패턴 누적 저장 (RAG 임베딩용) ────────────────────────
       - name: diff 패턴 저장

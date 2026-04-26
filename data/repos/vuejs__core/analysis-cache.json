@@ -1,60 +1,32 @@
 {
   "generated_at": "2026-04-26",
   "repo": "vuejs/core",
-  "fix_rate": 58.5,
+  "fix_rate": 63.0,
   "summary": {
-    "total_prs": 200,
-    "fix_prs": 117,
-    "fix_rate": 58.5
+    "total_prs": 27,
+    "fix_prs": 17,
+    "fix_rate": 63.0
   },
   "risky_files": [],
   "domain_counts": [
     {
       "domain": "vapor",
-      "fix_count": 44
-    },
-    {
-      "domain": "general",
-      "fix_count": 25
-    },
-    {
-      "domain": "compiler",
-      "fix_count": 19
-    },
-    {
-      "domain": "runtime",
       "fix_count": 7
     },
     {
-      "domain": "hydration",
-      "fix_count": 6
-    },
-    {
-      "domain": "types",
+      "domain": "general",
       "fix_count": 4
     },
     {
-      "domain": "reactivity",
+      "domain": "compiler",
       "fix_count": 3
     },
     {
-      "domain": "maintenance",
-      "fix_count": 2
-    },
-    {
-      "domain": "ssr",
-      "fix_count": 2
-    },
-    {
-      "domain": "hmr",
-      "fix_count": 2
-    },
-    {
-      "domain": "playground",
+      "domain": "hydration",
       "fix_count": 1
     },
     {
-      "domain": "docs",
+      "domain": "reactivity",
       "fix_count": 1
     },
     {
@@ -65,33 +37,9 @@
   "ai_weak_domains": [],
   "clusters": [
     {
-      "start": 14374,
-      "end": 14447,
-      "size": 17,
-      "domain": "general"
-    },
-    {
-      "start": 14443,
-      "end": 14547,
-      "size": 33,
-      "domain": "vapor"
-    },
-    {
-      "start": 14493,
-      "end": 14632,
-      "size": 36,
-      "domain": "compiler"
-    },
-    {
-      "start": 14633,
-      "end": 14709,
-      "size": 15,
-      "domain": "vapor"
-    },
-    {
       "start": 14702,
       "end": 14754,
-      "size": 16,
+      "size": 17,
       "domain": "vapor"
     }
   ]
