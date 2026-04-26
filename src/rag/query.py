@@ -11,6 +11,7 @@ ChromaDB에서 관련 패턴을 검색하고 Claude Code CLI로 규칙을 생성
 """
 
 import json
+import pickle
 import subprocess
 import sys
 from pathlib import Path
@@ -19,9 +20,62 @@ from typing import Optional
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
+from tokenizer import code_tokenizer
+
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 CHROMA_DIR = DATA_DIR / "chroma"
+BM25_CACHE_PATH = DATA_DIR / ".bm25_cache.pkl"
 EMBED_MODEL = "all-MiniLM-L6-v2"
+
+
+def _load_or_build_bm25(collection):
+    """BM25 인덱스를 pickle 캐시에서 로드하거나 ChromaDB에서 빌드한다."""
+    try:
+        from rank_bm25 import BM25Okapi
+    except ImportError:
+        return None, [], []
+
+    if BM25_CACHE_PATH.exists():
+        try:
+            cache = pickle.loads(BM25_CACHE_PATH.read_bytes())
+            return cache["bm25"], cache["ids"], cache["docs"]
+        except Exception:
+            pass
+
+    # 캐시 miss → ChromaDB 전체 로드 후 빌드 (콜드 스타트 폴백)
+    all_data = collection.get(include=["documents"])
+    docs: list[str] = all_data["documents"]
+    ids: list[str] = all_data["ids"]
+    if not docs:
+        return None, [], []
+
+    tokenized = [code_tokenizer(d) for d in docs]
+    bm25 = BM25Okapi(tokenized)
+    return bm25, ids, docs
+
+
+def _rrf_fusion(
+    vector_ids: list[str],
+    bm25_ids: list[str],
+    k: int = 60,
+) -> list[str]:
+    """Reciprocal Rank Fusion으로 두 랭킹을 병합한다.
+
+    Score(id) = 1/(k + rank_vector) + 1/(k + rank_bm25)
+    rank는 1-indexed. 한쪽에만 있는 id는 나머지 목록 길이+1을 rank로 사용.
+    """
+    all_ids = list(dict.fromkeys(vector_ids + bm25_ids))
+    v_rank = {id_: i + 1 for i, id_ in enumerate(vector_ids)}
+    b_rank = {id_: i + 1 for i, id_ in enumerate(bm25_ids)}
+
+    v_default = len(vector_ids) + 1
+    b_default = len(bm25_ids) + 1
+
+    scores = {
+        id_: 1 / (k + v_rank.get(id_, v_default)) + 1 / (k + b_rank.get(id_, b_default))
+        for id_ in all_ids
+    }
+    return sorted(all_ids, key=lambda x: scores[x], reverse=True)
 
 
 class RagEngine:
@@ -33,6 +87,50 @@ class RagEngine:
         client = chromadb.PersistentClient(path=str(CHROMA_DIR))
         ef = SentenceTransformerEmbeddingFunction(model_name=EMBED_MODEL)
         self.collection = client.get_collection("ai_dev_loop", embedding_function=ef)
+        self._bm25, self._bm25_ids, self._bm25_docs = _load_or_build_bm25(self.collection)
+
+    def hybrid_retrieve(
+        self,
+        query: str,
+        n_results: int = 5,
+        where: Optional[dict] = None,
+    ) -> list[str]:
+        """BM25 + 벡터 검색을 RRF로 결합한 하이브리드 검색."""
+        candidate = min(max(n_results * 3, 15), self.collection.count())
+
+        # 벡터 검색
+        kwargs: dict = {"query_texts": [query], "n_results": candidate}
+        if where:
+            kwargs["where"] = where
+        vec_results = self.collection.query(**kwargs)
+        vec_ids: list[str] = vec_results["ids"][0] if vec_results["ids"] else []
+        vec_docs_map: dict[str, str] = {}
+        if vec_results["ids"] and vec_results["documents"]:
+            for id_, doc in zip(vec_results["ids"][0], vec_results["documents"][0]):
+                vec_docs_map[id_] = doc
+
+        # BM25 검색
+        bm25_ids: list[str] = []
+        if self._bm25 is not None:
+            tokens = code_tokenizer(query)
+            scores = self._bm25.get_scores(tokens)
+            ranked = sorted(
+                range(len(self._bm25_ids)), key=lambda i: scores[i], reverse=True
+            )
+            # where 필터 적용: type 메타데이터 기반 단순 필터링은 생략
+            # (BM25는 ChromaDB 메타데이터 없이 동작하므로 전체 랭킹 사용)
+            bm25_ids = [self._bm25_ids[i] for i in ranked[:candidate]]
+
+        merged_ids = _rrf_fusion(vec_ids, bm25_ids)[:n_results]
+
+        # 문서 텍스트 복원: 벡터 결과 우선, 없으면 BM25 캐시에서
+        bm25_id_to_doc = dict(zip(self._bm25_ids, self._bm25_docs)) if self._bm25 else {}
+        result_docs = []
+        for id_ in merged_ids:
+            doc = vec_docs_map.get(id_) or bm25_id_to_doc.get(id_, "")
+            if doc:
+                result_docs.append(doc)
+        return result_docs
 
     def retrieve(self, query: str, n_results: int = 5, where: Optional[dict] = None) -> list[str]:
         """쿼리와 유사한 청크를 검색합니다."""
@@ -61,10 +159,10 @@ class RagEngine:
         # 1. diff 패턴 우선 검색 — 실제 코드 변경이 가장 구체적인 컨텍스트
         diff_query = f"{domain} fix 코드 변경 패턴 {language}".strip()
         where_diff = {"type": "diff_pattern"} if self._has_diff_patterns() else None
-        diff_docs = self.retrieve(diff_query, n_retrieve, where=where_diff)
+        diff_docs = self.hybrid_retrieve(diff_query, n_retrieve, where=where_diff)
 
         # 2. 통계/요약 검색 — diff가 없거나 부족할 때 보완
-        stat_docs = self.retrieve(f"{domain} 회귀 취약 도메인 {language}".strip(), n_retrieve // 2)
+        stat_docs = self.hybrid_retrieve(f"{domain} 회귀 취약 도메인 {language}".strip(), n_retrieve // 2)
 
         # diff 패턴을 앞에 배치 (더 구체적이므로 우선)
         all_docs = list(dict.fromkeys(diff_docs + stat_docs))[:n_retrieve]
@@ -124,7 +222,7 @@ class RagEngine:
     ) -> str:
         """회귀 클러스터를 RAG 컨텍스트로 설명합니다."""
         query = f"{domain} 회귀 클러스터 원인 패턴"
-        docs = self.retrieve(query, n_results=5)
+        docs = self.hybrid_retrieve(query, n_results=5)
         context_text = "\n".join(f"  - {d}" for d in docs)
 
         pr_list = "\n".join(f"  - #{p['number']}: {p['title']}" for p in prs[:10])
