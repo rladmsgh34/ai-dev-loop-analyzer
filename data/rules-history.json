@@ -89,7 +89,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "afe62a64",
@@ -180,7 +182,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "09a27d86",
@@ -271,7 +275,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "c6e0595d",
@@ -362,7 +368,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "b89b775d",
@@ -453,7 +461,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "32699aeb",
@@ -532,7 +542,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "a13e1029",
@@ -611,7 +623,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "8607b6a2",
@@ -690,7 +704,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "aeaaa483",
@@ -769,7 +785,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "be61b6cd",
@@ -848,7 +866,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "53a34351",
@@ -910,7 +930,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "7a741814",
@@ -972,7 +994,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "af1a86d6",
@@ -1034,7 +1058,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "ca8aa38f",
@@ -1096,7 +1122,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "ab744e04",
@@ -1158,7 +1186,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "22c72089",
@@ -1207,7 +1237,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "6528b6b6",
@@ -1256,7 +1288,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "468952ae",
@@ -1305,7 +1339,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "fa3254a5",
@@ -1354,7 +1390,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "01bce2f5",
@@ -1403,7 +1441,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "self",
+      "origin_confidence": "explicit"
     },
     {
       "id": "b32ac3c9",
@@ -1440,7 +1480,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "b9010ee4",
@@ -1477,7 +1519,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "inferred"
     },
     {
       "id": "f7d1be71",
@@ -1514,7 +1558,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "be663e4b",
@@ -1551,7 +1597,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "1314b8f2",
@@ -1588,7 +1636,9 @@
           "cli": 0.5,
           "test/e2e": 0.5
         }
-      ]
+      ],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "fb2400a4",
@@ -1607,7 +1657,9 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "03c1dc50",
@@ -1626,7 +1678,9 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "ed5a0585",
@@ -1645,7 +1699,9 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "3ae8de2b",
@@ -1664,7 +1720,9 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     },
     {
       "id": "38847995",
@@ -1683,7 +1741,9 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [],
+      "origin_repo": "unknown",
+      "origin_confidence": "unknown"
     }
   ],
   "snapshots": [
