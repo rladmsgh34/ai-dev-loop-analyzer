@@ -12,5 +12,6 @@ __pycache__/
 !data/repos/**/feedback-stats.json
 data/repos/**/warning-log.jsonl
 !profiles/**/*.json
+!config/repos.json
 .DS_Store
 data/chroma/

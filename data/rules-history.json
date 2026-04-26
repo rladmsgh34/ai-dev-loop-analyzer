@@ -1,4 +1,544 @@
 {
-  "rules": [],
-  "snapshots": []
+  "rules": [
+    {
+      "id": "6b3d2508",
+      "rule": "- src/cli.py에서 위험 파일의 경고를 비활성화하지 않도록 항상 위험도를 확인하고 경고 메시지를 stdout에 출력하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "afe62a64",
+      "rule": "- src/analyze.py의 detect_clusters 함수에서 fix PR 클러스터링 시 window 값을 14로 설정하고, 종속 클러스터를 피하기 위해 이전 클러스터에 포함된 PR을 제외하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "09a27d86",
+      "rule": "- tests/test_analyze.py에서 test 함수의 개별 테스트 케이스를 더 구체적으로 나누어 각 케이스에 대한 명확한 기대 결과를 정의하세요.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "c6e0595d",
+      "rule": "- src/rag_hook.py의 BM25 절대 점수가 _SCORE_THRESHOLD 기준값 1.5 이상이 되도록 새로운 코드 변경 시 기존 패턴과의 유사도를 체크하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "b89b775d",
+      "rule": "- 외부 API 호출이나 보안 관련 코드 변경 시 src/rag_hook.py와 관련된 경고를 추가하여 과거의 회귀 패턴을 인지할 수 있도록 하세요.",
+      "domain": "external-api",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 58.5,
+          "vapor": 22.0,
+          "general": 12.5,
+          "compiler": 9.5,
+          "runtime": 3.5,
+          "hydration": 3.0,
+          "types": 2.0,
+          "reactivity": 1.5,
+          "maintenance": 1.0,
+          "ssr": 1.0,
+          "hmr": 1.0,
+          "playground": 0.5,
+          "docs": 0.5,
+          "runtime-dom": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "32699aeb",
+      "rule": "- PR 작성 시, `vapor` 관련 코드 변경이 있을 경우, 연속된 `fix` PR 발행 없이 한 번에 해결하도록 한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "a13e1029",
+      "rule": "- `compiler` 관련 코드를 수정할 때는 다른 `fix`와의 종속 관계를 명확히 하고, 관련된 변화가 있는 부분을 모두 수정하여 연쇄적인 `fix` 발생을 예방한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "8607b6a2",
+      "rule": "- `hydration` 작업 시, 유사한 수정사항에 대해 그룹화하여 한번에 수정함으로써 반복적인 `fix`를 줄인다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "aeaaa483",
+      "rule": "- `runtime` 수정 시, 특정 함수 (`createPlainElement`, `hydrate`)의 변경이 있을 경우, 이들 함수와 관련된 모든 속성을 점검하고 수정하여 후속 `fix`를 방지한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "be61b6cd",
+      "rule": "- 동일한 파일에서 `vFor`나 `transition` 관련 수정이 다수 발생할 경우, 여러 이슈를 통합하여 다루도록 하여 반복적인 수정 부담을 줄인다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 58.5,
+        "vapor": 22.0,
+        "general": 12.5,
+        "compiler": 9.5,
+        "runtime": 3.5,
+        "hydration": 3.0,
+        "types": 2.0,
+        "reactivity": 1.5,
+        "maintenance": 1.0,
+        "ssr": 1.0,
+        "hmr": 1.0,
+        "playground": 0.5,
+        "docs": 0.5,
+        "runtime-dom": 0.5
+      },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 17.5,
+          "general": 12.5,
+          "monorepo": 1.0,
+          "ci/cd": 1.0,
+          "font": 0.5,
+          "cache": 0.5,
+          "maintenance": 0.5,
+          "scripts": 0.5,
+          "cli": 0.5,
+          "test/e2e": 0.5
+        }
+      ]
+    },
+    {
+      "id": "53a34351",
+      "rule": "- PR에 관련된 `type-only ExportNamed` 기능이 변경될 때는 반드시 관련 테스트를 확인하고 추가해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "7a741814",
+      "rule": "- `devlow-bench`와 같은 설정 파일의 `rootDir` 값이 `package.json`과 불일치할 경우, 수정 전에 영향을 받는 모든 파일을 점검해야 한다.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "af1a86d6",
+      "rule": "- `next/image`의 `images.maximumResponseBody` 설정이 로컬 이미지에도 적용되도록 변화를 줄 경우, 관련된 모든 경우의 수를 테스트하여 누락된 부분이 없는지 확인해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "ca8aa38f",
+      "rule": "- CI/CD 관련 PR에서는 Docker 이미지 캐시와 관련된 변경사항이 있을 때, 성능 측정을 위한 벤치마크 테스트를 반드시 수행해야 한다.",
+      "domain": "ci/cd",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    },
+    {
+      "id": "ab744e04",
+      "rule": "- `cache-components.test.ts`와 같이 테스트 파일에서 발생하는 타입 오류를 사전에 예방하기 위해, 개발 중에 정적 타입 검사 도구를 적극 활용해야 한다.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 17.5,
+        "general": 12.5,
+        "monorepo": 1.0,
+        "ci/cd": 1.0,
+        "font": 0.5,
+        "cache": 0.5,
+        "maintenance": 0.5,
+        "scripts": 0.5,
+        "cli": 0.5,
+        "test/e2e": 0.5
+      },
+      "snapshots": []
+    }
+  ],
+  "snapshots": [
+    {
+      "date": "2026-04-26",
+      "total_fix_rate": 17.5,
+      "general": 12.5,
+      "monorepo": 1.0,
+      "ci/cd": 1.0,
+      "font": 0.5,
+      "cache": 0.5,
+      "maintenance": 0.5,
+      "scripts": 0.5,
+      "cli": 0.5,
+      "test/e2e": 0.5
+    }
+  ]
 }
