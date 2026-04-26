@@ -136,6 +136,54 @@ def test_compute_effectiveness_excludes_self_by_default(tmp_history):
     assert len(rt.compute_effectiveness(include_self=True)) == 1
 
 
+def test_migration_purges_repo_less_snapshots(tmp_path, monkeypatch):
+    """Pre-migration snapshots (no repo field) get cleaned. Idempotent."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "migrate_rules_origin",
+        Path(__file__).resolve().parent.parent / "scripts" / "migrate_rules_origin.py",
+    )
+    mig = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mig)
+
+    history_file = tmp_path / "rules-history.json"
+    history_file.write_text(json.dumps({
+        "rules": [
+            {
+                "id": "abc",
+                "rule": "fix something",
+                "domain": "general",
+                "date_added": "2026-01-01",
+                "fix_rate_at_add": {},
+                "snapshots": [
+                    {"date": "2026-01-02", "total": 5.0},  # no repo — dirty
+                    {"date": "2026-01-03", "repo": "vuejs/core", "total": 5.0},  # clean
+                ],
+            }
+        ],
+        "snapshots": [
+            {"date": "2026-01-02", "total_fix_rate": 5.0},  # no repo — dirty
+            {"date": "2026-01-03", "repo": "vuejs/core", "total_fix_rate": 5.0},
+        ],
+    }))
+    monkeypatch.setattr(mig, "HISTORY", history_file)
+    mig.main()
+
+    history = json.loads(history_file.read_text())
+    # Dirty global snapshot purged, clean one stays
+    assert len(history["snapshots"]) == 1
+    assert history["snapshots"][0]["repo"] == "vuejs/core"
+    # Dirty rule snapshot purged, clean one stays
+    assert len(history["rules"][0]["snapshots"]) == 1
+    assert history["rules"][0]["snapshots"][0]["repo"] == "vuejs/core"
+
+    # Idempotent — second run purges nothing
+    mig.main()
+    history2 = json.loads(history_file.read_text())
+    assert len(history2["snapshots"]) == 1
+    assert len(history2["rules"][0]["snapshots"]) == 1
+
+
 def test_compute_effectiveness_strict_excludes_inferred(tmp_history):
     rt.record_new_rules(
         rules=["explicit rule"], domain_fix_rates={},

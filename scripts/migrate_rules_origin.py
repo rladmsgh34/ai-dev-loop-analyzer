@@ -96,6 +96,29 @@ def _classify(rule_text: str) -> tuple[str, str]:
     return "unknown", "unknown"
 
 
+def _purge_dirty_snapshots(history: dict) -> tuple[int, int]:
+    """Remove snapshots that lack a 'repo' field (created before per-repo
+    tracking landed). Without a repo tag we can't tell which repo's analysis
+    produced them, so they're unsafe for cross-repo-aware efficacy
+    calculation. Idempotent — already-clean histories are no-ops.
+    """
+    global_purged = 0
+    rule_purged = 0
+
+    if "snapshots" in history:
+        before = len(history["snapshots"])
+        history["snapshots"] = [s for s in history["snapshots"] if s.get("repo")]
+        global_purged = before - len(history["snapshots"])
+
+    for rule in history.get("rules", []):
+        snaps = rule.get("snapshots", [])
+        before = len(snaps)
+        rule["snapshots"] = [s for s in snaps if s.get("repo")]
+        rule_purged += before - len(rule["snapshots"])
+
+    return global_purged, rule_purged
+
+
 def main() -> None:
     if not HISTORY.exists():
         print("rules-history.json 없음 — 스킵", file=sys.stderr)
@@ -118,6 +141,8 @@ def main() -> None:
         tagged[conf] += 1
         by_repo[origin] = by_repo.get(origin, 0) + 1
 
+    g_purged, r_purged = _purge_dirty_snapshots(history)
+
     HISTORY.write_text(json.dumps(history, ensure_ascii=False, indent=2))
 
     print(f"Tagged {len(rules)} rules:")
@@ -126,6 +151,9 @@ def main() -> None:
     print(f"\nBy origin_repo:")
     for k, v in sorted(by_repo.items(), key=lambda x: -x[1]):
         print(f"  {k}: {v}")
+    print(f"\nPurged snapshots without repo tag:")
+    print(f"  global: {g_purged}")
+    print(f"  rule-attached: {r_purged}")
 
 
 if __name__ == "__main__":

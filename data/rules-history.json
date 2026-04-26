@@ -16,80 +16,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -109,80 +36,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -202,80 +56,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -295,80 +76,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -388,80 +96,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -486,74 +121,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -578,74 +146,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -670,74 +171,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -762,99 +196,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -879,74 +221,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -967,61 +242,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -1042,86 +263,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1142,86 +284,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1242,86 +305,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1342,86 +326,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1441,74 +346,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1528,74 +366,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1615,74 +386,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1702,74 +406,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -1789,38 +426,7 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 58.5,
-          "vapor": 22.0,
-          "general": 12.5,
-          "compiler": 9.5,
-          "runtime": 3.5,
-          "hydration": 3.0,
-          "types": 2.0,
-          "reactivity": 1.5,
-          "maintenance": 1.0,
-          "ssr": 1.0,
-          "hmr": 1.0,
-          "playground": 0.5,
-          "docs": 0.5,
-          "runtime-dom": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "self",
       "origin_confidence": "explicit"
     },
@@ -1845,32 +451,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -1895,32 +476,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "vuejs/core",
       "origin_confidence": "inferred"
     },
@@ -1945,57 +501,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2020,57 +526,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2095,57 +551,7 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "total": 17.5,
-          "general": 12.5,
-          "monorepo": 1.0,
-          "ci/cd": 1.0,
-          "font": 0.5,
-          "cache": 0.5,
-          "maintenance": 0.5,
-          "scripts": 0.5,
-          "cli": 0.5,
-          "test/e2e": 0.5
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2166,44 +572,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2224,44 +593,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2282,44 +614,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2340,44 +635,7 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -2398,382 +656,10 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [
-        {
-          "date": "2026-04-26",
-          "repo": "rladmsgh34/gwangcheon-shop",
-          "total": 16.9,
-          "ci/cd": 6.7,
-          "general": 2.2,
-          "external-api": 1.7,
-          "security": 1.7,
-          "payment": 1.7,
-          "database": 1.1,
-          "test/e2e": 1.1,
-          "auth": 0.6
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vuejs/core",
-          "total": 63.0,
-          "vapor": 25.9,
-          "general": 14.8,
-          "compiler": 11.1,
-          "hydration": 3.7,
-          "reactivity": 3.7,
-          "runtime-dom": 3.7
-        },
-        {
-          "date": "2026-04-26",
-          "repo": "vercel/next.js",
-          "total": 13.1,
-          "general": 9.5,
-          "cache": 0.6,
-          "maintenance": 0.6,
-          "scripts": 0.6,
-          "monorepo": 0.6,
-          "cli": 0.6,
-          "test/e2e": 0.6
-        }
-      ],
+      "snapshots": [],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
-    },
-    {
-      "id": "2c4564cf",
-      "rule": "- GCS에 대한 접근은 반드시 Signed URL을 사용하여 처리하며, 공개 액세스 없이 이미지 처리 코드를 작성해야 한다.",
-      "domain": "external-api",
-      "origin_repo": "rladmsgh34/gwangcheon-shop",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 16.9,
-        "ci/cd": 6.7,
-        "general": 2.2,
-        "external-api": 1.7,
-        "security": 1.7,
-        "payment": 1.7,
-        "database": 1.1,
-        "test/e2e": 1.1,
-        "auth": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "12651076",
-      "rule": "- CI/CD 관련 PR에서는 pnpm 버전을 중복으로 선언하지 않도록 주의하고, 모든 설정을 명확히 문서화한다.",
-      "domain": "ci/cd",
-      "origin_repo": "rladmsgh34/gwangcheon-shop",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 16.9,
-        "ci/cd": 6.7,
-        "general": 2.2,
-        "external-api": 1.7,
-        "security": 1.7,
-        "payment": 1.7,
-        "database": 1.1,
-        "test/e2e": 1.1,
-        "auth": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "62372d15",
-      "rule": "- 프로덕트 페이지의 카테고리 필터는 URL 파라미터와 항상 동기화되도록 관리해야 하며, 이를 검증하는 테스트를 추가한다.",
-      "domain": "test/e2e",
-      "origin_repo": "rladmsgh34/gwangcheon-shop",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 16.9,
-        "ci/cd": 6.7,
-        "general": 2.2,
-        "external-api": 1.7,
-        "security": 1.7,
-        "payment": 1.7,
-        "database": 1.1,
-        "test/e2e": 1.1,
-        "auth": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "02e3cbd9",
-      "rule": "- 응용 프로그램의 코드 변경 시 BM25 캐시 파일이 존재하는지 항상 확인하고, 예상치 못한 오류를 방지하기 위해 예외 처리를 철저히 한다.",
-      "domain": "general",
-      "origin_repo": "rladmsgh34/gwangcheon-shop",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 16.9,
-        "ci/cd": 6.7,
-        "general": 2.2,
-        "external-api": 1.7,
-        "security": 1.7,
-        "payment": 1.7,
-        "database": 1.1,
-        "test/e2e": 1.1,
-        "auth": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "0c8de339",
-      "rule": "- cluster detection 알고리즘에서는 mergedAt 기준으로 PR 간의 시간 차이를 14일로 설정하고, 토큰의 유사도를 기준으로 클러스터를 식별할 때 정확성을 높인다.",
-      "domain": "general",
-      "origin_repo": "rladmsgh34/gwangcheon-shop",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 16.9,
-        "ci/cd": 6.7,
-        "general": 2.2,
-        "external-api": 1.7,
-        "security": 1.7,
-        "payment": 1.7,
-        "database": 1.1,
-        "test/e2e": 1.1,
-        "auth": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "d86205f1",
-      "rule": "- PR 제출 시, `runtime-vapor` 관련 코드 수정이 포함된 경우, 반드시 관련 문서와 주석을 업데이트하여 변경 사항을 명확히 해야 한다.",
-      "domain": "general",
-      "origin_repo": "vuejs/core",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 63.0,
-        "vapor": 25.9,
-        "general": 14.8,
-        "compiler": 11.1,
-        "hydration": 3.7,
-        "reactivity": 3.7,
-        "runtime-dom": 3.7
-      },
-      "snapshots": []
-    },
-    {
-      "id": "c5ab87be",
-      "rule": "- `compiler-sfc`에서 `:deep`과 같은 선택자 관련 수정이 있을 경우, 모든 연관된 CSS 파일을 검토하여 영향을 받을 수 있는 부분을 확인하고 수정해야 한다.",
-      "domain": "general",
-      "origin_repo": "vuejs/core",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 63.0,
-        "vapor": 25.9,
-        "general": 14.8,
-        "compiler": 11.1,
-        "hydration": 3.7,
-        "reactivity": 3.7,
-        "runtime-dom": 3.7
-      },
-      "snapshots": []
-    },
-    {
-      "id": "4514da29",
-      "rule": "- PR에서 `keepalive` 및 `teleport` 관련 기능을 수정하는 경우, 해당 기능의 유닛 테스트를 반드시 포함해야 하며, 새로운 테스트 케이스를 추가하여 회귀를 방지해야 한다.",
-      "domain": "test/e2e",
-      "origin_repo": "vuejs/core",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 63.0,
-        "vapor": 25.9,
-        "general": 14.8,
-        "compiler": 11.1,
-        "hydration": 3.7,
-        "reactivity": 3.7,
-        "runtime-dom": 3.7
-      },
-      "snapshots": []
-    },
-    {
-      "id": "0ba10b7f",
-      "rule": "- `vdom` 관련 수정이 포함된 PR은 배포 전에 시각적 회귀 테스트를 수행하여 UI 변경 사항이 의도한 대로 나타나는지 확인해야 한다.",
-      "domain": "test/e2e",
-      "origin_repo": "vuejs/core",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 63.0,
-        "vapor": 25.9,
-        "general": 14.8,
-        "compiler": 11.1,
-        "hydration": 3.7,
-        "reactivity": 3.7,
-        "runtime-dom": 3.7
-      },
-      "snapshots": []
-    },
-    {
-      "id": "d24fdc6e",
-      "rule": "- `textarea`와 관련된 기능 수정이 있을 경우, 다양한 화면 크기와 환경에서의 테스트를 통해 크기 조정 기능이 정상적으로 작동하는지 검증해야 한다.",
-      "domain": "test/e2e",
-      "origin_repo": "vuejs/core",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 63.0,
-        "vapor": 25.9,
-        "general": 14.8,
-        "compiler": 11.1,
-        "hydration": 3.7,
-        "reactivity": 3.7,
-        "runtime-dom": 3.7
-      },
-      "snapshots": []
-    },
-    {
-      "id": "82fd2473",
-      "rule": "- PR 작성 시 서버 참조 등록과 관련된 `ExportNamed`의 타입만 있는 경우, 사전 패스를 건너뛰도록 주의할 것.",
-      "domain": "general",
-      "origin_repo": "vercel/next.js",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 13.1,
-        "general": 9.5,
-        "cache": 0.6,
-        "maintenance": 0.6,
-        "scripts": 0.6,
-        "monorepo": 0.6,
-        "cli": 0.6,
-        "test/e2e": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "90466d25",
-      "rule": "- 리밸리데이션 중에 prefetch 힌트가 로드되지 않는 문제를 방지하기 위해 관련 기능의 코드 검토를 철저히 할 것.",
-      "domain": "general",
-      "origin_repo": "vercel/next.js",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 13.1,
-        "general": 9.5,
-        "cache": 0.6,
-        "maintenance": 0.6,
-        "scripts": 0.6,
-        "monorepo": 0.6,
-        "cli": 0.6,
-        "test/e2e": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "19a03a24",
-      "rule": "- 에러 발생 시 셀 정리를 허용하도록 재계산 루프를 수정할 때, `turbo-tasks` 관련 함수의 에러 처리 로직을 명확히 정의할 것.",
-      "domain": "general",
-      "origin_repo": "vercel/next.js",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 13.1,
-        "general": 9.5,
-        "cache": 0.6,
-        "maintenance": 0.6,
-        "scripts": 0.6,
-        "monorepo": 0.6,
-        "cli": 0.6,
-        "test/e2e": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "a3714a28",
-      "rule": "- `next/image`의 `images.maximumResponseBody` 설정이 로컬 이미지에도 적용되도록 코드 리뷰 과정에서 관련 테스트를 상시 포함할 것.",
-      "domain": "test/e2e",
-      "origin_repo": "vercel/next.js",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 13.1,
-        "general": 9.5,
-        "cache": 0.6,
-        "maintenance": 0.6,
-        "scripts": 0.6,
-        "monorepo": 0.6,
-        "cli": 0.6,
-        "test/e2e": 0.6
-      },
-      "snapshots": []
-    },
-    {
-      "id": "2f5ae2f7",
-      "rule": "- CI 워크플로우와 관련된 PR에서는 항상 권한 및 자동 레이블링 기능의 동작 여부를 검토할 것.",
-      "domain": "general",
-      "origin_repo": "vercel/next.js",
-      "origin_confidence": "explicit",
-      "date_added": "2026-04-26",
-      "fix_rate_at_add": {
-        "total": 13.1,
-        "general": 9.5,
-        "cache": 0.6,
-        "maintenance": 0.6,
-        "scripts": 0.6,
-        "monorepo": 0.6,
-        "cli": 0.6,
-        "test/e2e": 0.6
-      },
-      "snapshots": []
     }
   ],
-  "snapshots": [
-    {
-      "date": "2026-04-26",
-      "total_fix_rate": 17.5,
-      "general": 12.5,
-      "monorepo": 1.0,
-      "ci/cd": 1.0,
-      "font": 0.5,
-      "cache": 0.5,
-      "maintenance": 0.5,
-      "scripts": 0.5,
-      "cli": 0.5,
-      "test/e2e": 0.5
-    },
-    {
-      "date": "2026-04-26",
-      "repo": "rladmsgh34/gwangcheon-shop",
-      "total_fix_rate": 16.9,
-      "ci/cd": 6.7,
-      "general": 2.2,
-      "external-api": 1.7,
-      "security": 1.7,
-      "payment": 1.7,
-      "database": 1.1,
-      "test/e2e": 1.1,
-      "auth": 0.6
-    },
-    {
-      "date": "2026-04-26",
-      "repo": "vuejs/core",
-      "total_fix_rate": 63.0,
-      "vapor": 25.9,
-      "general": 14.8,
-      "compiler": 11.1,
-      "hydration": 3.7,
-      "reactivity": 3.7,
-      "runtime-dom": 3.7
-    },
-    {
-      "date": "2026-04-26",
-      "repo": "vercel/next.js",
-      "total_fix_rate": 13.1,
-      "general": 9.5,
-      "cache": 0.6,
-      "maintenance": 0.6,
-      "scripts": 0.6,
-      "monorepo": 0.6,
-      "cli": 0.6,
-      "test/e2e": 0.6
-    }
-  ]
+  "snapshots": []
 }
