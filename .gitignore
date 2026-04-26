@@ -6,6 +6,11 @@ __pycache__/
 !package.json
 !data/language-patterns.json
 !data/rules-history.json
+# 멀티 레포: 레포별 분석/피드백 데이터는 추적 (warning-log는 dev 머신 local-only)
+!data/repos/
+!data/repos/**/analysis-cache.json
+!data/repos/**/feedback-stats.json
+data/repos/**/warning-log.jsonl
 !profiles/**/*.json
 .DS_Store
 data/chroma/
