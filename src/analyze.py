@@ -14,6 +14,7 @@ import subprocess
 import urllib.request
 import urllib.error
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -173,55 +174,6 @@ def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
             diff_snippet += f"\n... ({len(lines) - 100}줄 생략)"
 
     return files, comments, is_ai, diff_snippet
-
-
-def fetch_pr_files(pr_number: int) -> list[str]:
-    result = subprocess.run(
-        ["gh", "pr", "view", str(pr_number), "--json", "files"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        return []
-    data = json.loads(result.stdout)
-    return [f["path"] for f in data.get("files", [])]
-
-
-def fetch_pr_is_ai_generated(pr_number: int) -> bool:
-    """PR의 커밋에 'Co-Authored-By: Claude' 태그가 있으면 AI 생성 PR로 판정"""
-    result = subprocess.run(
-        ["gh", "pr", "view", str(pr_number), "--json", "commits"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        return False
-    data = json.loads(result.stdout)
-    for commit in data.get("commits", []):
-        body = commit.get("messageBody", "") or ""
-        headline = commit.get("messageHeadline", "") or ""
-        if "Co-Authored-By: Claude" in body or "Co-Authored-By: Claude" in headline:
-            return True
-    return False
-
-
-def fetch_pr_review_comments(pr_number: int) -> list[str]:
-    """리뷰어 코멘트 수집 — 사람이 잡아낸 패턴을 LLM 프롬프트에 반영"""
-    result = subprocess.run(
-        ["gh", "pr", "view", str(pr_number), "--json", "reviews,comments"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        return []
-    data = json.loads(result.stdout)
-    comments = []
-    for r in data.get("reviews", []):
-        body = (r.get("body") or "").strip()
-        if body and len(body) > 10:
-            comments.append(body[:300])
-    for c in data.get("comments", []):
-        body = (c.get("body") or "").strip()
-        if body and len(body) > 10:
-            comments.append(body[:300])
-    return comments
 
 
 # ── 분석 엔진 ────────────────────────────────────────────────────────────────
@@ -672,13 +624,15 @@ def main():
 
     if args.fetch_files:
         fix_prs = [p for p in prs if p.is_fix]
-        print(f"fix PR {len(fix_prs)}개 파일 + 리뷰 코멘트 + AI 여부 수집 중...", file=sys.stderr)
-        for pr in fix_prs:
-            pr.files = fetch_pr_files(pr.number)
-            pr.review_comments = fetch_pr_review_comments(pr.number)
-            pr.is_ai_generated = fetch_pr_is_ai_generated(pr.number)
-            domain = classify_domain(pr.title, pr.files)
-            pr.domain = domain
+        print(f"fix PR {len(fix_prs)}개 병렬 수집 중 (workers=8)...", file=sys.stderr)
+        pr_map = {p.number: p for p in fix_prs}
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            futures = {pool.submit(fetch_pr_details, num): num for num in pr_map}
+            for future in as_completed(futures):
+                num = futures[future]
+                pr = pr_map[num]
+                pr.files, pr.review_comments, pr.is_ai_generated, _diff = future.result()
+                pr.domain = classify_domain(pr.title, pr.files)
 
     clusters = detect_clusters(prs)
     risky_files = rank_risky_files(prs)
