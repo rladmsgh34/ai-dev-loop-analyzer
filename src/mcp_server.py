@@ -330,6 +330,70 @@ def _suggest_review_checklist(pr_title: str, file_paths: list[str]) -> str:
     return "\n".join(lines)
 
 
+def _diff_risk_score(diff: str, context: str = "") -> str:
+    """
+    Scores a staged diff (0-10) by comparing it against past fix-PR patterns in ChromaDB.
+    Returns a markdown block with score badge, top-3 similar patterns, and a recommendation.
+    """
+    # 1. Use first 120 lines of the diff (token limit)
+    diff_lines = diff.splitlines()[:120]
+    diff_excerpt = "\n".join(diff_lines)
+
+    # 2. Extract changed file names from `+++ b/` lines in the diff
+    extracted_files: list[str] = []
+    for line in diff_lines:
+        if line.startswith("+++ b/"):
+            file_path = line[6:].strip()
+            if file_path and file_path != "/dev/null":
+                extracted_files.append(file_path)
+
+    # 3. Classify domain via _ana.classify_domain(context, extracted_files)
+    domain = _ana.classify_domain(context, extracted_files)
+
+    # 4. Query RAG context
+    query = f"{domain} fix {context} {diff_excerpt[:400]}"
+    rag_docs = _try_rag_context(domain, query, n=5)
+
+    # 5. Compute risk score 0-10: each matched similar pattern = +2, capped at 10
+    score = min(len(rag_docs) * 2, 10)
+
+    # Score badge
+    if score >= 7:
+        badge = f"🔴 **위험 점수: {score}/10**"
+        recommendation = "커밋 전 관련 테스트를 전부 실행하고, 과거 fix 패턴과 동일한 실수가 없는지 직접 확인하세요."
+    elif score >= 4:
+        badge = f"🟡 **위험 점수: {score}/10**"
+        recommendation = f"{domain} 도메인 관련 테스트를 실행하고 체크리스트를 확인하세요."
+    else:
+        badge = f"🟢 **위험 점수: {score}/10**"
+        recommendation = "유사한 과거 회귀 패턴이 적습니다. 기본 테스트 통과 후 커밋하세요."
+
+    # Build output
+    lines = [
+        f"## 🔍 Diff 위험 점수 분석",
+        f"{badge}",
+        f"도메인: `{domain}` | 변경 파일: {len(extracted_files)}개",
+        "",
+    ]
+
+    if extracted_files:
+        lines.append(f"**변경 파일:** {', '.join(f'`{f}`' for f in extracted_files[:5])}")
+        lines.append("")
+
+    # Top-3 similar patterns (first line only, max 120 chars each)
+    if rag_docs:
+        lines.append("### 🔎 유사 과거 fix 패턴 (상위 3개)")
+        for doc in rag_docs[:3]:
+            first_line = doc.splitlines()[0] if doc else ""
+            if first_line:
+                lines.append(f"- {first_line[:120]}")
+        lines.append("")
+
+    lines.append(f"**권장 조치:** {recommendation}")
+
+    return "\n".join(lines)
+
+
 def _get_active_rules(domain: str = "") -> str:
     """현재 활성 규칙 조회. domain 미지정 시 전체 반환."""
     history = load_history()
@@ -449,6 +513,29 @@ TOOLS = [
             "required": ["pr_title"],
         },
     ),
+    Tool(
+        name="diff_risk_score",
+        description=(
+            "Score the risk of a staged diff (0–10) by comparing it against past fix-PR patterns in ChromaDB. "
+            "Call this before committing (e.g., pipe `git diff --staged` output) to catch patterns "
+            "that have caused regressions before. Returns score, similar past fixes, and a recommendation."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "diff": {
+                    "type": "string",
+                    "description": "Raw diff string (e.g., output of `git diff --staged`)",
+                },
+                "context": {
+                    "type": "string",
+                    "description": "Optional context such as PR title or commit message to improve domain classification",
+                    "default": "",
+                },
+            },
+            "required": ["diff"],
+        },
+    ),
 ]
 
 
@@ -466,6 +553,11 @@ async def call_tool(name: str, arguments: dict):
             text = _suggest_review_checklist(
                 arguments["pr_title"],
                 arguments.get("file_paths", []),
+            )
+        elif name == "diff_risk_score":
+            text = _diff_risk_score(
+                arguments["diff"],
+                arguments.get("context", ""),
             )
         elif name == "analyze_pr_history":
             text = _analyze_pr_history(
