@@ -47,7 +47,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh label create "daily-report" --color "e4e669" --description "Daily auto-analysis report" 2>/dev/null || true
-          mkdir -p data
+          # 레포별 데이터 디렉토리 (멀티 레포 지원 — slug: owner_repo)
+          REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
+          mkdir -p "data/repos/${REPO_SLUG}"
           touch data/rules-history.json
 
       - name: Checkout target repo
@@ -92,6 +94,58 @@ jobs:
           echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
           echo "is_pr_trigger=$IS_PR_TRIGGER" >> $GITHUB_OUTPUT
+
+      # ── Step 1.5: analysis-cache 레포별 경로에 저장 ──────────────────────────
+      - name: Save analysis cache to per-repo directory
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, sys
+          sys.path.insert(0, 'src')
+          from repo_store import cache_path
+
+          target_repo = os.environ.get('TARGET_REPO', '')
+          if not target_repo:
+              sys.exit(0)
+
+          d = json.load(open('/tmp/report.json'))
+          summary = d.get('summary', {})
+          clusters = d.get('clusters', [])
+          risky_files = d.get('risky_files', [])
+          domain_counts = d.get('domain_counts', [])
+          ai_weak = d.get('ai_weak_domains', [])
+
+          import analyze as ana
+          file_last_diff = {}
+          for pr in d.get('fix_prs_with_diff', []):
+              if pr.get('diff_snippet'):
+                  for f in pr.get('files', []):
+                      file_last_diff[f] = {'title': pr['title'], 'diff': pr['diff_snippet']}
+
+          cache = {
+              'generated_at': __import__('datetime').date.today().isoformat(),
+              'repo': target_repo,
+              'fix_rate': summary.get('fix_rate', 0),
+              'summary': summary,
+              'risky_files': [
+                  {
+                      'file': f['file'],
+                      'fix_count': f['count'],
+                      'domain': ana.classify_domain('', [f['file']]),
+                      'last_fix_title': file_last_diff.get(f['file'], {}).get('title', ''),
+                      'last_diff_snippet': file_last_diff.get(f['file'], {}).get('diff', '')[:400],
+                  }
+                  for f in risky_files
+              ],
+              'domain_counts': domain_counts,
+              'ai_weak_domains': ai_weak,
+              'clusters': [{'start': c.get('start'), 'end': c.get('end'), 'domain': c.get('domain')} for c in clusters],
+          }
+          p = cache_path(target_repo)
+          p.write_text(json.dumps(cache, ensure_ascii=False, indent=2))
+          print(f'✅ analysis-cache 저장: {p}')
+          PYEOF
+        env:
+          TARGET_REPO: ${{ env.TARGET_REPO }}
 
       # ── Step 2: issue report ───────────────────────────────────────────────
       - name: Post daily report issue
@@ -438,11 +492,16 @@ jobs:
           PYEOF
 
       - name: 히스토리 파일 커밋
+        env:
+          TARGET_REPO: ${{ env.TARGET_REPO }}
         run: |
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
-          git add data/rules-history.json data/diff-patterns.json data/feedback-stats.json data/warning-log.jsonl || true
-          git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }}"
+          REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
+          # 공유 데이터 + 레포별 데이터 모두 커밋
+          git add data/rules-history.json data/diff-patterns.json || true
+          git add "data/repos/${REPO_SLUG}/" || true
+          git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }} [${TARGET_REPO}]"
           git push
 
       # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
