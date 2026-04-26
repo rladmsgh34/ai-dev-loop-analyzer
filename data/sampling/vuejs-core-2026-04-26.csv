@@ -1,4 +1,4 @@
-repo,pr_number,pr_url,merged_at,title,files_top3,files_count,current_domain,true_domain,suggested_pattern,notes
+﻿repo,pr_number,pr_url,merged_at,title,files_top3,files_count,current_domain,true_domain,suggested_pattern,notes
 vuejs/core,14705,https://github.com/vuejs/core/pull/14705,2026-04-10T03:18:09Z,fix(runtime-vapor): tree-shake ssr runtime from defineVaporCustomElement,packages/runtime-vapor/src/apiDefineCustomElement.ts,1,general,,,
 vuejs/core,14666,https://github.com/vuejs/core/pull/14666,2026-04-01T03:49:55Z,fix(runtime-vapor): Add a non-null check for parentComponent,packages/runtime-vapor/src/vdomInterop.ts,1,general,,,
 vuejs/core,14641,https://github.com/vuejs/core/pull/14641,2026-04-03T02:31:00Z,fix(types): use private branding for shallowReactive,packages-private/dts-test/reactivity.test-d.ts; packages-private/dts-test/ref.test-d.ts; packages/reactivity/src/reactive.ts,4,general,,,

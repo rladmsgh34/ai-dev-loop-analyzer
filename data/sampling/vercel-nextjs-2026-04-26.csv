@@ -1,4 +1,4 @@
-repo,pr_number,pr_url,merged_at,title,files_top3,files_count,current_domain,true_domain,suggested_pattern,notes
+﻿repo,pr_number,pr_url,merged_at,title,files_top3,files_count,current_domain,true_domain,suggested_pattern,notes
 vercel/next.js,92831,https://github.com/vercel/next.js/pull/92831,2026-04-15T17:41:42Z,fix(trace-server): default MCP port to --port + 1 to avoid conflicts,packages/next/src/bin/next.ts; packages/next/src/cli/internal/turbo-trace-server.ts,2,general,,,
 vercel/next.js,91092,https://github.com/vercel/next.js/pull/91092,2026-03-09T12:09:47Z,fix: run lerna on a branch,scripts/set-preview-version.js,1,general,,,
 vercel/next.js,90700,https://github.com/vercel/next.js/pull/90700,2026-03-02T09:25:03Z,fix(turbopack): use posix.join for client URL manifest paths on Windows,packages/next/src/shared/lib/turbopack/manifest-loader.ts,1,general,,,

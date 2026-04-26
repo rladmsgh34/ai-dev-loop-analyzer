@@ -130,7 +130,8 @@ def main():
         print(f"   빈 CSV 저장: {out}")
         return
 
-    with out.open("w", newline="", encoding="utf-8") as f:
+    # utf-8-sig (BOM 포함) — Excel이 한글 셀 메모를 깨뜨리지 않도록 인코딩 자동 감지 유도
+    with out.open("w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=list(general_fix[0].keys()))
         writer.writeheader()
         writer.writerows(general_fix)
