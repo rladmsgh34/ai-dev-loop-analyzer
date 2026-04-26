@@ -106,8 +106,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh label create "daily-report" --color "e4e669" --description "Daily auto-analysis report" 2>/dev/null || true
-          # 레포별 데이터 디렉토리 (멀티 레포 지원 — slug: owner_repo)
-          REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
+          # repo_store.repo_slug() 단일 진실 공급원 — workflow가 직접 tr '/' '_'로
+          # 만들면 '__' (double underscore)와 미스매치돼 cache가 영영 안 커밋됨.
+          REPO_SLUG=$(python3 -c "import sys; sys.path.insert(0, 'src'); from repo_store import repo_slug; print(repo_slug('$TARGET_REPO'))")
+          echo "REPO_SLUG=$REPO_SLUG" >> $GITHUB_ENV
           mkdir -p "data/repos/${REPO_SLUG}"
           touch data/rules-history.json
 
@@ -150,9 +152,35 @@ jobs:
             echo "profile: built-in default"
           fi
 
+          # Incremental fetch: cache가 있으면 generated_at - 14일부터만 가져온다.
+          # 14일 overlap = detect_clusters의 window=14일을 보존하기 위한 최소값
+          # + 늦은 머지/리뷰/타임존 안전판. 중복 PR은 dict-based dedup으로 무해.
+          # 첫 실행 (cache 없음)이면 그냥 fetch_limit만큼.
+          SEARCH_FLAG=""
+          CACHE_PATH="data/repos/${REPO_SLUG}/analysis-cache.json"
+          if [ -f "$CACHE_PATH" ]; then
+            SINCE=$(python3 -c "
+          import json
+          from datetime import datetime, timedelta
+          try:
+              c = json.load(open('$CACHE_PATH'))
+              d = datetime.strptime(c.get('generated_at', ''), '%Y-%m-%d') - timedelta(days=14)
+              print(d.strftime('%Y-%m-%d'))
+          except Exception:
+              pass
+          ")
+            if [ -n "$SINCE" ]; then
+              SEARCH_FLAG="--search merged:>=$SINCE"
+              echo "incremental fetch since $SINCE (cache generated_at - 14d, covers cluster window)"
+            fi
+          else
+            echo "first run for $TARGET_REPO — fetching latest $LIMIT PRs"
+          fi
+
           gh pr list \
             --repo "$TARGET_REPO" \
             --state merged --limit $LIMIT \
+            $SEARCH_FLAG \
             --json number,title,mergedAt,additions,deletions \
             > /tmp/prs.json
 
@@ -569,7 +597,7 @@ jobs:
           set -e
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
-          REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
+          # REPO_SLUG는 Step 0에서 GITHUB_ENV로 export됨 — 여기서 재계산하면 동기 깨짐.
           git add data/rules-history.json data/diff-patterns.json || true
           git add "data/repos/${REPO_SLUG}/" || true
           if git diff --staged --quiet; then

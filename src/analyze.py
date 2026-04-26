@@ -158,12 +158,15 @@ class Cluster:
 
 
 # ── GitHub 데이터 수집 ───────────────────────────────────────────────────────
-def fetch_prs(limit: int = 300) -> list[PR]:
-    result = subprocess.run(
-        ["gh", "pr", "list", "--state", "merged", f"--limit={limit}",
-         "--json", "number,title,mergedAt,additions,deletions"],
-        capture_output=True, text=True
-    )
+def fetch_prs(limit: int = 300, since: str | None = None) -> list[PR]:
+    """
+    since: ISO date (YYYY-MM-DD). gh search filter `merged:>=DATE`로 변환.
+    """
+    cmd = ["gh", "pr", "list", "--state", "merged", f"--limit={limit}",
+           "--json", "number,title,mergedAt,additions,deletions"]
+    if since:
+        cmd.extend(["--search", f"merged:>={since}"])
+    result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"[error] gh pr list 실패: {result.stderr}", file=sys.stderr)
         sys.exit(1)
@@ -745,6 +748,9 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="AI Dev Loop Analyzer")
     parser.add_argument("--limit", type=int, default=300, help="분석할 PR 수 (기본 300)")
+    parser.add_argument("--since", default=None,
+                        help="이 날짜(YYYY-MM-DD) 이후 머지된 PR만 fetch. gh CLI search로 위임. "
+                             "--input 사용 시에는 무시.")
     parser.add_argument("--fetch-files", action="store_true",
                         help="모든 fix PR의 파일·리뷰·diff 수집 (정밀 분석, 느림)")
     parser.add_argument("--no-smart-fetch", action="store_true",
@@ -831,7 +837,7 @@ def main():
         prs = sorted(prs, key=lambda p: p.number)
     else:
         print("PR 데이터 수집 중...", file=sys.stderr)
-        prs = fetch_prs(args.limit)
+        prs = fetch_prs(args.limit, since=args.since)
 
     pr_map_by_num = {p.number: p for p in prs}
 
