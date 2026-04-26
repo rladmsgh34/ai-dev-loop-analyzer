@@ -43,9 +43,11 @@ const DOMAIN_PATTERNS: [string, RegExp][] = [
   ['payment',      /payment|portone|checkout|order|cart|purchase|결제|주문|장바구니/i],
   ['database',     /prisma|migration|schema/i],
   ['security',     /csp|xss|csrf|rate.?limit|sanitize|allowlist/i],
-  ['external-api', /kakao|postcode|우편번호|google.?maps|gcs|sentry|daum/i],
+  ['external-api', /stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook|kakao|postcode|우편번호|google.?maps|gcs|sentry|daum|portone|toss|naver|coolsms|gcp\b|aws\b|azure/i],
   ['test/e2e',     /\.test\.|\.spec\.|e2e|playwright|vitest|coverage/i],
-  ['config',       /next\.config|env\.ts|tsconfig|biome|tailwind|npmrc/i],
+  ['maintenance',  /refactor|cleanup|rename|deprecat|rewrite|reorganize/i],
+  ['docs',         /readme|changelog|docs?\b|document/i],
+  ['config',       /next\.config|env\.ts|tsconfig|biome|tailwind|npmrc|eslint|prettier|lint\b/i],
 ]
 
 export function isFixPR(title: string): boolean {

@@ -36,9 +36,11 @@ DOMAIN_PATTERNS: list[tuple[str, str]] = [
     ("payment",      r"payment|checkout|order|cart|purchase"),
     ("database",     r"migration|schema\.|migrate\b"),
     ("security",     r"csp|xss|csrf|rate.limit|sanitize|escape|content.security"),
-    ("external-api", r"stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook"),
+    ("external-api", r"stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs|gcp\b|aws\b|azure"),
     ("test/e2e",     r"\.test\.|\.spec\.|e2e|playwright|vitest|jest|coverage|flaky"),
-    ("config",       r"\.config\.|env\.ts|tsconfig|biome|tailwind"),
+    ("maintenance",  r"refactor|cleanup|rename|deprecat|reorganize|remov\b|rewrite"),
+    ("docs",         r"readme|changelog|docs?\b|document|comment"),
+    ("config",       r"\.config\.|env\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\b"),
     ("api",          r"api/|route\.ts|route\.js"),
     ("ui",           r"components/|page\.tsx|page\.jsx"),
 ]
@@ -191,6 +193,38 @@ def _parallel_fetch(pr_numbers: list[int], label: str) -> dict[int, tuple]:
     return pr_map
 
 
+def _fetch_ai_flag(pr_number: int) -> tuple[int, bool]:
+    """커밋 메시지에서 'Co-Authored-By: Claude' 포함 여부만 확인 (파일/diff 없이 커밋만)."""
+    result = subprocess.run(
+        ["gh", "pr", "view", str(pr_number), "--json", "commits"],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return (pr_number, False)
+    try:
+        data = json.loads(result.stdout)
+        is_ai = any(
+            "Co-Authored-By: Claude" in (commit.get("messageBody", "") or "")
+            or "Co-Authored-By: Claude" in (commit.get("messageHeadline", "") or "")
+            for commit in data.get("commits", [])
+        )
+        return (pr_number, is_ai)
+    except Exception:
+        return (pr_number, False)
+
+
+def fetch_ai_flags(pr_numbers: list[int]) -> dict[int, bool]:
+    """PR 번호 목록을 받아 AI 생성 여부를 병렬로 확인한다."""
+    print(f"AI 생성 PR 감지 중 ({len(pr_numbers)}개)...", file=sys.stderr)
+    results: dict[int, bool] = {}
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        futures = {pool.submit(_fetch_ai_flag, num): num for num in pr_numbers}
+        for future in as_completed(futures):
+            num, is_ai = future.result()
+            results[num] = is_ai
+    return results
+
+
 # ── 분석 엔진 ────────────────────────────────────────────────────────────────
 def detect_clusters(prs: list[PR], window: int = 8, threshold: int = 2) -> list[Cluster]:
     """
@@ -280,6 +314,8 @@ RULE_TEMPLATES: dict[str, str] = {
     "security":     "After security changes, verify no external domains are missing from the allowlist — {count} regressions",
     "external-api": "External API integration changes may behave differently locally vs. deployed — {count} regressions, verify on staging",
     "test/e2e":     "Run E2E tests against a production build server, not dev — {count} flaky incidents",
+    "maintenance":  "After refactoring/cleanup, run all related tests to catch regressions — {count} regressions",
+    "docs":         "After documentation changes, verify content matches actual code and config — {count} mismatches",
     "config":       "After config file changes, restart the dev server and verify the build — {count} regressions",
 }
 
@@ -615,6 +651,11 @@ def main():
         action="store_true",
         help="AI 규칙 생성 비활성화, 템플릿만 사용",
     )
+    parser.add_argument(
+        "--no-fetch-ai",
+        action="store_true",
+        help="AI 생성 PR 감지 패스 비활성화 (기본: 활성)",
+    )
     args = parser.parse_args()
 
     if args.profile:
@@ -688,6 +729,15 @@ def main():
                 pr = pr_map_by_num[num]
                 pr.files, pr.review_comments, pr.is_ai_generated, pr.diff_snippet = files, comments, is_ai, diff
                 pr.domain = classify_domain(pr.title, pr.files)
+
+    # AI 감지 패스: smart-fetch/fetch-files로 커버되지 않은 PR에 적용
+    if not args.no_fetch_ai:
+        already_checked = {p.number for p in prs if p.is_ai_generated}
+        remaining = [p.number for p in prs if p.number not in already_checked]
+        if remaining:
+            ai_flags = fetch_ai_flags(remaining)
+            for num, is_ai in ai_flags.items():
+                pr_map_by_num[num].is_ai_generated = is_ai
 
     clusters = detect_clusters(prs)
     risky_files = rank_risky_files(prs)

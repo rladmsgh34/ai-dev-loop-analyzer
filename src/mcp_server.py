@@ -203,6 +203,15 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
                 pr.is_ai_generated, pr.diff_snippet = is_ai, diff
                 pr.domain = ana.classify_domain(pr.title, pr.files)
 
+    # AI 감지 패스: 클러스터 PR 외 전체 PR 대상으로 Co-Authored-By 확인
+    already_checked = {num for num in cluster_nums}
+    remaining = [p.number for p in prs if p.number not in already_checked]
+    if remaining:
+        ai_flags = ana.fetch_ai_flags(remaining)
+        for num, is_ai in ai_flags.items():
+            if not pr_map[num].is_ai_generated:
+                pr_map[num].is_ai_generated = is_ai
+
     clusters = ana.detect_clusters(prs)
     risky_files = ana.rank_risky_files(prs)
     domain_counts = ana.rank_risky_domains(prs)
