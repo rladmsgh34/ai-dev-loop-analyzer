@@ -185,17 +185,17 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
         prs.append(pr)
     prs = sorted(prs, key=lambda p: p.number)
 
-    # smart-fetch: 클러스터 PR만 diff + 파일 수집
-    pre_clusters = ana.detect_clusters(prs)
-    cluster_nums = list({p.number for c in pre_clusters for p in c.prs})
+    # fix PR 전체 파일 fetch → domain 분류 정확도 향상
+    # (클러스터 여부 관계없이 fix PR이면 모두 파일+diff 수집)
     pr_map = {p.number: p for p in prs}
+    fix_nums = [p.number for p in prs if p.is_fix]
 
-    if cluster_nums:
+    if fix_nums:
         def _fetch(num):
             return num, ana.fetch_pr_details(num)
 
         with ThreadPoolExecutor(max_workers=8) as pool:
-            futures = {pool.submit(_fetch, num): num for num in cluster_nums}
+            futures = {pool.submit(_fetch, num): num for num in fix_nums}
             for future in as_completed(futures):
                 num, (files, comments, is_ai, diff) = future.result()
                 pr = pr_map[num]
@@ -203,8 +203,8 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
                 pr.is_ai_generated, pr.diff_snippet = is_ai, diff
                 pr.domain = ana.classify_domain(pr.title, pr.files)
 
-    # AI 감지 패스: 클러스터 PR 외 전체 PR 대상으로 Co-Authored-By 확인
-    already_checked = {num for num in cluster_nums}
+    # AI 감지 패스: fix PR 외 나머지 PR 대상으로 Co-Authored-By 확인
+    already_checked = set(fix_nums)
     remaining = [p.number for p in prs if p.number not in already_checked]
     if remaining:
         ai_flags = ana.fetch_ai_flags(remaining)
