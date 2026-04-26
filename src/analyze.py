@@ -262,43 +262,20 @@ def analyze_ai_vs_human(prs: list[PR]) -> dict:
     }
 
 
-# ── CLAUDE.md 규칙 생성 ──────────────────────────────────────────────────────
-RULE_TEMPLATES = {
-    "ci/cd": (
-        "CI/CD·Docker·배포 파이프라인 변경 전 `scripts/verify-build.sh` 실행 필수 — "
-        "{count}회 회귀 감지 (가장 위험한 도메인)"
-    ),
-    "auth": (
-        "인증 관련 파일 수정 시 로그인/세션/권한 플로우 전체 수동 검증 필수 — "
-        "{count}회 회귀 이력"
-    ),
-    "payment": (
-        "결제 플로우 변경 시 Opus 모델로 설계 검토 후 구현 — "
-        "{count}회 회귀, 금액 불일치 시 강제 취소 로직 반드시 확인"
-    ),
-    "database": (
-        "Prisma 스키마 변경 PR에는 down SQL 필수 첨부 — {count}회 회귀 이력"
-    ),
-    "security": (
-        "CSP·XSS·rate-limit 수정 후 새 외부 도메인이 allowlist에 누락되지 않았는지 확인 — "
-        "{count}회 회귀"
-    ),
-    "external-api": (
-        "외부 API(Kakao·PortOne·GCS) 연동 변경 시 localhost와 스테이징 동작이 다를 수 있음 — "
-        "{count}회 회귀, 반드시 스테이징 배포 후 검증"
-    ),
-    "test/e2e": (
-        "E2E 테스트 서버는 `next start`(standalone) 기준으로만 실행 — "
-        "dev JIT race로 {count}회 플레이키 발생"
-    ),
-    "config": (
-        "`next.config.ts` · `env.ts` 변경 후 반드시 dev 서버 재시작 및 빌드 확인 — "
-        "{count}회 회귀"
-    ),
+# ── Rule generation (template fallback, overridable via profile) ─────────────
+RULE_TEMPLATES: dict[str, str] = {
+    "ci/cd":        "CI/CD pipeline changes require running a build verification script — {count} regressions detected",
+    "auth":         "Auth-related changes require full manual verification of login/session/permission flows — {count} regressions",
+    "payment":      "Review payment flow changes carefully before implementing — {count} regressions",
+    "database":     "Schema change PRs must include a down SQL — {count} regressions",
+    "security":     "After security changes, verify no external domains are missing from the allowlist — {count} regressions",
+    "external-api": "External API integration changes may behave differently locally vs. deployed — {count} regressions, verify on staging",
+    "test/e2e":     "Run E2E tests against a production build server, not dev — {count} flaky incidents",
+    "config":       "After config file changes, restart the dev server and verify the build — {count} regressions",
 }
 
 def generate_rules(domain_counts: list[tuple[str, int]]) -> list[str]:
-    """템플릿 기반 규칙 생성 (Claude API 없을 때 폴백)"""
+    """Template-based rule generation (fallback when no AI key is available)."""
     rules = []
     for domain, count in domain_counts:
         if count < 2:

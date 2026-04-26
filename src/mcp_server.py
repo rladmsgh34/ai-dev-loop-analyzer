@@ -237,9 +237,10 @@ TOOLS = [
     Tool(
         name="check_risk_zones",
         description=(
-            "편집하려는 파일들이 과거 회귀 핫존인지 사전 확인합니다. "
-            "파일 수정 전 호출하면 '이 파일은 결제 도메인에서 4번 회귀됐음 — Opus 검토 권장' 같은 "
-            "경고를 받을 수 있습니다. retrospective 분석 → prospective 경고."
+            "Check whether the files you are about to edit are known regression hotspots. "
+            "Call this before modifying a file to receive warnings such as "
+            "'this file has regressed 4 times in the payment domain'. "
+            "Turns retrospective analysis into prospective warnings."
         ),
         inputSchema={
             "type": "object",
