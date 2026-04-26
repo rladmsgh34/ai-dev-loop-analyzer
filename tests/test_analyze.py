@@ -116,9 +116,14 @@ def test_is_fix_hotfix():
     assert _is_fix("hotfix(auth): token expiry") is True
 
 
-def test_is_fix_no_colon_not_fix():
-    """'fix ' without colon (e.g. 'fix typo') is not a fix PR (colon required)."""
-    assert _is_fix("fix typo in readme") is False
+def test_is_fix_no_colon_is_fix_now():
+    """
+    새 regex(2026-04-26): 'fix '를 콜론 없이 쓴 경우도 fix PR로 인식.
+    next.js 같은 비표준 컨벤션 레포의 'Fix dev mode hydration' 같은 PR을
+    잡기 위한 의도적 변경. 'fixture'/'fixes' 등은 \\b 워드 경계로 구분.
+    """
+    assert _is_fix("fix typo in readme") is True
+    assert _is_fix("Fix the build") is True
 
 
 # ── Cluster detection tests ───────────────────────────────────────────────────
@@ -426,3 +431,66 @@ def test_build_cache_dict_empty_report():
     assert cache["repo"] == "empty/repo"
     assert cache["risky_files"] == []
     assert cache["clusters"] == []
+
+
+# ── 비표준 prefix 패턴 (next.js-style) ────────────────────────────────────────
+
+def test_is_fix_bracket_with_colon():
+    """'[ci]: fix permissions on workflow' 같은 next.js 패턴."""
+    assert _is_fix("[ci]: fix permissions on comment workflow") is True
+    assert _is_fix("[tests]: fix cache-components.test.ts type error") is True
+
+
+def test_is_fix_bracket_with_space_and_capital():
+    """'[turbopack] Fix max_level_hint' 같은 패턴."""
+    assert _is_fix("[turbopack] Fix max_level_hint to return most verbose") is True
+    assert _is_fix("[ci] Fix auto-label workflow") is True
+    assert _is_fix("[next/image] Fix image rendering") is True
+
+
+def test_is_fix_patch_keyword():
+    """'Patch X' 같은 patch 키워드 (next.js)."""
+    assert _is_fix("Patch setHeader for direct route handlers") is True
+
+
+def test_is_fix_capital_no_colon():
+    """'Fix dev mode hydration' 같은 콜론 없는 capital Fix."""
+    assert _is_fix("Fix dev mode hydration failure") is True
+    assert _is_fix("Fix monorepo binary postinstall") is True
+
+
+def test_is_fix_word_prefix_with_fix():
+    """'webpack: fix swcPlugins' / 'turbo-tasks: Fix recomputation' 같은 단어 prefix."""
+    assert _is_fix("webpack: fix swcPlugins with relative paths") is True
+    assert _is_fix("turbo-tasks: Fix recomputation loop") is True
+    assert _is_fix("Turbopack: fix filesystem watcher config") is True
+    assert _is_fix("docs: fix broken bun.sh link") is True
+
+
+def test_is_fix_does_not_match_fix_in_middle():
+    """'Turbopack: optimize ... and fix range...' fix가 제목 중간이면 매칭 안 함."""
+    assert _is_fix("Turbopack: optimize SelfTimeTree performance and fix range query") is False
+
+
+def test_is_fix_does_not_match_fixture():
+    """'fixture: ...' 처럼 fix로 시작하지만 다른 단어인 케이스 미매칭."""
+    assert _is_fix("fixture: add new test fixtures") is False
+    assert _is_fix("fixtures need updating") is False
+
+
+def test_is_fix_does_not_match_fixes_plural():
+    """'Fixes #123' 복수형은 의도적으로 미매칭 (추후 확장 가능)."""
+    assert _is_fix("Fixes #123 broken thing") is False
+
+
+def test_is_fix_chore_with_fix_in_title():
+    """'chore: fix CI build' 같은 chore prefix + fix는 매칭 (실용적 판단)."""
+    # 진짜 CI 픽스이므로 회귀 분석에 포함하는 게 맞음
+    assert _is_fix("chore: fix CI build — add GCS_BUCKET_NAME dummy env") is True
+
+
+def test_is_fix_case_insensitive():
+    """대소문자 무관."""
+    assert _is_fix("FIX: broken button") is True
+    assert _is_fix("Fix the bug") is True
+    assert _is_fix("PATCH: server route") is True
