@@ -120,6 +120,15 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           path: target-repo
 
+      # GH_PAT rate-limit 체크포인트 — 매트릭스 iteration 시작.
+      # 끝 직후 동일 호출로 한 번 더 찍어 delta가 그 iteration 실제 소비량.
+      # fetch_limit 스케일업(PR #36) intervention 측정용.
+      - name: rate_limit checkpoint (start)
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh api rate_limit --jq ".resources.core | \"[$TARGET_REPO] start: remaining=\\(.remaining) reset=\\(.reset)\""
+
       # ── Step 1: analyze ─────────────────────────────────────────────────────
       # 프로파일 우선순위:
       #   1. matrix.target.profile (config/repos.json) — 명시적 override
@@ -597,6 +606,12 @@ jobs:
           stats = evaluate(fix_prs, repo=target_repo)
           print(feedback_report(repo=target_repo))
           PYEOF
+
+      - name: rate_limit checkpoint (end)
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh api rate_limit --jq ".resources.core | \"[$TARGET_REPO] end: remaining=\\(.remaining) reset=\\(.reset)\""
 
       - name: 히스토리 파일 커밋
         env:
