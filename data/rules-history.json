@@ -541,6 +541,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -622,6 +633,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -703,6 +725,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -797,6 +830,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -878,6 +922,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -942,6 +997,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -1019,6 +1085,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1096,6 +1173,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1173,6 +1261,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1250,6 +1349,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1314,6 +1424,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1378,6 +1499,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1442,6 +1574,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1506,6 +1649,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1596,6 +1750,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -1635,6 +1800,17 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "vuejs/core",
@@ -1687,6 +1863,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1739,6 +1926,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1791,6 +1989,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1826,6 +2035,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1861,6 +2081,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1896,6 +2127,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1931,6 +2173,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -1966,6 +2219,17 @@
           "database": 1.1,
           "test/e2e": 1.1,
           "auth": 0.6
+        },
+        {
+          "date": "2026-04-26",
+          "repo": "vuejs/core",
+          "total": 63.0,
+          "vapor": 25.9,
+          "general": 14.8,
+          "compiler": 11.1,
+          "hydration": 3.7,
+          "reactivity": 3.7,
+          "runtime-dom": 3.7
         }
       ],
       "origin_repo": "unknown",
@@ -2070,6 +2334,96 @@
         "auth": 0.6
       },
       "snapshots": []
+    },
+    {
+      "id": "d86205f1",
+      "rule": "- PR 제출 시, `runtime-vapor` 관련 코드 수정이 포함된 경우, 반드시 관련 문서와 주석을 업데이트하여 변경 사항을 명확히 해야 한다.",
+      "domain": "general",
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 63.0,
+        "vapor": 25.9,
+        "general": 14.8,
+        "compiler": 11.1,
+        "hydration": 3.7,
+        "reactivity": 3.7,
+        "runtime-dom": 3.7
+      },
+      "snapshots": []
+    },
+    {
+      "id": "c5ab87be",
+      "rule": "- `compiler-sfc`에서 `:deep`과 같은 선택자 관련 수정이 있을 경우, 모든 연관된 CSS 파일을 검토하여 영향을 받을 수 있는 부분을 확인하고 수정해야 한다.",
+      "domain": "general",
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 63.0,
+        "vapor": 25.9,
+        "general": 14.8,
+        "compiler": 11.1,
+        "hydration": 3.7,
+        "reactivity": 3.7,
+        "runtime-dom": 3.7
+      },
+      "snapshots": []
+    },
+    {
+      "id": "4514da29",
+      "rule": "- PR에서 `keepalive` 및 `teleport` 관련 기능을 수정하는 경우, 해당 기능의 유닛 테스트를 반드시 포함해야 하며, 새로운 테스트 케이스를 추가하여 회귀를 방지해야 한다.",
+      "domain": "test/e2e",
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 63.0,
+        "vapor": 25.9,
+        "general": 14.8,
+        "compiler": 11.1,
+        "hydration": 3.7,
+        "reactivity": 3.7,
+        "runtime-dom": 3.7
+      },
+      "snapshots": []
+    },
+    {
+      "id": "0ba10b7f",
+      "rule": "- `vdom` 관련 수정이 포함된 PR은 배포 전에 시각적 회귀 테스트를 수행하여 UI 변경 사항이 의도한 대로 나타나는지 확인해야 한다.",
+      "domain": "test/e2e",
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 63.0,
+        "vapor": 25.9,
+        "general": 14.8,
+        "compiler": 11.1,
+        "hydration": 3.7,
+        "reactivity": 3.7,
+        "runtime-dom": 3.7
+      },
+      "snapshots": []
+    },
+    {
+      "id": "d24fdc6e",
+      "rule": "- `textarea`와 관련된 기능 수정이 있을 경우, 다양한 화면 크기와 환경에서의 테스트를 통해 크기 조정 기능이 정상적으로 작동하는지 검증해야 한다.",
+      "domain": "test/e2e",
+      "origin_repo": "vuejs/core",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 63.0,
+        "vapor": 25.9,
+        "general": 14.8,
+        "compiler": 11.1,
+        "hydration": 3.7,
+        "reactivity": 3.7,
+        "runtime-dom": 3.7
+      },
+      "snapshots": []
     }
   ],
   "snapshots": [
@@ -2098,6 +2452,17 @@
       "database": 1.1,
       "test/e2e": 1.1,
       "auth": 0.6
+    },
+    {
+      "date": "2026-04-26",
+      "repo": "vuejs/core",
+      "total_fix_rate": 63.0,
+      "vapor": 25.9,
+      "general": 14.8,
+      "compiler": 11.1,
+      "hydration": 3.7,
+      "reactivity": 3.7,
+      "runtime-dom": 3.7
     }
   ]
 }
