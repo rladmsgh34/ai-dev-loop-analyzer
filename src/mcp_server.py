@@ -10,6 +10,7 @@ Claude Code, Cursor, Cline 등 MCP 지원 AI 에디터에서
   suggest_review_checklist(...)       — PR 제목 + 파일 기반 리뷰 체크리스트 생성
   analyze_pr_history(repo)            — 레포 PR 히스토리 전체 분석
   get_active_rules(domain)            — 도메인별 현재 활성 규칙 조회
+  get_warning_feedback()              — PostToolUse 경고 정밀도(TP/FP) 통계 및 임계값 제안
 
 설치 (Claude Code):
   claude mcp add ai-dev-loop-analyzer -- python3 /path/to/src/mcp_server.py
@@ -545,6 +546,18 @@ TOOLS = [
             "required": ["diff"],
         },
     ),
+    Tool(
+        name="get_warning_feedback",
+        description=(
+            "PostToolUse 훅 경고의 정밀도(Precision)를 조회합니다. "
+            "경고가 실제 회귀로 이어졌는지(TP) vs 오탐(FP)인지 통계와 "
+            "BM25 임계값 조정 제안을 반환합니다."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {},
+        },
+    ),
 ]
 
 
@@ -575,6 +588,9 @@ async def call_tool(name: str, arguments: dict):
             )
         elif name == "get_active_rules":
             text = _get_active_rules(arguments.get("domain", ""))
+        elif name == "get_warning_feedback":
+            from feedback import feedback_report
+            text = feedback_report()
         else:
             text = f"알 수 없는 도구: {name}"
     except Exception as e:
