@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { fetchMergedPRs, validateRepo } from '../lib/github'
-import { analyze } from '../lib/analyzer'
+import { analyze, type AnalysisResult } from '../lib/analyzer'
+import { getProfileForRepo, isTrackedRepo } from '../lib/profiles'
+import { loadCachedResult } from '../lib/cache'
 import HomeForm from './HomeForm'
 
 const FEATURED_REPOS = [
@@ -21,12 +23,27 @@ interface FeaturedRepoData {
 }
 
 async function fetchFeaturedRepo(owner: string, repo: string): Promise<FeaturedRepoData | null> {
+  const fullRepo = `${owner}/${repo}`
   try {
-    const [repoInfo, prs] = await Promise.all([
-      validateRepo(owner, repo),
-      fetchMergedPRs(owner, repo, 200),
-    ])
-    const result = analyze(prs)
+    const repoInfo = await validateRepo(owner, repo)
+    let result: AnalysisResult
+
+    // tracked 레포는 cache 우선 — featured 그리드 빌드 비용 절감.
+    if (await isTrackedRepo(fullRepo)) {
+      const cached = await loadCachedResult(fullRepo)
+      if (cached) {
+        result = cached
+      } else {
+        const profile = await getProfileForRepo(fullRepo)
+        const prs = await fetchMergedPRs(owner, repo, 200, profile)
+        result = analyze(prs)
+      }
+    } else {
+      const profile = await getProfileForRepo(fullRepo)
+      const prs = await fetchMergedPRs(owner, repo, 200, profile)
+      result = analyze(prs)
+    }
+
     const topDomain = result.domainCounts[0]?.domain ?? null
     return {
       owner,

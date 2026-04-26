@@ -36,9 +36,11 @@ interface Props {
   repo: string
   meta: { stars: number; description: string; language: string }
   benchmark: Benchmark
+  source?: 'cache' | 'live'
+  generatedAt?: string
 }
 
-export default function ResultClient({ result, owner, repo, meta, benchmark }: Props) {
+export default function ResultClient({ result, owner, repo, meta, benchmark, source = 'live', generatedAt }: Props) {
   const [copied, setCopied] = useState(false)
   const [badgeCopied, setBadgeCopied] = useState(false)
   const { summary, clusters, domainCounts, aiVsHuman, trend } = result
@@ -83,6 +85,13 @@ export default function ResultClient({ result, owner, repo, meta, benchmark }: P
               <p className="mt-1 text-sm text-gray-500">{meta.description}</p>
             )}
             <p className="mt-1 text-xs text-gray-600">⭐ {meta.stars.toLocaleString()}</p>
+            {source === 'cache' ? (
+              <p className="mt-1 text-xs text-emerald-500/80">
+                tracked repo · 캐시 결과 ({generatedAt ?? '시점 미상'}) — cron 분석과 일치
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-gray-600">live fetch — 최신 200개 PR 분석</p>
+            )}
           </div>
           <button
             onClick={copyShare}

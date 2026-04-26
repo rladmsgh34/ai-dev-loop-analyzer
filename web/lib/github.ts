@@ -1,4 +1,5 @@
 import { classifyDomain, isFixPR, type PR } from './analyzer'
+import type { Profile } from './profiles'
 
 const GH_API = 'https://api.github.com'
 const GH_GRAPHQL = 'https://api.github.com/graphql'
@@ -61,11 +62,16 @@ const MERGED_PRS_QUERY = `
   }
 `
 
-export async function fetchMergedPRs(owner: string, repo: string, limit = 200): Promise<PR[]> {
+export async function fetchMergedPRs(
+  owner: string,
+  repo: string,
+  limit = 200,
+  profile: Profile,
+): Promise<PR[]> {
   const prs: PR[] = []
   let cursor: string | null = null
 
-  const authHeaders = process.env.GITHUB_TOKEN
+  const authHeaders: Record<string, string> = process.env.GITHUB_TOKEN
     ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
     : {}
 
@@ -115,8 +121,8 @@ export async function fetchMergedPRs(owner: string, repo: string, limit = 200): 
         mergedAt: pr.mergedAt,
         additions: pr.additions,
         deletions: pr.deletions,
-        isFix: isFixPR(title),
-        domain: classifyDomain(title),
+        isFix: isFixPR(title, profile),
+        domain: classifyDomain(title, [], profile),
         isAiGenerated,
       })
 

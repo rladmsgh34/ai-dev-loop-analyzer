@@ -1,5 +1,7 @@
 import { fetchMergedPRs, validateRepo, fetchLanguagePatterns } from '@/lib/github'
-import { analyze } from '@/lib/analyzer'
+import { analyze, type AnalysisResult } from '@/lib/analyzer'
+import { getProfileForRepo, isTrackedRepo } from '@/lib/profiles'
+import { loadCachedResult } from '@/lib/cache'
 import ResultClient from './ResultClient'
 
 interface Props {
@@ -13,19 +15,40 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ResultPage({ params }: Props) {
   const { owner, repo } = await params
+  const fullRepo = `${owner}/${repo}`
 
   try {
-    const [prs, repoMeta, langPatterns] = await Promise.all([
-      fetchMergedPRs(owner, repo, 200),
-      validateRepo(owner, repo),
-      fetchLanguagePatterns(),
-    ])
+    const repoMeta = await validateRepo(owner, repo)
+    const langPatterns = await fetchLanguagePatterns()
 
-    if (prs.length === 0) {
-      return <ErrorPage message="머지된 PR이 없습니다." owner={owner} repo={repo} />
+    let result: AnalysisResult
+    let source: 'cache' | 'live' = 'live'
+    let generatedAt: string | undefined
+
+    // tracked 레포는 commit된 cron 분석 결과 우선. live fetch 비용 절감 + cron과 동일 분류.
+    if (await isTrackedRepo(fullRepo)) {
+      const cached = await loadCachedResult(fullRepo)
+      if (cached) {
+        result = cached
+        source = 'cache'
+        generatedAt = cached.generatedAt
+      } else {
+        const profile = await getProfileForRepo(fullRepo)
+        const prs = await fetchMergedPRs(owner, repo, 200, profile)
+        if (prs.length === 0) {
+          return <ErrorPage message="머지된 PR이 없습니다." owner={owner} repo={repo} />
+        }
+        result = analyze(prs)
+      }
+    } else {
+      const profile = await getProfileForRepo(fullRepo)
+      const prs = await fetchMergedPRs(owner, repo, 200, profile)
+      if (prs.length === 0) {
+        return <ErrorPage message="머지된 PR이 없습니다." owner={owner} repo={repo} />
+      }
+      result = analyze(prs)
     }
 
-    const result = analyze(prs)
     const langStats = langPatterns?.languages[repoMeta.language] ?? null
     const allFixRates = langPatterns?.repo_results
       .filter(r => r.language === repoMeta.language)
@@ -38,6 +61,8 @@ export default async function ResultPage({ params }: Props) {
         repo={repo}
         meta={repoMeta}
         benchmark={{ langStats, allFixRates, language: repoMeta.language }}
+        source={source}
+        generatedAt={generatedAt}
       />
     )
   } catch (e) {
