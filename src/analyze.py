@@ -91,6 +91,9 @@ def load_profile(path: str | Path) -> None:
         RULE_HINTS.update(data["rule_hints"])
     if "fix_pr_regex" in data:
         FIX_PR_REGEX = data["fix_pr_regex"]
+    if "scope_to_domain" in data:
+        # 기본 매핑 위에 프로젝트별 매핑을 덮어쓴다 (replace가 아닌 merge)
+        _SCOPE_TO_DOMAIN.update(data["scope_to_domain"])
     if "prompt_hints" in data:
         PROMPT_HINTS.clear()
         PROMPT_HINTS.update(data["prompt_hints"])

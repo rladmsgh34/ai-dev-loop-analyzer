@@ -40,6 +40,8 @@
     "docs":         "→ 문서와 실제 코드·설정 내용 일치 여부 확인",
     "config":       "→ 설정 파일 변경 후 dev 서버 재시작 필수"
   },
+  "scope_to_domain": {
+  },
   "prompt_hints": {
     "language":      "ko",
     "ai_assistant":  "AI coding assistant",
