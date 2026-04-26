@@ -13,6 +13,8 @@ on:
         description: 'fix PR 파일 + 리뷰 코멘트 수집 (더 정확, 느림)'
         type: boolean
         default: true
+  repository_dispatch:
+    types: [pr-merged]
 
 jobs:
   evolve:
@@ -21,6 +23,8 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+    env:
+      IS_PR_TRIGGER: ${{ github.event_name == 'repository_dispatch' }}
 
     steps:
       - name: Checkout ai-dev-loop-analyzer
@@ -49,16 +53,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           AI_DEV_LOOP_PROFILE: gwangcheon-shop/.claude/ai-dev-loop-profile.json
         run: |
+          LIMIT=300
+          FETCH_FLAG="--fetch-files"
+          if [ "$IS_PR_TRIGGER" = "true" ]; then
+            LIMIT=50
+            FETCH_FLAG=""
+          elif [ "${{ inputs.fetch_files }}" = "false" ]; then
+            FETCH_FLAG=""
+          fi
+
           gh pr list \
             --repo rladmsgh34/gwangcheon-shop \
-            --state merged --limit 300 \
+            --state merged --limit $LIMIT \
             --json number,title,mergedAt,additions,deletions \
             > /tmp/prs.json
-
-          FETCH_FLAG=""
-          if [ "${{ inputs.fetch_files }}" != "false" ]; then
-            FETCH_FLAG="--fetch-files"
-          fi
 
           python3 src/analyze.py \
             --input /tmp/prs.json \
@@ -72,9 +80,11 @@ jobs:
           echo "fix_rate=$FIX_RATE" >> $GITHUB_OUTPUT
           echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+          echo "is_pr_trigger=$IS_PR_TRIGGER" >> $GITHUB_OUTPUT
 
       # ── Step 2: issue report ───────────────────────────────────────────────
       - name: Post daily report issue
+        if: env.IS_PR_TRIGGER != 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -233,6 +243,7 @@ jobs:
 
       # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
       - name: Generate CLAUDE.md patch
+        if: env.IS_PR_TRIGGER != 'true'
         continue-on-error: true
         id: patch
         run: |
