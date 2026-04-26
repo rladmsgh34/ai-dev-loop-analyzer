@@ -607,12 +607,6 @@ jobs:
           print(feedback_report(repo=target_repo))
           PYEOF
 
-      - name: rate_limit checkpoint (end)
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          gh api rate_limit --jq ".resources.core | \"[$TARGET_REPO] end: remaining=\\(.remaining) reset=\\(.reset)\""
-
       - name: 히스토리 파일 커밋
         env:
           TARGET_REPO: ${{ env.TARGET_REPO }}
@@ -688,3 +682,13 @@ jobs:
             _fix율: ${{ steps.analyze.outputs.fix_rate }}% | 클러스터: ${{ steps.analyze.outputs.cluster_count }}개_
           labels: "documentation,ai-generated"
           delete-branch: true
+
+      # rate_limit end checkpoint — 매트릭스 iteration 진짜 마지막.
+      # Step 4b (peter-evans/create-pull-request)도 GH_PAT 소비하므로 그 이후로 위치.
+      # `if: always()`로 앞 step 실패 시에도 측정 (intervention 검증 누락 방지).
+      - name: rate_limit checkpoint (end)
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh api rate_limit --jq ".resources.core | \"[$TARGET_REPO] end: remaining=\\(.remaining) reset=\\(.reset)\""
