@@ -30,23 +30,17 @@ from mcp.types import TextContent, Tool
 # ── 경로 설정 ─────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
-CACHE_FILE = DATA_DIR / "analysis-cache.json"
 HISTORY_FILE = DATA_DIR / "rules-history.json"
 SRC_DIR = Path(__file__).parent
 
 sys.path.insert(0, str(SRC_DIR))
 
 import analyze as _ana  # noqa: E402
+from repo_store import load_cache, list_registered_repos, cache_path  # noqa: E402
 
 _profile_path = os.environ.get("AI_DEV_LOOP_PROFILE")
 if _profile_path and Path(_profile_path).exists():
     _ana.load_profile(_profile_path)
-
-# ── 캐시 로드 ─────────────────────────────────────────────────────────────────
-def load_cache() -> dict:
-    if CACHE_FILE.exists():
-        return json.loads(CACHE_FILE.read_text())
-    return {}
 
 def load_history() -> dict:
     if HISTORY_FILE.exists():
@@ -55,13 +49,12 @@ def load_history() -> dict:
 
 
 # ── 도구 구현 ─────────────────────────────────────────────────────────────────
-def _check_risk_zones(file_paths: list[str]) -> str:
+def _check_risk_zones(file_paths: list[str], repo: str | None = None) -> str:
     """
     편집하려는 파일들이 과거 회귀 핫존인지 확인.
-    캐시된 분석 데이터를 사용하므로 빠르게 응답.
-    diff 스니펫이 있으면 "마지막으로 이 파일이 고쳐졌을 때 변경 내용"도 함께 표시.
+    repo 지정 시 해당 레포 캐시만 조회. 미지정 시 등록된 첫 번째 레포 사용.
     """
-    cache = load_cache()
+    cache = load_cache(repo)
     if not cache:
         return (
             "⚠️ 캐시 없음 — `analyze_pr_history`를 먼저 실행하거나 "
@@ -249,7 +242,8 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
         "ai_weak_domains": ai_stats["ai"]["weak_domains"],
         "clusters": [{"start": c.start, "end": c.end, "domain": c.domain} for c in clusters],
     }
-    CACHE_FILE.write_text(json.dumps(cache, ensure_ascii=False, indent=2))
+    # 레포별 경로에 저장 (멀티 레포 지원)
+    cache_path(repo).write_text(json.dumps(cache, ensure_ascii=False, indent=2))
 
     # 응답 구성
     lines = [
@@ -443,7 +437,7 @@ TOOLS = [
             "Check whether the files you are about to edit are known regression hotspots. "
             "Call this before modifying a file to receive warnings such as "
             "'this file has regressed 4 times in the payment domain'. "
-            "Turns retrospective analysis into prospective warnings."
+            "Supports multiple repos — specify repo to query a specific project's history."
         ),
         inputSchema={
             "type": "object",
@@ -452,7 +446,12 @@ TOOLS = [
                     "type": "array",
                     "items": {"type": "string"},
                     "description": "확인할 파일 경로 목록 (예: ['src/lib/auth.ts', 'next.config.ts'])",
-                }
+                },
+                "repo": {
+                    "type": "string",
+                    "description": "조회할 레포 (예: 'owner/repo'). 미지정 시 첫 번째 등록 레포 사용.",
+                    "default": "",
+                },
             },
             "required": ["file_paths"],
         },
@@ -551,7 +550,25 @@ TOOLS = [
         description=(
             "PostToolUse 훅 경고의 정밀도(Precision)를 조회합니다. "
             "경고가 실제 회귀로 이어졌는지(TP) vs 오탐(FP)인지 통계와 "
-            "BM25 임계값 조정 제안을 반환합니다."
+            "BM25 임계값 조정 제안을 반환합니다. "
+            "repo 미지정 시 등록된 전체 레포의 요약을 반환합니다."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "repo": {
+                    "type": "string",
+                    "description": "조회할 레포 (예: 'owner/repo'). 미지정 시 전체 레포 요약.",
+                    "default": "",
+                },
+            },
+        },
+    ),
+    Tool(
+        name="list_repos",
+        description=(
+            "분석 캐시가 존재하는 등록 레포 목록을 반환합니다. "
+            "멀티 레포 환경에서 어떤 레포가 추적되고 있는지 확인할 때 사용합니다."
         ),
         inputSchema={
             "type": "object",
@@ -570,7 +587,10 @@ async def list_tools():
 async def call_tool(name: str, arguments: dict):
     try:
         if name == "check_risk_zones":
-            text = _check_risk_zones(arguments.get("file_paths", []))
+            text = _check_risk_zones(
+                arguments.get("file_paths", []),
+                arguments.get("repo") or None,
+            )
         elif name == "suggest_review_checklist":
             text = _suggest_review_checklist(
                 arguments["pr_title"],
@@ -590,7 +610,21 @@ async def call_tool(name: str, arguments: dict):
             text = _get_active_rules(arguments.get("domain", ""))
         elif name == "get_warning_feedback":
             from feedback import feedback_report
-            text = feedback_report()
+            text = feedback_report(arguments.get("repo") or None)
+        elif name == "list_repos":
+            repos = list_registered_repos()
+            if not repos:
+                text = "등록된 레포 없음 — `analyze_pr_history`를 먼저 실행하세요."
+            else:
+                lines = [f"## 등록된 레포 ({len(repos)}개)\n"]
+                for r in repos:
+                    p = cache_path(r)
+                    import json as _json
+                    cache = _json.loads(p.read_text()) if p.exists() else {}
+                    fix_rate = cache.get("fix_rate", "?")
+                    analyzed_at = cache.get("generated_at", "?")
+                    lines.append(f"- **{r}** | fix율 {fix_rate}% | 분석: {analyzed_at}")
+                text = "\n".join(lines)
         else:
             text = f"알 수 없는 도구: {name}"
     except Exception as e:
