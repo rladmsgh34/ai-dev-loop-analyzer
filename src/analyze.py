@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import subprocess
+from datetime import datetime, timezone, timedelta
 import urllib.request
 import urllib.error
 from collections import Counter, defaultdict
@@ -258,39 +259,63 @@ def fetch_ai_flags(pr_numbers: list[int]) -> dict[int, bool]:
 
 
 # ── 분석 엔진 ────────────────────────────────────────────────────────────────
-def detect_clusters(prs: list[PR], window: int = 8, threshold: int = 2) -> list[Cluster]:
+def detect_clusters(prs: list[PR], window: int = 14, threshold: int = 2) -> list[Cluster]:
     """
-    PR 번호 순서로 window 안에 fix가 threshold개 이상이면 클러스터.
-    겹치는 클러스터는 병합해 중복 제거.
+    mergedAt 기준 time-window(일) 내 fix PR이 threshold개 이상이면 클러스터.
+
+    window: 기준 PR로부터 몇 일 이내를 같은 클러스터로 볼지 (기본 14일)
+    threshold: 클러스터 최소 fix PR 수 (기본 2개)
+
+    날짜 순으로 정렬 후 greedy 슬라이딩 윈도우를 적용한다.
+    이미 클러스터에 포함된 PR은 다음 클러스터에서 제외해 중복을 방지한다.
+    merged_at 파싱 실패 시 epoch(2000-01-01)로 대체해 로버스트하게 동작한다.
     """
-    n = len(prs)
-    in_cluster: set[int] = set()  # 이미 클러스터에 포함된 PR index
-    clusters = []
+    _EPOCH = datetime(2000, 1, 1, tzinfo=timezone.utc)
+
+    def _parse(s: str) -> datetime:
+        try:
+            return datetime.fromisoformat(s.replace("Z", "+00:00"))
+        except Exception:
+            return _EPOCH
+
+    # (원본 prs 인덱스, PR 객체, 파싱된 datetime) — fix PR만
+    fix_entries: list[tuple[int, PR, datetime]] = [
+        (i, p, _parse(p.merged_at)) for i, p in enumerate(prs) if p.is_fix
+    ]
+    fix_entries.sort(key=lambda x: x[2])  # 날짜 오름차순
+
+    in_cluster: set[int] = set()  # 원본 prs 인덱스
+    clusters: list[Cluster] = []
+    delta = timedelta(days=window)
+    n = len(fix_entries)
 
     i = 0
     while i < n:
-        if not prs[i].is_fix or i in in_cluster:
+        orig_i, pr_i, dt_i = fix_entries[i]
+        if orig_i in in_cluster:
             i += 1
             continue
-        # i에서 시작하는 window 수집
-        group_idx = [i]
-        j = i + 1
-        while j < n and prs[j].number - prs[i].number < window * 3:
-            if prs[j].is_fix:
-                group_idx.append(j)
-            j += 1
-            if len(group_idx) >= 8:  # 최대 클러스터 크기
-                break
 
-        if len(group_idx) >= threshold:
-            group = [prs[k] for k in group_idx]
-            domain = Counter(p.domain for p in group).most_common(1)[0][0]
-            clusters.append(Cluster(prs=group, domain=domain))
-            for k in group_idx:
-                in_cluster.add(k)
-            i = group_idx[-1] + 1
+        # i 기준 window 내 아직 미분류 fix PR 수집
+        group: list[tuple[int, PR]] = [(orig_i, pr_i)]
+        for j in range(i + 1, n):
+            orig_j, pr_j, dt_j = fix_entries[j]
+            if dt_j - dt_i > delta:
+                break  # 정렬됐으므로 이후도 전부 범위 밖
+            if orig_j not in in_cluster:
+                group.append((orig_j, pr_j))
+
+        if len(group) >= threshold:
+            group_prs = [p for _, p in group]
+            group_prs.sort(key=lambda p: p.number)  # start/end property 일관성
+            domain = Counter(p.domain for p in group_prs).most_common(1)[0][0]
+            clusters.append(Cluster(prs=group_prs, domain=domain))
+            for orig_k, _ in group:
+                in_cluster.add(orig_k)
+            i += len(group)  # 묶인 PR 수만큼 전진
         else:
             i += 1
+
     return clusters
 
 def rank_risky_files(prs: list[PR]) -> list[tuple[str, int]]:

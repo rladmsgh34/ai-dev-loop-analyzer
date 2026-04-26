@@ -304,3 +304,76 @@ def test_classify_domain_profile_scope_override():
         assert classify_domain("fix(pitr): restore duration input", []) == "database"
     finally:
         os.unlink(tmp)
+
+
+# ── Time-window clustering tests ─────────────────────────────────────────────
+
+def _make_pr_dated(number: int, title: str, is_fix: bool, merged_at: str) -> PR:
+    return PR(
+        number=number,
+        title=title,
+        merged_at=merged_at,
+        additions=10,
+        deletions=5,
+        is_fix=is_fix,
+        domain=classify_domain(title, []),
+    )
+
+
+def test_time_window_cluster_within_14_days():
+    """Two fix PRs merged 10 days apart are detected as a cluster (window=14)."""
+    prs = [
+        _make_pr_dated(1, "feat: feature", False, "2026-01-01T00:00:00Z"),
+        _make_pr_dated(2, "fix: auth bug", True,  "2026-01-05T00:00:00Z"),
+        _make_pr_dated(3, "fix: session",  True,  "2026-01-10T00:00:00Z"),
+        _make_pr_dated(4, "feat: page",    False, "2026-01-15T00:00:00Z"),
+    ]
+    clusters = detect_clusters(prs, window=14, threshold=2)
+    assert len(clusters) == 1
+    pr_nums = {p.number for p in clusters[0].prs}
+    assert pr_nums == {2, 3}
+
+
+def test_time_window_no_cluster_beyond_window():
+    """Two fix PRs merged 20 days apart are NOT a cluster when window=14."""
+    prs = [
+        _make_pr_dated(1, "fix: early bug", True, "2026-01-01T00:00:00Z"),
+        _make_pr_dated(2, "fix: late bug",  True, "2026-01-25T00:00:00Z"),
+    ]
+    clusters = detect_clusters(prs, window=14, threshold=2)
+    assert len(clusters) == 0
+
+
+def test_time_window_two_separate_clusters():
+    """Two independent time-window clusters in different periods are both detected."""
+    prs = [
+        _make_pr_dated(1, "fix: bug A1", True, "2026-01-01T00:00:00Z"),
+        _make_pr_dated(2, "fix: bug A2", True, "2026-01-03T00:00:00Z"),
+        _make_pr_dated(3, "feat: skip",  False, "2026-01-10T00:00:00Z"),
+        _make_pr_dated(4, "fix: bug B1", True, "2026-02-01T00:00:00Z"),
+        _make_pr_dated(5, "fix: bug B2", True, "2026-02-05T00:00:00Z"),
+    ]
+    clusters = detect_clusters(prs, window=14, threshold=2)
+    assert len(clusters) == 2
+    all_pr_nums = {p.number for c in clusters for p in c.prs}
+    assert all_pr_nums == {1, 2, 4, 5}
+
+
+def test_time_window_boundary_exact_14_days():
+    """Fix PR exactly window days apart is still included (boundary inclusive)."""
+    prs = [
+        _make_pr_dated(1, "fix: start", True, "2026-01-01T00:00:00Z"),
+        _make_pr_dated(2, "fix: end",   True, "2026-01-15T00:00:00Z"),  # exactly 14 days
+    ]
+    clusters = detect_clusters(prs, window=14, threshold=2)
+    assert len(clusters) == 1
+
+
+def test_time_window_malformed_date_fallback():
+    """PRs with unparseable merged_at are grouped together (epoch fallback)."""
+    prs = [
+        _make_pr_dated(1, "fix: bad date1", True, "not-a-date"),
+        _make_pr_dated(2, "fix: bad date2", True, "also-bad"),
+    ]
+    clusters = detect_clusters(prs, window=14, threshold=2)
+    assert len(clusters) == 1  # both fall to epoch, so they're in the same window
