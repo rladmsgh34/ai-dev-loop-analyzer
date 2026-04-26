@@ -1,16 +1,18 @@
 // Per-repo analysis cache reader — workflow가 data/repos/{owner__repo}/analysis-cache.json에
 // 누적해둔 결과를 web에서 재사용. live fetch보다 빠르고 cron 분석과 일치.
 //
+// Vercel serverless에선 web/ 외부 파일을 읽을 수 없어 GitHub raw URL로 fetch.
+// Next의 1시간 revalidate cache로 cold-start 외엔 무비용.
+//
 // 캐시 스키마는 src/analyze.py의 build_cache_dict() 출력 — web의 AnalysisResult와
 // 일부 필드만 겹침. 변환 시 부재 필드(trend, riskyFiles 전체, full ai/human breakdown)는
 // 빈 값 + source 마커로 표시.
 
-import { promises as fs } from 'fs'
-import path from 'path'
-
 import type { AnalysisResult } from './analyzer'
 
-const MONOREPO_ROOT = path.resolve(process.cwd(), '..')
+const RAW_BASE =
+  'https://raw.githubusercontent.com/rladmsgh34/ai-dev-loop-analyzer/main'
+const REVALIDATE_SECONDS = 3600
 
 interface CachedAnalysis {
   generated_at: string
@@ -37,20 +39,15 @@ function repoSlug(repo: string): string {
 export async function loadCachedResult(
   repo: string
 ): Promise<CachedAnalysisResult | null> {
-  const cachePath = path.join(
-    MONOREPO_ROOT,
-    'data',
-    'repos',
-    repoSlug(repo),
-    'analysis-cache.json'
-  )
-  let raw: string
+  const url = `${RAW_BASE}/data/repos/${repoSlug(repo)}/analysis-cache.json`
+  let cache: CachedAnalysis
   try {
-    raw = await fs.readFile(cachePath, 'utf-8')
+    const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } })
+    if (!res.ok) return null
+    cache = (await res.json()) as CachedAnalysis
   } catch {
     return null
   }
-  const cache: CachedAnalysis = JSON.parse(raw)
 
   return {
     source: 'cache',
