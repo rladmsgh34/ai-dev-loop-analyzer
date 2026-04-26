@@ -1,0 +1,68 @@
+name: Production Smoke
+
+# 6시간마다 prod 검증 + 수동 트리거. fail 시 issue 자동 생성/업데이트.
+# 회귀 분석으로는 못 잡는 first-of-its-kind 런타임 버그를 사용자보다 먼저 발견하는 게 목표.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # 매 6시간
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Smoke 대상 URL (기본: production 커스텀 도메인)'
+        required: false
+        default: 'https://ai-dev-loop-analyzer.rladmsgh34.org'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run smoke
+        id: smoke
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://ai-dev-loop-analyzer.rladmsgh34.org' }}
+        run: |
+          set +e
+          ./web/scripts/smoke.sh 2>&1 | tee /tmp/smoke.log
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+
+      - name: Open / update smoke-failure issue
+        if: steps.smoke.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          TITLE="🚨 Production smoke failed — ${DATE}"
+          BODY=$(cat <<EOF
+          \`\`\`
+          $(cat /tmp/smoke.log)
+          \`\`\`
+
+          - run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - target: ${BASE_URL:-https://ai-dev-loop-analyzer.rladmsgh34.org}
+          - 트리거: ${{ github.event_name }}
+
+          ## 다음 액션
+          1. 로그에서 ❌ 표시된 URL 직접 호출해 본 응답 확인
+          2. 회귀 분석으로 못 잡는 카테고리 (포팅 / 데이터 무결성 / 환경) 중 어디인지 분류
+          3. fix PR — trap memory에 한 줄 추가하면 미래 동일 패턴 회피
+          EOF
+          )
+
+          # 같은 날짜 같은 타이틀 issue 있으면 댓글로, 없으면 신규
+          gh label create "smoke-failure" --color "ee0701" --description "Production smoke test failed" 2>/dev/null || true
+          EXISTING=$(gh issue list --label smoke-failure --state open --search "$DATE in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+            echo "댓글 추가: #$EXISTING"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label smoke-failure
+          fi
+
+      - name: Fail job if smoke failed
+        if: steps.smoke.outputs.exit_code != '0'
+        run: exit 1
