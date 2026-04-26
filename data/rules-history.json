@@ -196,7 +196,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -263,7 +277,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -284,7 +312,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -305,7 +347,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -326,7 +382,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -346,7 +416,21 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -366,7 +450,21 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -386,7 +484,21 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -406,7 +518,21 @@
         "test/e2e": 1.1,
         "auth": 0.6
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -501,7 +627,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -526,7 +666,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -551,7 +705,21 @@
         "docs": 0.5,
         "runtime-dom": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -572,7 +740,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -593,7 +775,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -614,7 +810,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -635,7 +845,21 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
     },
@@ -656,10 +880,138 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": [],
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "repo": "rladmsgh34/gwangcheon-shop",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ],
       "origin_repo": "unknown",
       "origin_confidence": "unknown"
+    },
+    {
+      "id": "7b4a573f",
+      "rule": "- GCS에 대한 Signed URL 처리 시, 공개 액세스를 비활성화하고 항상 안전한 URL 생성 방법을 사용하십시오. (파일: src/cli.py)",
+      "domain": "external-api",
+      "origin_repo": "rladmsgh34/gwangcheon-shop",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "93a8befd",
+      "rule": "- CI 워크플로우의 pnpm 버전 설정은 중복되지 않도록 유지하고, 여러 파일에서 일관되게 설정하십시오. (파일: src/analyze.py)",
+      "domain": "general",
+      "origin_repo": "rladmsgh34/gwangcheon-shop",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "8ed3a8a6",
+      "rule": "- 제품 페이지의 카테고리 필터와 URL 파라미터 간의 동기화를 철저히 검사하고, 변경 시 반드시 기능 테스트를 수행하십시오. (파일: src/rag_hook.py)",
+      "domain": "test/e2e",
+      "origin_repo": "rladmsgh34/gwangcheon-shop",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "b9436336",
+      "rule": "- CI/CD 관련 PR은 특히 보안 및 권한 설정에 주의를 기울이고, 레거시 코드와의 호환성을 지속적으로 확인하십시오. (PR 범위: #21~#321)",
+      "domain": "ci/cd",
+      "origin_repo": "rladmsgh34/gwangcheon-shop",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "d8dc713d",
+      "rule": "- XSS 방어를 위한 RichText HTML 저장 및 렌더링 과정에서 모든 사용자 입력을 철저히 검증하고 필터링하십시오. (실행 파일: src/rag_hook.py)",
+      "domain": "security",
+      "origin_repo": "rladmsgh34/gwangcheon-shop",
+      "origin_confidence": "explicit",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
     }
   ],
-  "snapshots": []
+  "snapshots": [
+    {
+      "date": "2026-04-26",
+      "repo": "rladmsgh34/gwangcheon-shop",
+      "total_fix_rate": 16.9,
+      "ci/cd": 6.7,
+      "general": 2.2,
+      "external-api": 1.7,
+      "security": 1.7,
+      "payment": 1.7,
+      "database": 1.1,
+      "test/e2e": 1.1,
+      "auth": 0.6
+    }
+  ]
 }
