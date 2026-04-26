@@ -8,18 +8,38 @@
 """
 
 import json
-import sys
+import pickle
 import argparse
 from pathlib import Path
-from datetime import datetime, timezone
 
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
+from tokenizer import code_tokenizer
+
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 CHROMA_DIR = DATA_DIR / "chroma"
+BM25_CACHE_PATH = DATA_DIR / ".bm25_cache.pkl"
 
 EMBED_MODEL = "all-MiniLM-L6-v2"  # 90MB, CPU 동작, 다국어 지원
+
+# 파일 확장자 → 언어 매핑
+_EXT_LANG = {
+    ".ts": "typescript", ".tsx": "typescript",
+    ".js": "javascript", ".jsx": "javascript", ".mjs": "javascript",
+    ".py": "python", ".go": "go", ".rs": "rust",
+    ".java": "java", ".kt": "kotlin", ".swift": "swift",
+    ".rb": "ruby", ".cs": "csharp", ".cpp": "cpp", ".c": "c",
+}
+
+
+def detect_language(files: list[str]) -> str:
+    """파일 목록에서 주 언어를 감지한다."""
+    for f in files:
+        lang = _EXT_LANG.get(Path(f).suffix.lower())
+        if lang:
+            return lang
+    return "unknown"
 
 
 def get_collection():
@@ -41,7 +61,6 @@ def load_language_patterns() -> list[dict]:
     chunks = []
 
     for lang, stats in data.get("languages", {}).items():
-        # 언어별 요약 청크
         top = ", ".join(stats["top_domains"][:3])
         chunks.append({
             "id": f"lang_{lang}_summary",
@@ -62,7 +81,6 @@ def load_language_patterns() -> list[dict]:
             },
         })
 
-        # 도메인별 상세 청크
         for domain, rate in stats.get("domain_avg_fix_rates", {}).items():
             chunks.append({
                 "id": f"lang_{lang}_domain_{domain}",
@@ -79,7 +97,6 @@ def load_language_patterns() -> list[dict]:
                 },
             })
 
-    # 개별 레포 결과 청크
     for r in data.get("repo_results", []):
         top_domain = max(r.get("domain_fix_rates", {}).items(),
                          key=lambda x: x[1].get("fix_count", 0),
@@ -131,10 +148,7 @@ def load_rules_history() -> list[dict]:
             })
 
     for snap in data.get("snapshots", []):
-        top = sorted(
-            snap.get("domain_fix_rates", {}).items(),
-            key=lambda x: -x[1]
-        )[:3]
+        top = sorted(snap.get("domain_fix_rates", {}).items(), key=lambda x: -x[1])[:3]
         top_text = ", ".join(f"{d}({r}%)" for d, r in top)
         chunks.append({
             "id": f"snapshot_{snap.get('date', 'unknown')}",
@@ -165,8 +179,8 @@ def load_analysis_cache() -> list[dict]:
 
     repo_full = data.get("repo", "unknown")
     repo_short = repo_full.split("/")[-1] if "/" in repo_full else repo_full
-
     chunks = []
+
     summary = data.get("summary", {})
     if summary:
         chunks.append({
@@ -207,8 +221,9 @@ def load_analysis_cache() -> list[dict]:
 
 def load_diff_patterns() -> list[dict]:
     """diff-patterns.json → 청크 리스트.
-    각 항목은 실제 fix PR의 diff snippet + 도메인 + 레포 정보를 담는다.
-    통계 요약이 아닌 실제 코드 패턴을 임베딩해 RAG 검색 품질을 높인다.
+
+    각 청크 맨 앞에 '[PR #N] 제목 / [Domain] [Files]' 헤더를 강제 주입해
+    BM25와 벡터 검색 모두 PR 제목·도메인·파일명 키워드로 찾을 수 있게 한다.
     """
     path = DATA_DIR / "diff-patterns.json"
     if not path.exists():
@@ -226,36 +241,70 @@ def load_diff_patterns() -> list[dict]:
         repo = entry.get("repo", "unknown")
         date = entry.get("date", "")
         diff = entry.get("diff_snippet", "").strip()
-        files = ", ".join(entry.get("files", [])[:5])
+        files = entry.get("files", [])
+        review = entry.get("review_summary", "")
 
         if not diff:
             continue
 
-        chunk_id = f"diff_{repo.replace('/', '_')}_{pr_num}"
+        # 메타데이터 헤더 강제 주입 — BM25와 벡터 모두 PR 제목·파일명으로 검색 가능
+        header_lines = [
+            f"[PR #{pr_num}] {title}",
+            f"[Domain: {domain}] [Files: {', '.join(files[:3])}]",
+        ]
+        if review:
+            header_lines.append(f"[Review: {review}]")
+        header_lines.append("---")
+
+        chunk_text = "\n".join(header_lines) + "\n" + diff[:600]
+
         chunks.append({
-            "id": chunk_id,
-            "text": (
-                f"[{repo}] fix PR #{pr_num} ({domain}): {title}\n"
-                f"변경 파일: {files}\n"
-                f"diff:\n{diff[:600]}"  # 600자로 청크 크기 제한
-            ),
+            "id": f"diff_{repo.replace('/', '_')}_{pr_num}",
+            "text": chunk_text,
             "metadata": {
                 "type": "diff_pattern",
                 "domain": domain,
                 "repo": repo,
                 "pr_number": pr_num,
                 "date": date,
+                "language": detect_language(files),
+                "files": json.dumps(files[:5]),
             },
         })
 
     return chunks
 
 
+def _save_bm25_cache(collection) -> None:
+    """ChromaDB의 전체 문서로 BM25 인덱스를 빌드하고 pickle로 저장한다.
+
+    ingest 완료 후 즉시 호출하면 query.py가 콜드 스타트 없이 바로 로드할 수 있다.
+    """
+    try:
+        from rank_bm25 import BM25Okapi
+    except ImportError:
+        print("⚠️  rank-bm25 미설치 — BM25 캐시 생략 (pip install rank-bm25)")
+        return
+
+    all_data = collection.get(include=["documents"])
+    docs: list[str] = all_data["documents"]
+    ids: list[str] = all_data["ids"]
+
+    if not docs:
+        return
+
+    tokenized = [code_tokenizer(d) for d in docs]
+    bm25 = BM25Okapi(tokenized)
+
+    cache = {"bm25": bm25, "ids": ids, "docs": docs}
+    BM25_CACHE_PATH.write_bytes(pickle.dumps(cache))
+    print(f"💾 BM25 캐시 저장 완료 ({len(docs)}개 문서 → {BM25_CACHE_PATH.name})")
+
+
 def ingest(append: bool = False):
     collection = get_collection()
 
     if not append:
-        # 전체 재구축
         client = chromadb.PersistentClient(path=str(CHROMA_DIR))
         client.delete_collection("ai_dev_loop")
         ef = SentenceTransformerEmbeddingFunction(model_name=EMBED_MODEL)
@@ -278,6 +327,7 @@ def ingest(append: bool = False):
 
     if not new_chunks:
         print("✅ 추가할 새 청크 없음")
+        _save_bm25_cache(collection)
         return
 
     print(f"📥 {len(new_chunks)}개 청크 임베딩 중...")
@@ -294,6 +344,9 @@ def ingest(append: bool = False):
     total = collection.count()
     print(f"✅ 완료 — ChromaDB 총 {total}개 청크 저장됨")
     print(f"   경로: {CHROMA_DIR}")
+
+    # ChromaDB 색인 완료 후 BM25 캐시 갱신
+    _save_bm25_cache(collection)
 
 
 def main():
