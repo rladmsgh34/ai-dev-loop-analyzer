@@ -1,29 +1,17 @@
 {
   "generated_at": "2026-04-26",
   "repo": "vercel/next.js",
-  "fix_rate": 17.5,
+  "fix_rate": 13.1,
   "summary": {
-    "total_prs": 200,
-    "fix_prs": 35,
-    "fix_rate": 17.5
+    "total_prs": 168,
+    "fix_prs": 22,
+    "fix_rate": 13.1
   },
   "risky_files": [],
   "domain_counts": [
     {
       "domain": "general",
-      "fix_count": 25
-    },
-    {
-      "domain": "monorepo",
-      "fix_count": 2
-    },
-    {
-      "domain": "ci/cd",
-      "fix_count": 2
-    },
-    {
-      "domain": "font",
-      "fix_count": 1
+      "fix_count": 16
     },
     {
       "domain": "cache",
@@ -35,6 +23,10 @@
     },
     {
       "domain": "scripts",
+      "fix_count": 1
+    },
+    {
+      "domain": "monorepo",
       "fix_count": 1
     },
     {
@@ -50,14 +42,8 @@
   "clusters": [
     {
       "start": 92494,
-      "end": 93113,
-      "size": 32,
-      "domain": "general"
-    },
-    {
-      "start": 93128,
       "end": 93225,
-      "size": 3,
+      "size": 22,
       "domain": "general"
     }
   ]
