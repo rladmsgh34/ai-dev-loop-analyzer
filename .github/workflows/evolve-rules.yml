@@ -93,8 +93,12 @@ jobs:
       IS_PR_TRIGGER: ${{ github.event_name == 'repository_dispatch' }}
 
     steps:
+      # ref 명시 — 기본값(detached HEAD)이면 뒤의 git push가 "not currently on a branch"로 실패.
+      # workflow_dispatch가 PR 브랜치에서 dry-run으로 트리거될 수도 있어 head_ref 우선.
       - name: Checkout ai-dev-loop-analyzer
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       # ── Step 0: prerequisites ───────────────────────────────────────────────
       - name: Ensure labels and data directory
@@ -566,8 +570,6 @@ jobs:
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
           REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
-          # 직렬 매트릭스라 매 iteration마다 새 checkout이지만, 이전 iteration 커밋과의
-          # 충돌 방지를 위해 push 전에 한 번 더 rebase. 실패 시 한 번만 재시도.
           git add data/rules-history.json data/diff-patterns.json || true
           git add "data/repos/${REPO_SLUG}/" || true
           if git diff --staged --quiet; then
@@ -575,8 +577,10 @@ jobs:
             exit 0
           fi
           git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }} [${TARGET_REPO}]"
-          git pull --rebase origin main || true
-          git push || (sleep 5 && git pull --rebase origin main && git push)
+          # max-parallel:1 + serial matrix면 race가 없지만, 별도 워크플로우 run이
+          # 같은 브랜치에 push했을 가능성에 대비해 충돌 시 한 번만 rebase 재시도.
+          BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+          git push origin "$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "$BRANCH")
 
       # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
       # 외부 레포는 CLAUDE.md를 보유하지 않거나 우리가 PR을 보낼 권한이 없으므로 스킵.
