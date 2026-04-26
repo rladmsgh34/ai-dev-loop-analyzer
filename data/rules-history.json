@@ -1,4 +1,108 @@
 {
-  "rules": [],
-  "snapshots": []
+  "rules": [
+    {
+      "id": "6b3d2508",
+      "rule": "- src/cli.py에서 위험 파일의 경고를 비활성화하지 않도록 항상 위험도를 확인하고 경고 메시지를 stdout에 출력하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "afe62a64",
+      "rule": "- src/analyze.py의 detect_clusters 함수에서 fix PR 클러스터링 시 window 값을 14로 설정하고, 종속 클러스터를 피하기 위해 이전 클러스터에 포함된 PR을 제외하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "09a27d86",
+      "rule": "- tests/test_analyze.py에서 test 함수의 개별 테스트 케이스를 더 구체적으로 나누어 각 케이스에 대한 명확한 기대 결과를 정의하세요.",
+      "domain": "test/e2e",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "c6e0595d",
+      "rule": "- src/rag_hook.py의 BM25 절대 점수가 _SCORE_THRESHOLD 기준값 1.5 이상이 되도록 새로운 코드 변경 시 기존 패턴과의 유사도를 체크하세요.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "b89b775d",
+      "rule": "- 외부 API 호출이나 보안 관련 코드 변경 시 src/rag_hook.py와 관련된 경고를 추가하여 과거의 회귀 패턴을 인지할 수 있도록 하세요.",
+      "domain": "external-api",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    }
+  ],
+  "snapshots": [
+    {
+      "date": "2026-04-26",
+      "total_fix_rate": 16.9,
+      "ci/cd": 6.7,
+      "general": 2.2,
+      "external-api": 1.7,
+      "security": 1.7,
+      "payment": 1.7,
+      "database": 1.1,
+      "test/e2e": 1.1,
+      "auth": 0.6
+    }
+  ]
 }
