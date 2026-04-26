@@ -12,7 +12,7 @@
     "profile": "profiles/examples/vuejs-core.json",
     "schedule": "weekly",
     "post_issues": false,
-    "fetch_limit": 200,
+    "fetch_limit": 800,
     "enabled": true
   },
   {
@@ -20,7 +20,7 @@
     "profile": "profiles/examples/vercel-nextjs.json",
     "schedule": "weekly",
     "post_issues": false,
-    "fetch_limit": 200,
+    "fetch_limit": 800,
     "enabled": true
   }
 ]
