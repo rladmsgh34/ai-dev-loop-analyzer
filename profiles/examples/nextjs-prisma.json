@@ -1,0 +1,42 @@
+{
+  "name": "nextjs-prisma",
+  "description": "Next.js + Prisma 스택 프리셋. 프로젝트별 외부 서비스 키워드(결제사, 지도 등)는 이 파일을 복사해서 추가하세요.",
+  "fix_pr_regex": "^fix",
+  "domain_patterns": [
+    ["ci/cd",        "deploy|docker|dockerfile|ci\\b|workflow|buildx|healthcheck|compose|prisma.cli|binary.target|musl|alpine"],
+    ["auth",         "auth|login|signup|session|jwt|credential|credentials|signin|nextauth"],
+    ["payment",      "payment|checkout|order|cart|purchase"],
+    ["database",     "prisma/|migration|schema\\.prisma|prisma\\b|migrate"],
+    ["security",     "csp|xss|csrf|rate.limit|sanitize|escape|frame.src|allowlist|content.security"],
+    ["external-api", "stripe|twilio|sendgrid|s3\\b|cloudfront|firebase|slack|webhook"],
+    ["test/e2e",     "\\.test\\.|\\.spec\\.|e2e|playwright|vitest|coverage|flaky|standalone.server"],
+    ["config",       "next\\.config|env\\.ts|tsconfig|biome|tailwind|npmrc|pnpm"],
+    ["api",          "src/app/api/|route\\.ts|api.route"],
+    ["ui",           "src/components/|page\\.tsx"]
+  ],
+  "rule_templates": {
+    "ci/cd":        "CI/CD·Docker·배포 파이프라인 변경 전 빌드 검증 스크립트 실행 필수 — {count}회 회귀 감지",
+    "auth":         "인증 관련 파일 수정 시 로그인/세션/권한 플로우 전체 수동 검증 필수 — {count}회 회귀 이력",
+    "payment":      "결제 플로우 변경 시 신중한 설계 검토 후 구현 — {count}회 회귀",
+    "database":     "Prisma 스키마 변경 PR에는 down SQL 필수 첨부 — {count}회 회귀 이력",
+    "security":     "CSP·XSS·rate-limit 수정 후 외부 도메인 allowlist 누락 여부 확인 — {count}회 회귀",
+    "external-api": "외부 API 연동 변경 시 localhost와 스테이징 동작이 다를 수 있음 — {count}회 회귀, 반드시 스테이징 배포 후 검증",
+    "test/e2e":     "E2E 테스트 서버는 `next start`(standalone) 기준으로만 실행 — dev JIT race로 {count}회 플레이키 발생",
+    "config":       "`next.config.ts` · `env.ts` 변경 후 반드시 dev 서버 재시작 및 빌드 확인 — {count}회 회귀"
+  },
+  "rule_hints": {
+    "ci/cd":        "→ Dockerfile/워크플로우 변경 전 빌드 검증 스크립트 실행 권장",
+    "auth":         "→ 로그인/세션/권한 플로우 전체 수동 검증 필수",
+    "payment":      "→ 결제 플로우 변경 시 신중한 설계 검토 후 구현 권장",
+    "database":     "→ Prisma 스키마 변경 PR에 down SQL 첨부 필수",
+    "security":     "→ CSP·XSS 변경 후 외부 도메인 allowlist 누락 여부 확인",
+    "external-api": "→ localhost ≠ 스테이징 동작 가능 — 반드시 스테이징 배포 후 검증",
+    "test/e2e":     "→ E2E 서버는 `next start`(standalone) 기준으로만 실행",
+    "config":       "→ next.config.ts 변경 후 dev 서버 재시작 필수"
+  },
+  "prompt_hints": {
+    "language":     "ko",
+    "ai_assistant": "Claude Code",
+    "config_file":  "CLAUDE.md"
+  }
+}

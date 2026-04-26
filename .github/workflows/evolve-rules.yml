@@ -23,30 +23,31 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: ai-dev-loop-analyzer 체크아웃
+      - name: Checkout ai-dev-loop-analyzer
         uses: actions/checkout@v4
 
-      # ── 0단계: 사전 조건 확인 ──────────────────────────────────────────────
-      - name: 사전 조건 확인
+      # ── Step 0: prerequisites ───────────────────────────────────────────────
+      - name: Ensure labels and data directory
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh label create "daily-report" --color "e4e669" --description "일일 자동 분석 리포트" 2>/dev/null || true
+          gh label create "daily-report" --color "e4e669" --description "Daily auto-analysis report" 2>/dev/null || true
           mkdir -p data
           touch data/rules-history.json
 
-      - name: gwangcheon-shop 체크아웃
+      - name: Checkout gwangcheon-shop
         uses: actions/checkout@v4
         with:
           repository: rladmsgh34/gwangcheon-shop
           token: ${{ secrets.GH_PAT }}
           path: gwangcheon-shop
 
-      # ── 1단계: 분석 ────────────────────────────────────────────────────────
-      - name: PR 히스토리 수집 및 분석
+      # ── Step 1: analyze ─────────────────────────────────────────────────────
+      - name: Collect and analyze PR history
         id: analyze
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+          AI_DEV_LOOP_PROFILE: gwangcheon-shop/.claude/ai-dev-loop-profile.json
         run: |
           gh pr list \
             --repo rladmsgh34/gwangcheon-shop \
@@ -72,8 +73,8 @@ jobs:
           echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
 
-      # ── 2단계: 이슈 리포트 ─────────────────────────────────────────────────
-      - name: 일일 리포트 이슈 게시
+      # ── Step 2: issue report ───────────────────────────────────────────────
+      - name: Post daily report issue
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -140,8 +141,8 @@ jobs:
                             '--body', body, '--label', 'daily-report'], check=True)
           PYEOF
 
-      # ── 3단계: 규칙 히스토리 스냅샷 기록 ─────────────────────────────────────
-      - name: 규칙 효과 측정 스냅샷 저장
+      # ── Step 3: snapshot ───────────────────────────────────────────────────
+      - name: Save rule effectiveness snapshot
         continue-on-error: true
         run: |
           python3 - <<'PYEOF'
@@ -162,7 +163,7 @@ jobs:
         env:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
 
-      - name: 히스토리 파일 커밋
+      - name: Commit history file
         run: |
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
@@ -170,8 +171,8 @@ jobs:
           git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }}"
           git push
 
-      # ── 4단계: CLAUDE.md 패치 ──────────────────────────────────────────────
-      - name: CLAUDE.md 패치 생성
+      # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
+      - name: Generate CLAUDE.md patch
         continue-on-error: true
         id: patch
         run: |
@@ -188,8 +189,8 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
-      # ── 4단계: PR 생성 (dry_run=false 이고 변경사항 있을 때만) ─────────────
-      - name: gwangcheon-shop PR 생성
+      # ── Step 4b: open PR (only when dry_run=false and changes exist) ────────
+      - name: Open gwangcheon-shop PR
         if: steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
         uses: peter-evans/create-pull-request@v6
         with:

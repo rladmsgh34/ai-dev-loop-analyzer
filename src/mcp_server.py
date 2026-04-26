@@ -34,6 +34,12 @@ SRC_DIR = Path(__file__).parent
 
 sys.path.insert(0, str(SRC_DIR))
 
+import analyze as _ana  # noqa: E402
+
+_profile_path = os.environ.get("AI_DEV_LOOP_PROFILE")
+if _profile_path and Path(_profile_path).exists():
+    _ana.load_profile(_profile_path)
+
 # ── 캐시 로드 ─────────────────────────────────────────────────────────────────
 def load_cache() -> dict:
     if CACHE_FILE.exists():
@@ -103,18 +109,8 @@ def _check_risk_zones(file_paths: list[str]) -> str:
 
 
 def _get_rule_hint(domain: str, domain_counts: dict[str, int]) -> str:
-    """도메인에 맞는 사전 경고 메시지"""
-    hints = {
-        "ci/cd":        "→ Dockerfile/워크플로우 변경 전 `scripts/verify-build.sh` 실행 권장",
-        "auth":         "→ 로그인/세션/권한 플로우 전체 수동 검증 필수",
-        "payment":      "→ 결제 플로우 변경 시 Opus 모델로 설계 검토 후 구현 권장",
-        "database":     "→ 스키마 변경 PR에 down SQL 첨부 필수",
-        "security":     "→ CSP·XSS 변경 후 외부 도메인 allowlist 누락 여부 확인",
-        "external-api": "→ localhost ≠ 스테이징 동작 가능 — 반드시 스테이징 배포 후 검증",
-        "test/e2e":     "→ E2E 서버는 `next start`(standalone) 기준으로만 실행",
-        "config":       "→ next.config.ts 변경 후 dev 서버 재시작 필수",
-    }
-    return hints.get(domain, f"→ {domain} 도메인: 변경 전 관련 테스트 전체 실행 권장")
+    """도메인에 맞는 사전 경고 메시지 — 프로파일의 rule_hints에서 로드."""
+    return _ana.RULE_HINTS.get(domain, f"→ {domain} 도메인: 변경 전 관련 테스트 전체 실행 권장")
 
 
 def _analyze_pr_history(repo: str, limit: int = 200) -> str:
@@ -241,9 +237,10 @@ TOOLS = [
     Tool(
         name="check_risk_zones",
         description=(
-            "편집하려는 파일들이 과거 회귀 핫존인지 사전 확인합니다. "
-            "파일 수정 전 호출하면 '이 파일은 결제 도메인에서 4번 회귀됐음 — Opus 검토 권장' 같은 "
-            "경고를 받을 수 있습니다. retrospective 분석 → prospective 경고."
+            "Check whether the files you are about to edit are known regression hotspots. "
+            "Call this before modifying a file to receive warnings such as "
+            "'this file has regressed 4 times in the payment domain'. "
+            "Turns retrospective analysis into prospective warnings."
         ),
         inputSchema={
             "type": "object",
