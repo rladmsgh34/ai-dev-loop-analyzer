@@ -1,20 +1,20 @@
 {
   "name": "default",
   "description": "범용 프로필 — 스택 무관. 프로젝트별 키워드는 별도 파일에 추가.",
-  "fix_pr_regex": "^fix",
+  "fix_pr_regex": "^(fix|hotfix|bugfix)(\\([^)]*\\))?:",
   "domain_patterns": [
-    ["ci/cd",        "deploy|docker|dockerfile|ci\\b|workflow|buildx|healthcheck|compose"],
-    ["auth",         "auth|login|signup|session|jwt|credential|credentials|signin"],
-    ["payment",      "payment|checkout|order|cart|purchase"],
-    ["database",     "migration|schema\\.|migrate\\b"],
-    ["security",     "csp|xss|csrf|rate.limit|sanitize|escape|content.security"],
-    ["external-api", "stripe|twilio|sendgrid|s3\\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs|gcp\\b|aws\\b|azure"],
-    ["test/e2e",     "\\.test\\.|\\.spec\\.|e2e|playwright|vitest|jest|coverage|flaky"],
-    ["maintenance",  "refactor|cleanup|rename|deprecat|reorganize|remov\\b|rewrite"],
-    ["docs",         "readme|changelog|docs?\\b|document|comment"],
-    ["config",       "\\.config\\.|env\\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\\b"],
-    ["api",          "api/|route\\.ts|route\\.js"],
-    ["ui",           "components/|page\\.tsx|page\\.jsx"]
+    ["ci/cd",        "deploy|docker|dockerfile|ci\\b|workflow|buildx|healthcheck|compose|github.action|pipeline"],
+    ["auth",         "auth|login|signup|session|jwt|credential|credentials|signin|oauth|permission|role\\b"],
+    ["payment",      "payment|checkout|order|cart|purchase|invoice|billing|subscription"],
+    ["database",     "migration|schema\\.|migrate\\b|prisma|seed\\.ts|seed\\.js"],
+    ["security",     "csp|xss|csrf|rate.limit|sanitize|escape|content.security|vulnerabilit|injection"],
+    ["external-api", "stripe|twilio|sendgrid|s3\\b|cloudfront|firebase|slack|webhook|kakao|portone|toss|naver|daum|coolsms|sentry|gcs\\b|gcp\\b|aws\\b|azure|openai|anthropic"],
+    ["test/e2e",     "\\.test\\.|\\.spec\\.|/tests?/|e2e|playwright|vitest|jest|coverage|flaky|mock|fixture"],
+    ["maintenance",  "refactor|cleanup|rename|deprecat|reorganize|remov\\b|rewrite|chore\\b|bump\\b|upgrade|downgrade|update.dep|dependen|package\\.json"],
+    ["docs",         "readme|changelog|docs?\\b|document|comment|jsdoc"],
+    ["config",       "\\.config\\.|env\\.ts|tsconfig|biome|tailwind|eslint|prettier|lint\\b|next\\.config|vite\\.config|webpack|babel|postcss"],
+    ["api",          "api/|route\\.ts|route\\.js|endpoint|middleware"],
+    ["ui",           "components?/|pages?/|page\\.tsx|page\\.jsx|layout|modal|dialog|sidebar|navbar|header|footer|/styles?/|/theme/|/hooks?/|/context/|/store/"]
   ],
   "rule_templates": {
     "ci/cd":        "CI/CD·배포 파이프라인 변경 전 빌드 검증 스크립트 실행 필수 — {count}회 회귀 감지",
