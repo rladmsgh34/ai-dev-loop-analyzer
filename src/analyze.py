@@ -93,7 +93,7 @@ class PR:
     files: list[str] = field(default_factory=list)
     review_comments: list[str] = field(default_factory=list)
     is_ai_generated: bool = False  # Co-Authored-By: Claude 커밋 포함 여부
-    diff_snippet: str = ""
+    diff_snippet: str = ""  # gh pr diff 앞 100줄 (--fetch-files 모드에서만 채워짐)
 
 @dataclass
 class Cluster:
@@ -121,6 +121,7 @@ def fetch_prs(limit: int = 300) -> list[PR]:
 
     raw = json.loads(result.stdout)
     prs = []
+    _FIX_RE = re.compile(r'^fix|^hotfix|수정|버그|bug\b|regression|revert', re.I)
     for item in raw:
         is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
         domain = classify_domain(item["title"], [])
@@ -162,6 +163,7 @@ def fetch_pr_details(pr_number: int) -> tuple[list[str], list[str], bool, str]:
             for commit in data.get("commits", [])
         )
 
+    # diff snippet: 앞 100줄만 사용해 프롬프트 토큰 절약
     diff_result = subprocess.run(
         ["gh", "pr", "diff", str(pr_number)],
         capture_output=True, text=True
@@ -290,6 +292,12 @@ def _build_prompt(
     risky_files: list[tuple[str, int]],
     fix_prs: list[PR],
 ) -> str:
+    # 클러스터에 속한 PR을 우선 선택, 없으면 전체 fix PR 중 앞 10개로 diff 포함
+    cluster_pr_numbers = {p.number for c in clusters for p in c.prs}
+    diff_candidates = [p for p in fix_prs if p.number in cluster_pr_numbers and p.diff_snippet]
+    if not diff_candidates:
+        diff_candidates = [p for p in fix_prs if p.diff_snippet][:10]
+
     fix_summary_lines = []
     for p in fix_prs:
         line = f"- #{p.number}: {p.title}"
@@ -299,6 +307,14 @@ def _build_prompt(
             line += f"\n  리뷰: {' / '.join(p.review_comments[:2])}"
         fix_summary_lines.append(line)
     fix_summary = "\n".join(fix_summary_lines)
+
+    diff_section = ""
+    if diff_candidates:
+        diff_blocks = []
+        for p in diff_candidates[:5]:  # 최대 5개 PR diff (토큰 절약)
+            diff_blocks.append(f"### PR #{p.number}: {p.title}\n```diff\n{p.diff_snippet}\n```")
+        diff_section = "\n\n## 주요 fix PR diff (실제 코드 변경)\n" + "\n\n".join(diff_blocks)
+
     cluster_summary = "\n".join(
         f"- [{c.domain}] PR #{c.start}~#{c.end} ({c.size}개 연속 fix)"
         for c in clusters
@@ -315,7 +331,7 @@ def _build_prompt(
 아래는 한 GitHub 레포지토리의 PR 히스토리 분석 결과입니다.
 
 ## fix PR 목록
-{fix_summary}
+{fix_summary}{diff_section}
 
 ## 회귀 클러스터 (연속 fix 발생 구간)
 {cluster_summary}
@@ -331,8 +347,8 @@ def _build_prompt(
 요구사항:
 1. 각 규칙은 "- " 로 시작하는 한 줄
 2. 반복된 실수 패턴을 방지하는 구체적인 행동 지침
-3. 파일명·도메인·횟수 등 데이터 기반 근거 포함
-4. {lang_note}
+3. diff에 드러난 구체적인 패턴(함수명·파일명·설정값 등)을 규칙에 반영
+4. 한국어로 작성
 5. 과도하게 일반적인 규칙("테스트를 잘 하세요") 금지
 
 규칙 목록만 출력하세요 (설명 없이):"""
@@ -609,6 +625,7 @@ def main():
             return
         # 원시 PR 목록 JSON
         prs = []
+        _FIX_RE = re.compile(r'^fix|^hotfix|수정|버그|bug\b|regression|revert', re.I)
         for item in raw:
             is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
             prs.append(PR(
@@ -624,14 +641,14 @@ def main():
 
     if args.fetch_files:
         fix_prs = [p for p in prs if p.is_fix]
-        print(f"fix PR {len(fix_prs)}개 병렬 수집 중 (workers=8)...", file=sys.stderr)
+        print(f"fix PR {len(fix_prs)}개 병렬 수집 중 (메타 + diff, workers=8)...", file=sys.stderr)
         pr_map = {p.number: p for p in fix_prs}
         with ThreadPoolExecutor(max_workers=8) as pool:
             futures = {pool.submit(fetch_pr_details, num): num for num in pr_map}
             for future in as_completed(futures):
                 num = futures[future]
                 pr = pr_map[num]
-                pr.files, pr.review_comments, pr.is_ai_generated, _diff = future.result()
+                pr.files, pr.review_comments, pr.is_ai_generated, pr.diff_snippet = future.result()
                 pr.domain = classify_domain(pr.title, pr.files)
 
     clusters = detect_clusters(prs)
