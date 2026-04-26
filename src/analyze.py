@@ -567,6 +567,61 @@ def _call_github_models(prompt: str, token: str, model: str) -> list[str]:
         return []
 
 
+# ── 캐시 빌더 — mcp_server / evolve-rules.yml 양쪽이 공유 ──────────────────
+def build_cache_dict(report: dict, repo: str) -> dict:
+    """
+    analyze.py JSON 출력(report dict)에서 analysis-cache.json 구조를 만든다.
+
+    호출처:
+      - mcp_server.py:_analyze_pr_history (in-process, prs → report → cache)
+      - evolve-rules.yml Step 1.5 (subprocess, /tmp/report.json → cache)
+
+    두 곳에서 같은 함수를 사용해야 캐시 스키마 드리프트가 발생하지 않는다.
+    """
+    summary = report.get("summary", {})
+    risky_files = report.get("risky_files", [])
+    domain_counts = report.get("domain_counts", [])
+    ai_vs_human = report.get("ai_vs_human", {})
+    clusters = report.get("clusters", [])
+
+    # 파일별 마지막 fix diff 인덱스
+    file_last_diff: dict[str, dict] = {}
+    for pr in report.get("fix_prs_with_diff", []):
+        diff = pr.get("diff_snippet", "")
+        if not diff:
+            continue
+        for f in pr.get("files", []):
+            file_last_diff[f] = {"title": pr.get("title", ""), "diff": diff}
+
+    return {
+        "generated_at": __import__("datetime").date.today().isoformat(),
+        "repo": repo,
+        "fix_rate": summary.get("fix_rate", 0),
+        "summary": summary,
+        "risky_files": [
+            {
+                "file": f["file"],
+                "fix_count": f["fix_count"],
+                "domain": classify_domain("", [f["file"]]),
+                "last_fix_title": file_last_diff.get(f["file"], {}).get("title", ""),
+                "last_diff_snippet": file_last_diff.get(f["file"], {}).get("diff", "")[:400],
+            }
+            for f in risky_files
+        ],
+        "domain_counts": domain_counts,
+        "ai_weak_domains": ai_vs_human.get("ai", {}).get("weak_domains", []),
+        "clusters": [
+            {
+                "start": c.get("start"),
+                "end": c.get("end"),
+                "size": c.get("size"),
+                "domain": c.get("domain"),
+            }
+            for c in clusters
+        ],
+    }
+
+
 # ── 리포트 출력 ──────────────────────────────────────────────────────────────
 def print_report(
     prs: list[PR],

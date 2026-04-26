@@ -52,9 +52,13 @@ def load_history() -> dict:
 def _check_risk_zones(file_paths: list[str], repo: str | None = None) -> str:
     """
     편집하려는 파일들이 과거 회귀 핫존인지 확인.
-    repo 지정 시 해당 레포 캐시만 조회. 미지정 시 등록된 첫 번째 레포 사용.
+    repo 지정 시 해당 레포 캐시만 조회. 미지정 시 등록 레포가 1개면 자동 선택,
+    2개 이상이면 ValueError → 사용자에게 명시 요청.
     """
-    cache = load_cache(repo)
+    try:
+        cache = load_cache(repo)
+    except ValueError as e:
+        return f"⚠️ {e}"
     if not cache:
         return (
             "⚠️ 캐시 없음 — `analyze_pr_history`를 먼저 실행하거나 "
@@ -215,34 +219,28 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
     fix_count = sum(1 for p in prs if p.is_fix)
     fix_rate = round(fix_count / total * 100, 1) if total else 0
 
-    # 파일별 마지막 fix diff 인덱스 구성
-    file_last_diff: dict[str, dict] = {}
-    for pr in sorted(prs, key=lambda p: p.number):
-        if pr.is_fix and pr.diff_snippet:
-            for f in pr.files:
-                file_last_diff[f] = {"title": pr.title, "diff": pr.diff_snippet}
-
-    # 캐시 저장
-    DATA_DIR.mkdir(exist_ok=True)
-    cache = {
-        "generated_at": __import__("datetime").date.today().isoformat(),
-        "repo": repo,
-        "fix_rate": fix_rate,
-        "risky_files": [
-            {
-                "file": f,
-                "fix_count": n,
-                "domain": ana.classify_domain("", [f]),
-                "last_fix_title": file_last_diff.get(f, {}).get("title", ""),
-                "last_diff_snippet": file_last_diff.get(f, {}).get("diff", "")[:400],
-            }
-            for f, n in risky_files
-        ],
+    # report dict로 정규화 후 ana.build_cache_dict 호출
+    # → evolve-rules.yml Step 1.5와 100% 동일한 스키마 보장 (드리프트 차단)
+    fix_prs_with_diff = [
+        {
+            "number": p.number,
+            "title": p.title,
+            "domain": p.domain,
+            "files": p.files,
+            "diff_snippet": p.diff_snippet,
+        }
+        for p in prs
+        if p.is_fix and p.diff_snippet
+    ]
+    report = {
+        "summary": {"total_prs": total, "fix_prs": fix_count, "fix_rate": fix_rate},
+        "clusters": [{"start": c.start, "end": c.end, "size": c.size, "domain": c.domain} for c in clusters],
+        "risky_files": [{"file": f, "fix_count": n} for f, n in risky_files],
         "domain_counts": [{"domain": d, "fix_count": n} for d, n in domain_counts],
-        "ai_weak_domains": ai_stats["ai"]["weak_domains"],
-        "clusters": [{"start": c.start, "end": c.end, "domain": c.domain} for c in clusters],
+        "ai_vs_human": ai_stats,
+        "fix_prs_with_diff": fix_prs_with_diff,
     }
-    # 레포별 경로에 저장 (멀티 레포 지원)
+    cache = ana.build_cache_dict(report, repo)
     cache_path(repo).write_text(json.dumps(cache, ensure_ascii=False, indent=2))
 
     # 응답 구성

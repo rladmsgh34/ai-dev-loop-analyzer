@@ -377,3 +377,52 @@ def test_time_window_malformed_date_fallback():
     ]
     clusters = detect_clusters(prs, window=14, threshold=2)
     assert len(clusters) == 1  # both fall to epoch, so they're in the same window
+
+
+# ── build_cache_dict (mcp_server + evolve-rules.yml 공유 함수) ──────────────
+
+def test_build_cache_dict_basic_fields():
+    """기본 캐시 빌드 — analyze.py JSON 출력 → cache 구조."""
+    from analyze import build_cache_dict
+    report = {
+        "summary": {"total_prs": 100, "fix_prs": 12, "fix_rate": 12.0},
+        "clusters": [{"start": 10, "end": 20, "size": 3, "domain": "ci/cd"}],
+        "risky_files": [{"file": "src/lib/auth.ts", "fix_count": 5}],
+        "domain_counts": [{"domain": "auth", "fix_count": 5}],
+        "ai_vs_human": {"ai": {"weak_domains": [{"domain": "auth", "count": 3}]}},
+        "fix_prs_with_diff": [
+            {"number": 42, "title": "fix: auth", "domain": "auth",
+             "files": ["src/lib/auth.ts"], "diff_snippet": "diff content"}
+        ],
+    }
+    cache = build_cache_dict(report, "owner/repo")
+
+    assert cache["repo"] == "owner/repo"
+    assert cache["fix_rate"] == 12.0
+    assert cache["risky_files"][0]["file"] == "src/lib/auth.ts"
+    assert cache["risky_files"][0]["fix_count"] == 5
+    # 마지막 fix diff가 risky_files에 매칭됨
+    assert cache["risky_files"][0]["last_fix_title"] == "fix: auth"
+    assert "diff content" in cache["risky_files"][0]["last_diff_snippet"]
+
+
+def test_build_cache_dict_uses_fix_count_not_count():
+    """analyze.py JSON 출력은 'fix_count' 키를 쓰며 'count'를 쓰지 않는다 (회귀 방지)."""
+    from analyze import build_cache_dict
+    report = {
+        "summary": {"fix_rate": 5.0},
+        "risky_files": [{"file": "x.ts", "fix_count": 7}],
+        "fix_prs_with_diff": [],
+    }
+    cache = build_cache_dict(report, "test/repo")
+    # KeyError 없이 동작하면 OK
+    assert cache["risky_files"][0]["fix_count"] == 7
+
+
+def test_build_cache_dict_empty_report():
+    """비어있는 report도 안전하게 처리."""
+    from analyze import build_cache_dict
+    cache = build_cache_dict({}, "empty/repo")
+    assert cache["repo"] == "empty/repo"
+    assert cache["risky_files"] == []
+    assert cache["clusters"] == []
