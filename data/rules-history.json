@@ -46,6 +46,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -95,6 +107,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -144,6 +168,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -193,6 +229,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -242,6 +290,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -279,6 +339,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -316,6 +388,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -353,6 +437,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -390,6 +486,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -427,6 +535,18 @@
           "scripts": 0.5,
           "cli": 0.5,
           "test/e2e": 0.5
+        },
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
         }
       ]
     },
@@ -447,7 +567,20 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ]
     },
     {
       "id": "7a741814",
@@ -466,7 +599,20 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ]
     },
     {
       "id": "af1a86d6",
@@ -485,7 +631,20 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ]
     },
     {
       "id": "ca8aa38f",
@@ -504,7 +663,20 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
-      "snapshots": []
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ]
     },
     {
       "id": "ab744e04",
@@ -523,22 +695,124 @@
         "cli": 0.5,
         "test/e2e": 0.5
       },
+      "snapshots": [
+        {
+          "date": "2026-04-26",
+          "total": 16.9,
+          "ci/cd": 6.7,
+          "general": 2.2,
+          "external-api": 1.7,
+          "security": 1.7,
+          "payment": 1.7,
+          "database": 1.1,
+          "test/e2e": 1.1,
+          "auth": 0.6
+        }
+      ]
+    },
+    {
+      "id": "22c72089",
+      "rule": "- GCS와 외부 도메인에 대한 CSP 설정 시, 예외 처리 범위를 명확히 하고, 잘못된 접근을 방지하기 위해 특정 도메인만 허용하도록 설정할 것.",
+      "domain": "security",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "6528b6b6",
+      "rule": "- CI 구성 파일(예: GitHub Actions, Prerequisites)에서 중복된 패키지 버전 선언을 피하도록 하여 일관성을 유지할 것.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "468952ae",
+      "rule": "- 제품 페이지의 카테고리 필터와 URL 매개변수를 동기화할 때, 클라이언트와 서버 간의 데이터 일관성을 꼼꼼히 점검할 것.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "fa3254a5",
+      "rule": "- bm25 점수 기준을 만족하지 않는 이전 코드 변경 이력을 자동으로 경고하도록 PostToolUse 훅을 강화하여 회귀 검사를 수행할 것.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
+      "snapshots": []
+    },
+    {
+      "id": "01bce2f5",
+      "rule": "- 분석 과정에서 발생할 수 있는 위험 파일(예: src/cli.py, src/analyze.py 등)을 정기적으로 검토 및 업데이트하여 회귀 위험을 사전에 차단할 것.",
+      "domain": "general",
+      "date_added": "2026-04-26",
+      "fix_rate_at_add": {
+        "total": 16.9,
+        "ci/cd": 6.7,
+        "general": 2.2,
+        "external-api": 1.7,
+        "security": 1.7,
+        "payment": 1.7,
+        "database": 1.1,
+        "test/e2e": 1.1,
+        "auth": 0.6
+      },
       "snapshots": []
     }
   ],
   "snapshots": [
     {
       "date": "2026-04-26",
-      "total_fix_rate": 17.5,
-      "general": 12.5,
-      "monorepo": 1.0,
-      "ci/cd": 1.0,
-      "font": 0.5,
-      "cache": 0.5,
-      "maintenance": 0.5,
-      "scripts": 0.5,
-      "cli": 0.5,
-      "test/e2e": 0.5
+      "total_fix_rate": 16.9,
+      "ci/cd": 6.7,
+      "general": 2.2,
+      "external-api": 1.7,
+      "security": 1.7,
+      "payment": 1.7,
+      "database": 1.1,
+      "test/e2e": 1.1,
+      "auth": 0.6
     }
   ]
 }
