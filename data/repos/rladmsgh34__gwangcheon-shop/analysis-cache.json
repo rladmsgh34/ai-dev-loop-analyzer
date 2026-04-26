@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-04-26",
+  "repo": "rladmsgh34/gwangcheon-shop",
+  "fix_rate": 16.9,
+  "summary": {
+    "total_prs": 178,
+    "fix_prs": 30,
+    "fix_rate": 16.9
+  },
+  "risky_files": [
+    {
+      "file": "src/cli.py",
+      "fix_count": 1,
+      "domain": "general",
+      "last_fix_title": "fix: GCS 공개 액세스 없이 Signed URL로 이미지 처리",
+      "last_diff_snippet": "diff --git a/src/cli.py b/src/cli.py\nnew file mode 100644\nindex 0000000..2bfa25a\n--- /dev/null\n+++ b/src/cli.py\n@@ -0,0 +1,113 @@\n+#!/usr/bin/env python3\n+\"\"\"\n+ai-dev-loop-analyzer CLI 래퍼 — Claude Code PreToolUse 훅용\n+\n+사용법:\n+  # Claude Code 훅에서 stdin으로 tool 정보를 수신\n+  echo '{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"/path/to/file\"}}' | python3 cli.py\n+\n+  # 단독 테스트\n+  python3 cli.py /path/to/fil"
+    },
+    {
+      "file": "src/analyze.py",
+      "fix_count": 1,
+      "domain": "general",
+      "last_fix_title": "fix: remove duplicate pnpm version from CI workflow",
+      "last_diff_snippet": "diff --git a/src/analyze.py b/src/analyze.py\nindex 371fa9e..06b9bed 100644\n--- a/src/analyze.py\n+++ b/src/analyze.py\n@@ -11,6 +11,7 @@\n import re\n import sys\n import subprocess\n+from datetime import datetime, timezone, timedelta\n import urllib.request\n import urllib.error\n from collections import Counter, defaultdict\n@@ -258,39 +259,63 @@ def fetch_ai_flags(pr_numbers: list[int]) -> dict[int, bool"
+    },
+    {
+      "file": "tests/test_analyze.py",
+      "fix_count": 1,
+      "domain": "general",
+      "last_fix_title": "fix: remove duplicate pnpm version from CI workflow",
+      "last_diff_snippet": "diff --git a/src/analyze.py b/src/analyze.py\nindex 371fa9e..06b9bed 100644\n--- a/src/analyze.py\n+++ b/src/analyze.py\n@@ -11,6 +11,7 @@\n import re\n import sys\n import subprocess\n+from datetime import datetime, timezone, timedelta\n import urllib.request\n import urllib.error\n from collections import Counter, defaultdict\n@@ -258,39 +259,63 @@ def fetch_ai_flags(pr_numbers: list[int]) -> dict[int, bool"
+    },
+    {
+      "file": "src/rag_hook.py",
+      "fix_count": 1,
+      "domain": "general",
+      "last_fix_title": "fix: sync products page category filter with URL param",
+      "last_diff_snippet": "diff --git a/src/rag_hook.py b/src/rag_hook.py\nnew file mode 100644\nindex 0000000..b140fc5\n--- /dev/null\n+++ b/src/rag_hook.py\n@@ -0,0 +1,109 @@\n+#!/usr/bin/env python3\n+\"\"\"\n+PostToolUse 훅 — 방금 작성한 코드가 과거 회귀 패턴과 유사하면 즉시 경고.\n+\n+Claude Code PostToolUse 이벤트로 stdin에서 JSON을 받아 처리한다:\n+  {\"tool_name\": \"Edit\", \"tool_input\": {\"file_path\": \"...\", \"old_string\": \"...\", \"new_string\": \"...\"}}\n+\n+BM25 pickle 캐시("
+    },
+    {
+      "file": "tests/test_rag_hook.py",
+      "fix_count": 1,
+      "domain": "general",
+      "last_fix_title": "fix: sync products page category filter with URL param",
+      "last_diff_snippet": "diff --git a/src/rag_hook.py b/src/rag_hook.py\nnew file mode 100644\nindex 0000000..b140fc5\n--- /dev/null\n+++ b/src/rag_hook.py\n@@ -0,0 +1,109 @@\n+#!/usr/bin/env python3\n+\"\"\"\n+PostToolUse 훅 — 방금 작성한 코드가 과거 회귀 패턴과 유사하면 즉시 경고.\n+\n+Claude Code PostToolUse 이벤트로 stdin에서 JSON을 받아 처리한다:\n+  {\"tool_name\": \"Edit\", \"tool_input\": {\"file_path\": \"...\", \"old_string\": \"...\", \"new_string\": \"...\"}}\n+\n+BM25 pickle 캐시("
+    }
+  ],
+  "domain_counts": [
+    {
+      "domain": "ci/cd",
+      "fix_count": 12
+    },
+    {
+      "domain": "general",
+      "fix_count": 4
+    },
+    {
+      "domain": "external-api",
+      "fix_count": 3
+    },
+    {
+      "domain": "security",
+      "fix_count": 3
+    },
+    {
+      "domain": "payment",
+      "fix_count": 3
+    },
+    {
+      "domain": "database",
+      "fix_count": 2
+    },
+    {
+      "domain": "test/e2e",
+      "fix_count": 2
+    },
+    {
+      "domain": "auth",
+      "fix_count": 1
+    }
+  ],
+  "ai_weak_domains": [
+    {
+      "domain": "external-api",
+      "count": 1
+    },
+    {
+      "domain": "ci/cd",
+      "count": 1
+    },
+    {
+      "domain": "general",
+      "count": 1
+    }
+  ],
+  "clusters": [
+    {
+      "start": 21,
+      "end": 321,
+      "size": 30,
+      "domain": "ci/cd"
+    }
+  ]
+}

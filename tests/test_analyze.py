@@ -494,3 +494,42 @@ def test_is_fix_case_insensitive():
     assert _is_fix("FIX: broken button") is True
     assert _is_fix("Fix the bug") is True
     assert _is_fix("PATCH: server route") is True
+
+
+# ── fetch_prs --since flag ───────────────────────────────────────────────────
+
+def test_fetch_prs_command_without_since(monkeypatch):
+    """기본 fetch_prs는 --search 플래그를 추가하지 않는다."""
+    from unittest.mock import MagicMock
+    import analyze
+
+    captured = {}
+    def fake_run(cmd, **kw):
+        captured["cmd"] = cmd
+        m = MagicMock()
+        m.returncode = 0
+        m.stdout = "[]"
+        return m
+    monkeypatch.setattr(analyze.subprocess, "run", fake_run)
+    analyze.fetch_prs(limit=50)
+    assert "--search" not in captured["cmd"]
+    assert "--limit=50" in captured["cmd"]
+
+
+def test_fetch_prs_command_with_since(monkeypatch):
+    """--since 전달 시 gh search filter `merged:>=DATE`로 변환된다."""
+    from unittest.mock import MagicMock
+    import analyze
+
+    captured = {}
+    def fake_run(cmd, **kw):
+        captured["cmd"] = cmd
+        m = MagicMock()
+        m.returncode = 0
+        m.stdout = "[]"
+        return m
+    monkeypatch.setattr(analyze.subprocess, "run", fake_run)
+    analyze.fetch_prs(limit=50, since="2026-04-01")
+    assert "--search" in captured["cmd"]
+    idx = captured["cmd"].index("--search")
+    assert captured["cmd"][idx + 1] == "merged:>=2026-04-01"
