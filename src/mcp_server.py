@@ -6,9 +6,10 @@ Claude Code, Cursor, Cline 등 MCP 지원 AI 에디터에서
 코드 작성 시점에 회귀 위험을 사전 경고합니다.
 
 도구:
-  check_risk_zones(file_paths)   — 편집할 파일의 회귀 위험도 사전 체크
-  analyze_pr_history(repo)       — 레포 PR 히스토리 전체 분석
-  get_active_rules(domain)       — 도메인별 현재 활성 규칙 조회
+  check_risk_zones(file_paths)        — 편집할 파일의 회귀 위험도 사전 체크 (RAG 유사 패턴 포함)
+  suggest_review_checklist(...)       — PR 제목 + 파일 기반 리뷰 체크리스트 생성
+  analyze_pr_history(repo)            — 레포 PR 히스토리 전체 분석
+  get_active_rules(domain)            — 도메인별 현재 활성 규칙 조회
 
 설치 (Claude Code):
   claude mcp add ai-dev-loop-analyzer -- python3 /path/to/src/mcp_server.py
@@ -101,6 +102,14 @@ def _check_risk_zones(file_paths: list[str]) -> str:
                     + "\n   ```"
                 )
 
+            # RAG: 유사한 과거 fix 패턴 검색
+            rag_docs = _try_rag_context(domain, f"{domain} {path} fix 패턴", n=2)
+            if rag_docs:
+                block += "\n\n   🔎 유사 과거 패턴:"
+                for doc in rag_docs:
+                    first_line = doc.splitlines()[0] if doc else ""
+                    block += f"\n   - {first_line[:120]}"
+
             results.append(block)
         else:
             safe_files.append(path)
@@ -124,6 +133,18 @@ def _check_risk_zones(file_paths: list[str]) -> str:
 def _get_rule_hint(domain: str, domain_counts: dict[str, int]) -> str:
     """도메인에 맞는 사전 경고 메시지 — 프로파일의 rule_hints에서 로드."""
     return _ana.RULE_HINTS.get(domain, f"→ {domain} 도메인: 변경 전 관련 테스트 전체 실행 권장")
+
+
+def _try_rag_context(domain: str, query: str, n: int = 3) -> list[str]:
+    """ChromaDB가 있으면 유사 패턴을 반환, 없으면 빈 리스트."""
+    try:
+        sys.path.insert(0, str(SRC_DIR / "rag"))
+        from rag.query import RagEngine
+        engine = RagEngine()
+        return engine.retrieve(query, n_results=n, where={"type": "diff_pattern"}) or \
+               engine.retrieve(query, n_results=n)
+    except Exception:
+        return []
 
 
 def _analyze_pr_history(repo: str, limit: int = 200) -> str:
@@ -247,6 +268,68 @@ def _analyze_pr_history(repo: str, limit: int = 200) -> str:
     return "\n".join(lines)
 
 
+def _suggest_review_checklist(pr_title: str, file_paths: list[str]) -> str:
+    """
+    PR 제목 + 변경 파일을 기반으로 이 레포 특화 리뷰 체크리스트를 생성.
+    1) 도메인 분류 → 2) 고위험 파일 매칭 → 3) 활성 규칙 인용 → 4) RAG 패턴 추가.
+    """
+    domain = _ana.classify_domain(pr_title, file_paths)
+    cache = load_cache()
+    history = load_history()
+
+    lines = [f"## 📋 리뷰 체크리스트 — `{pr_title}`", f"도메인: `{domain}`\n"]
+
+    # ① 고위험 파일 경고
+    risky = {item["file"]: item for item in cache.get("risky_files", [])}
+    hit_files = []
+    for path in file_paths:
+        match = risky.get(path) or next(
+            (v for k, v in risky.items() if path.endswith(k) or k.endswith(path)), None
+        )
+        if match:
+            hit_files.append((path, match.get("fix_count", 0), match.get("last_fix_title", "")))
+
+    if hit_files:
+        lines.append("### ⚠️ 고위험 파일 (과거 회귀 이력)")
+        for path, count, last in hit_files:
+            last_note = f" — 마지막: _{last}_" if last else ""
+            lines.append(f"- [ ] `{path}` ({count}회 회귀{last_note}): 변경 전후 동작 직접 확인")
+        lines.append("")
+
+    # ② 도메인 규칙 기반 체크리스트
+    domain_rules = [
+        r["rule"] for r in history.get("rules", [])
+        if domain.lower() in r["rule"].lower() or domain in r.get("domain", "")
+    ][:5]
+
+    rule_hint = _get_rule_hint(domain, {})
+    lines.append("### ✅ 도메인 체크리스트")
+    if domain_rules:
+        for rule in domain_rules:
+            lines.append(f"- [ ] {rule}")
+    else:
+        lines.append(f"- [ ] {rule_hint.lstrip('→ ')}")
+
+    # ③ RAG 유사 패턴 — 과거 fix에서 뽑은 구체적 주의사항
+    rag_docs = _try_rag_context(domain, f"{domain} {pr_title} fix 주의사항", n=3)
+    if rag_docs:
+        lines.append("\n### 🔎 유사 과거 fix에서 배운 것")
+        for doc in rag_docs:
+            first = doc.splitlines()[0][:140] if doc else ""
+            if first:
+                lines.append(f"- [ ] 확인: {first}")
+
+    # ④ 항상 포함되는 기본 항목
+    lines += [
+        "\n### 🔧 기본 확인",
+        "- [ ] `pnpm test` 통과",
+        "- [ ] 타입 에러 없음 (`pnpm type-check`)",
+        f"- [ ] {domain} 관련 기존 테스트 갱신",
+    ]
+
+    return "\n".join(lines)
+
+
 def _get_active_rules(domain: str = "") -> str:
     """현재 활성 규칙 조회. domain 미지정 시 전체 반환."""
     history = load_history()
@@ -340,6 +423,32 @@ TOOLS = [
             },
         },
     ),
+    Tool(
+        name="suggest_review_checklist",
+        description=(
+            "Given a PR title and list of changed files, generate a review checklist "
+            "tailored to this repo's past regression patterns. "
+            "Combines risky-file history, domain-specific rules, and RAG-retrieved "
+            "similar fix diffs to produce concrete, actionable items. "
+            "Call this when opening a PR or starting a code review."
+        ),
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "pr_title": {
+                    "type": "string",
+                    "description": "PR 제목 (예: 'feat: 결제 흐름 리팩터')",
+                },
+                "file_paths": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "변경된 파일 경로 목록",
+                    "default": [],
+                },
+            },
+            "required": ["pr_title"],
+        },
+    ),
 ]
 
 
@@ -353,6 +462,11 @@ async def call_tool(name: str, arguments: dict):
     try:
         if name == "check_risk_zones":
             text = _check_risk_zones(arguments.get("file_paths", []))
+        elif name == "suggest_review_checklist":
+            text = _suggest_review_checklist(
+                arguments["pr_title"],
+                arguments.get("file_paths", []),
+            )
         elif name == "analyze_pr_history":
             text = _analyze_pr_history(
                 arguments["repo"],
