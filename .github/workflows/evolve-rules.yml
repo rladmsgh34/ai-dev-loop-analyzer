@@ -8,11 +8,12 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 1 * * *'   # 매일 오전 10시 KST
+    - cron: '0 1 * * *'   # 매일 오전 10시 KST — schedule="daily" 레포만
+    - cron: '0 2 * * 0'   # 매주 일요일 KST 11시 — schedule="weekly" 레포만
   workflow_dispatch:
     inputs:
       target_repo:
-        description: '분석할 레포 (예: owner/repo). 미입력 시 vars.TARGET_REPO 사용.'
+        description: '특정 레포만 분석 (예: owner/repo). 미입력 시 enabled 레포 전체.'
         required: false
         default: ''
       dry_run:
@@ -27,14 +28,68 @@ on:
     types: [pr-merged]
 
 jobs:
-  evolve:
+  # ── setup-matrix: config/repos.json → 트리거별 동적 매트릭스 ────────────────
+  # 트리거 분기:
+  #   - schedule '0 1 * * *' → schedule="daily" + enabled
+  #   - schedule '0 2 * * 0' → schedule="weekly" + enabled
+  #   - workflow_dispatch with target_repo → 그 레포만 (enabled 무시 — 디버깅용)
+  #   - workflow_dispatch without target_repo → enabled 전체
+  #   - repository_dispatch → client_payload.repo (없으면 gwangcheon-shop)
+  setup-matrix:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      count: ${{ steps.set.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: set
+        env:
+          INPUT_REPO: ${{ inputs.target_repo }}
+          DISPATCH_REPO: ${{ github.event.client_payload.repo }}
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          set -e
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_REPO" ]; then
+            MATRIX=$(jq --arg r "$INPUT_REPO" -c '[.[] | select(.repo == $r)]' config/repos.json)
+          elif [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            REPO="${DISPATCH_REPO:-rladmsgh34/gwangcheon-shop}"
+            MATRIX=$(jq --arg r "$REPO" -c '[.[] | select(.repo == $r and .enabled == true)]' config/repos.json)
+          elif [ "$EVENT_NAME" = "schedule" ] && [ "$SCHEDULE" = "0 2 * * 0" ]; then
+            MATRIX=$(jq -c '[.[] | select(.schedule == "weekly" and .enabled == true)]' config/repos.json)
+          elif [ "$EVENT_NAME" = "schedule" ]; then
+            MATRIX=$(jq -c '[.[] | select(.schedule == "daily" and .enabled == true)]' config/repos.json)
+          else
+            MATRIX=$(jq -c '[.[] | select(.enabled == true)]' config/repos.json)
+          fi
+          COUNT=$(echo "$MATRIX" | jq 'length')
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "── selected ${COUNT} repo(s) ──"
+          echo "$MATRIX" | jq '.'
+
+  evolve:
+    needs: setup-matrix
+    if: needs.setup-matrix.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      # max-parallel: 1 — analyze.py에 incremental fetch가 없어 매번 fetch_limit만큼
+      # gh API를 소비함. 직렬 실행으로 GITHUB_TOKEN(1000/hr) / GH_PAT(5000/hr) 한도 보호.
+      max-parallel: 1
+      # fail-fast: false — 한 레포가 실패해도 나머지는 계속 진행.
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     permissions:
       contents: write
       issues: write
       pull-requests: write
     env:
-      TARGET_REPO: ${{ inputs.target_repo || vars.TARGET_REPO || 'rladmsgh34/gwangcheon-shop' }}
+      TARGET_REPO: ${{ matrix.target.repo }}
+      POST_ISSUES: ${{ matrix.target.post_issues }}
+      FETCH_LIMIT: ${{ matrix.target.fetch_limit }}
+      PROFILE_PATH: ${{ matrix.target.profile }}
       IS_PR_TRIGGER: ${{ github.event_name == 'repository_dispatch' }}
 
     steps:
@@ -60,19 +115,35 @@ jobs:
           path: target-repo
 
       # ── Step 1: analyze ─────────────────────────────────────────────────────
+      # 프로파일 우선순위:
+      #   1. matrix.target.profile (config/repos.json) — 명시적 override
+      #   2. target-repo/.claude/ai-dev-loop-profile.json — 타겟 레포 자체 보유
+      #   3. 없으면 src/analyze.py의 built-in default
       - name: Collect and analyze PR history
         id: analyze
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-          AI_DEV_LOOP_PROFILE: target-repo/.claude/ai-dev-loop-profile.json
         run: |
-          LIMIT=300
+          set -e
+          LIMIT="$FETCH_LIMIT"
           FETCH_FLAG="--fetch-files"
           if [ "$IS_PR_TRIGGER" = "true" ]; then
             LIMIT=50
             FETCH_FLAG=""
           elif [ "${{ inputs.fetch_files }}" = "false" ]; then
             FETCH_FLAG=""
+          fi
+
+          # 프로파일 결정 — 파일 존재 시에만 --profile 전달
+          PROFILE_FLAG=""
+          if [ -n "$PROFILE_PATH" ] && [ -f "$PROFILE_PATH" ]; then
+            PROFILE_FLAG="--profile $PROFILE_PATH"
+            echo "profile: $PROFILE_PATH (matrix override)"
+          elif [ -f "target-repo/.claude/ai-dev-loop-profile.json" ]; then
+            PROFILE_FLAG="--profile target-repo/.claude/ai-dev-loop-profile.json"
+            echo "profile: target-repo in-tree"
+          else
+            echo "profile: built-in default"
           fi
 
           gh pr list \
@@ -85,6 +156,7 @@ jobs:
             --input /tmp/prs.json \
             --github-token "$GH_TOKEN" \
             --format json \
+            $PROFILE_FLAG \
             $FETCH_FLAG \
             2>/dev/null > /tmp/report.json
 
@@ -94,14 +166,14 @@ jobs:
           echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
           echo "is_pr_trigger=$IS_PR_TRIGGER" >> $GITHUB_OUTPUT
+          echo "profile_flag=$PROFILE_FLAG" >> $GITHUB_OUTPUT
 
       # ── Step 1.5: analysis-cache 레포별 경로에 저장 ──────────────────────────
       # 캐시 빌드는 analyze.build_cache_dict()로 위임 (mcp_server와 동일 함수 사용 → 스키마 드리프트 차단).
-      # 도메인 분류 정확도를 위해 AI_DEV_LOOP_PROFILE을 명시적으로 전달.
       - name: Save analysis cache to per-repo directory
         env:
           TARGET_REPO: ${{ env.TARGET_REPO }}
-          AI_DEV_LOOP_PROFILE: target-repo/.claude/ai-dev-loop-profile.json
+          PROFILE_PATH: ${{ env.PROFILE_PATH }}
         run: |
           python3 - <<'PYEOF'
           import json, os, sys
@@ -114,8 +186,13 @@ jobs:
               sys.exit(0)
 
           import analyze as ana
-          profile_path = os.environ.get('AI_DEV_LOOP_PROFILE')
-          if profile_path and Path(profile_path).exists():
+
+          # 프로파일: matrix override 우선, 없으면 target-repo in-tree
+          profile_path = os.environ.get('PROFILE_PATH') or ''
+          if not profile_path or not Path(profile_path).exists():
+              fallback = 'target-repo/.claude/ai-dev-loop-profile.json'
+              profile_path = fallback if Path(fallback).exists() else ''
+          if profile_path:
               ana.load_profile(profile_path)
               print(f'프로파일 로드: {profile_path}')
 
@@ -128,9 +205,10 @@ jobs:
           print(f'✅ analysis-cache 저장: {p}')
           PYEOF
 
-      # ── Step 2: issue report ───────────────────────────────────────────────
+      # ── Step 2: 일일 리포트 (analyzer 자체 레포에 issue) ───────────────────
+      # 외부 레포(post_issues=false)는 일일 리포트 노이즈가 의미 없으므로 스킵.
       - name: Post daily report issue
-        if: env.IS_PR_TRIGGER != 'true'
+        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -142,9 +220,10 @@ jobs:
           d = json.load(open('/tmp/report.json'))
           s = d['summary']
           date = os.environ.get('REPORT_DATE', '')
+          target_repo = os.environ.get('TARGET_REPO', '')
 
           lines = [
-            f"## 📊 일일 PR 품질 리포트 — {date}",
+            f"## 📊 일일 PR 품질 리포트 — {date} ({target_repo})",
             "",
             f"**총 PR**: {s['total_prs']}개 | **fix PR**: {s['fix_prs']}개 ({s['fix_rate']}%)",
             "",
@@ -177,18 +256,19 @@ jobs:
             for r in rules:
               lines.append(r)
 
-          lines += ["---", f"_[ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer) · {date}_"]
+          lines += ["---", f"_[ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer) · {date} · {target_repo}_"]
 
           body = "\n".join(lines)
-          title = f"[일일 리포트] {date} — fix율 {s['fix_rate']}%"
+          title = f"[일일 리포트] {date} — {target_repo} fix율 {s['fix_rate']}%"
 
           existing = json.loads(subprocess.run(
             ['gh', 'issue', 'list', '--label', 'daily-report', '--state', 'open',
-             '--json', 'number,title', '--limit', '5'],
+             '--json', 'number,title', '--limit', '20'],
             capture_output=True, text=True
           ).stdout or '[]')
 
-          today_issue = next((i for i in existing if date in i['title']), None)
+          # 같은 날 + 같은 타겟의 이슈만 갱신 (다른 타겟은 별개 이슈로 유지)
+          today_issue = next((i for i in existing if date in i['title'] and target_repo in i['title']), None)
           if today_issue:
             subprocess.run(['gh', 'issue', 'edit', str(today_issue['number']),
                             '--title', title, '--body', body], check=True)
@@ -197,9 +277,11 @@ jobs:
                             '--body', body, '--label', 'daily-report'], check=True)
           PYEOF
 
-      # ── Step 2b: gwangcheon-shop 회귀 경고 이슈 생성 ────────────────────────
-      - name: gwangcheon-shop에 회귀 경고 이슈 생성
-        if: env.IS_PR_TRIGGER != 'true'
+      # ── Step 2b: 타겟 레포에 회귀 경고 이슈 생성 ────────────────────────────
+      # 🚨 핵심 안전판 — post_issues=true (rladmsgh34/* 같은 owned 레포)일 때만 실행.
+      # 외부 레포(vuejs/core, vercel/next.js 등)에는 절대 이슈가 생성되지 않도록 보호.
+      - name: 타겟 레포에 회귀 경고 이슈 생성
+        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
@@ -248,7 +330,6 @@ jobs:
               )
 
           # ── 대표 도메인 선택 ──────────────────────────────────────────────
-          # 클러스터 있으면 가장 큰 클러스터 도메인, 없으면 hot_domain 1위
           if clusters:
               top_cluster = max(clusters, key=lambda c: c['size'])
               rep_domain = top_cluster['domain']
@@ -333,7 +414,6 @@ jobs:
           )
 
           if today_issue:
-              # 이미 같은 날 같은 도메인 이슈 존재 → 댓글 추가
               comment_body = f"## \U0001f504 업데이트 ({date})\n\n{body}"
               subprocess.run(
                   ['gh', 'issue', 'comment', str(today_issue['number']),
@@ -343,7 +423,6 @@ jobs:
               )
               print(f"기존 이슈 #{today_issue['number']}에 댓글 추가 완료")
           else:
-              # 신규 이슈 생성
               result = subprocess.run(
                   ['gh', 'issue', 'create',
                    '--repo', target_repo,
@@ -354,7 +433,7 @@ jobs:
                   capture_output=True, text=True
               )
               if result.returncode == 0:
-                  print(f"gwangcheon-shop 이슈 생성 완료: {result.stdout.strip()}")
+                  print(f"타겟 레포 이슈 생성 완료: {result.stdout.strip()}")
               else:
                   print(f"이슈 생성 실패: {result.stderr}", file=sys.stderr)
                   sys.exit(1)
@@ -427,7 +506,7 @@ jobs:
                   "title": pr.get("title", ""),
                   "domain": pr.get("domain", "general"),
                   "files": pr.get("files", []),
-                  "diff_snippet": diff[:800],  # 800자 제한
+                  "diff_snippet": diff[:800],
                   "date": date,
               })
               new_count += 1
@@ -444,9 +523,6 @@ jobs:
           TARGET_REPO: ${{ env.TARGET_REPO }}
 
       # ── Step 3.6: 피드백 루프 — 경고 로그 vs fix PR 교차 검증 ─────────────
-      # rag_hook.py가 data/repos/{slug}/warning-log.jsonl에 기록한 경고를
-      # 같은 레포의 fix PR과 대조해 TP/FP 판정. 반드시 TARGET_REPO를 명시해야
-      # GH 러너 git remote(=ai-dev-loop-analyzer)를 잘못 감지하지 않음.
       - name: 경고 피드백 정밀도 평가
         continue-on-error: true
         env:
@@ -486,21 +562,34 @@ jobs:
         env:
           TARGET_REPO: ${{ env.TARGET_REPO }}
         run: |
+          set -e
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
           REPO_SLUG=$(echo "$TARGET_REPO" | tr '/' '_')
-          # 공유 데이터 + 레포별 데이터 모두 커밋
+          # 직렬 매트릭스라 매 iteration마다 새 checkout이지만, 이전 iteration 커밋과의
+          # 충돌 방지를 위해 push 전에 한 번 더 rebase. 실패 시 한 번만 재시도.
           git add data/rules-history.json data/diff-patterns.json || true
           git add "data/repos/${REPO_SLUG}/" || true
-          git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }} [${TARGET_REPO}]"
-          git push
+          if git diff --staged --quiet; then
+            echo "변경 없음 — 커밋 스킵"
+            exit 0
+          fi
+          git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }} [${TARGET_REPO}]"
+          git pull --rebase origin main || true
+          git push || (sleep 5 && git pull --rebase origin main && git push)
 
       # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
+      # 외부 레포는 CLAUDE.md를 보유하지 않거나 우리가 PR을 보낼 권한이 없으므로 스킵.
       - name: Generate CLAUDE.md patch
-        if: env.IS_PR_TRIGGER != 'true'
+        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
         continue-on-error: true
         id: patch
         run: |
+          if [ ! -f target-repo/CLAUDE.md ]; then
+            echo "target-repo/CLAUDE.md 없음 — 스킵"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           python3 src/patch_claude_md.py \
             --report /tmp/report.json \
             --claude-md target-repo/CLAUDE.md \
@@ -516,7 +605,7 @@ jobs:
 
       # ── Step 4b: open PR (only when dry_run=false and changes exist) ────────
       - name: Open target repo PR
-        if: steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
+        if: env.POST_ISSUES == 'true' && steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GH_PAT }}
