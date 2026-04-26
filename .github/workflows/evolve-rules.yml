@@ -1,5 +1,11 @@
 name: Evolve Rules
 
+# 동시 실행 방지 — PR이 연속 머지되면 워크플로우가 겹쳐 data/*.json에 push 충돌 발생.
+# cancel-in-progress: false 로 큐잉(순차 실행)하여 모든 분석이 반드시 실행되도록 보장.
+concurrency:
+  group: evolve-rules
+  cancel-in-progress: false
+
 on:
   schedule:
     - cron: '0 1 * * *'   # 매일 오전 10시 KST
@@ -402,11 +408,40 @@ jobs:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
           TARGET_REPO: ${{ env.TARGET_REPO }}
 
+      # ── Step 3.6: 피드백 루프 — 경고 로그 vs fix PR 교차 검증 ─────────────
+      - name: 경고 피드백 정밀도 평가
+        continue-on-error: true
+        run: |
+          python3 - <<'PYEOF'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'src')
+
+          warning_log = Path("data/warning-log.jsonl")
+          if not warning_log.exists():
+              print("경고 로그 없음 — 스킵 (rag_hook 경고가 아직 발생하지 않은 상태)")
+              sys.exit(0)
+
+          d = json.load(open('/tmp/report.json'))
+          fix_prs = []
+          for pr in d.get("fix_prs_with_diff", []):
+              fix_prs.append({
+                  "files":     pr.get("files", []),
+                  "domain":    pr.get("domain", "general"),
+                  "merged_at": pr.get("merged_at", ""),
+                  "title":     pr.get("title", ""),
+              })
+
+          from feedback import evaluate, feedback_report
+          stats = evaluate(fix_prs)
+          print(feedback_report())
+          PYEOF
+
       - name: 히스토리 파일 커밋
         run: |
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
-          git add data/rules-history.json data/diff-patterns.json
+          git add data/rules-history.json data/diff-patterns.json data/feedback-stats.json data/warning-log.jsonl || true
           git diff --staged --quiet || git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }}"
           git push
 

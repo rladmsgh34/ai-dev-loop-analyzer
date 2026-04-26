@@ -23,6 +23,9 @@ BM25_CACHE_PATH = DATA_DIR / ".bm25_cache.pkl"
 
 EMBED_MODEL = "all-MiniLM-L6-v2"  # 90MB, CPU 동작, 다국어 지원
 
+# diff 청크 상한 — 가장 최근 N개만 유지해 BM25 pickle 크기와 응답 시간을 제어
+_MAX_DIFF_CHUNKS = 500
+
 # 파일 확장자 → 언어 매핑
 _EXT_LANG = {
     ".ts": "typescript", ".tsx": "typescript",
@@ -233,8 +236,14 @@ def load_diff_patterns() -> list[dict]:
     except Exception:
         return []
 
+    patterns = data.get("patterns", [])
+    # 최신 N개만 사용 — 오래된 패턴은 현재 코드베이스와 관련성이 낮고 인덱스만 비대해짐
+    if len(patterns) > _MAX_DIFF_CHUNKS:
+        patterns = sorted(patterns, key=lambda e: e.get("date", ""), reverse=True)[:_MAX_DIFF_CHUNKS]
+        print(f"   diff-patterns 상한 적용: 최신 {_MAX_DIFF_CHUNKS}개만 인제스트 (전체 {len(data['patterns'])}개 중)")
+
     chunks = []
-    for entry in data.get("patterns", []):
+    for entry in patterns:
         pr_num = entry.get("pr_number", 0)
         title = entry.get("title", "")
         domain = entry.get("domain", "general")

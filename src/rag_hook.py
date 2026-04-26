@@ -15,6 +15,7 @@ BM25 pickle 캐시(ingest.py 실행 시 자동 생성)를 사용해 ChromaDB 없
 import json
 import pickle
 import re
+import signal
 import sys
 from pathlib import Path
 
@@ -26,6 +27,8 @@ BM25_CACHE_PATH = DATA_DIR / ".bm25_cache.pkl"
 _SCORE_THRESHOLD = 1.5
 # 변경 내용이 너무 짧으면 노이즈가 많아 스킵
 _MIN_DIFF_LEN = 30
+# PostToolUse 훅 최대 실행 시간 — 초과 시 Claude Code Edit/Write가 블로킹됨
+_TIMEOUT_SEC = 5
 
 
 def _tokenize(text: str) -> list[str]:
@@ -53,7 +56,16 @@ def _extract_change(tool_name: str, tool_input: dict) -> str:
     return ""
 
 
+def _timeout_handler(signum, frame) -> None:
+    sys.exit(0)
+
+
 def main() -> None:
+    # 훅이 hang되면 Claude Code Edit/Write 전체가 블로킹됨 — 타임아웃으로 강제 종료
+    if hasattr(signal, "SIGALRM"):
+        signal.signal(signal.SIGALRM, _timeout_handler)
+        signal.alarm(_TIMEOUT_SEC)
+
     try:
         payload = json.loads(sys.stdin.read())
     except Exception:
@@ -103,6 +115,20 @@ def main() -> None:
     print(f"⚠️  [{filename}] 방금 작성한 코드가 과거 회귀 패턴과 유사합니다 (BM25 {best_score:.1f})")
     print(f"   패턴 참고: {header}")
     print(f"   상세 분석: mcp diff_risk_score 툴로 확인하세요.")
+
+    # 피드백 루프: 경고 로그 기록 — 추후 fix PR과 교차 검증해 정밀도 측정
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(Path(__file__).parent))
+        from feedback import record_warning
+        record_warning(
+            file_path=file_path,
+            bm25_score=best_score,
+            matched_id=ids[best_idx],
+            matched_header=header,
+        )
+    except Exception:
+        pass  # 로깅 실패가 경고 출력을 막으면 안 됨
 
 
 if __name__ == "__main__":
