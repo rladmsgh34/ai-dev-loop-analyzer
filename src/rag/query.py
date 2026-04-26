@@ -58,40 +58,62 @@ class RagEngine:
     ) -> list[str]:
         """RAG 컨텍스트를 활용해 Claude Code CLI로 규칙을 생성합니다."""
 
-        # 1. 관련 패턴 검색
-        query = f"{domain} 회귀 패턴 fix {language}".strip()
-        docs = self.retrieve(query, n_retrieve)
+        # 1. diff 패턴 우선 검색 — 실제 코드 변경이 가장 구체적인 컨텍스트
+        diff_query = f"{domain} fix 코드 변경 패턴 {language}".strip()
+        where_diff = {"type": "diff_pattern"} if self._has_diff_patterns() else None
+        diff_docs = self.retrieve(diff_query, n_retrieve, where=where_diff)
 
-        # 언어 특화 패턴도 추가 검색
-        if language:
-            lang_docs = self.retrieve(f"{language} {domain} 취약 도메인", n_retrieve // 2)
-            docs = list(dict.fromkeys(docs + lang_docs))  # 중복 제거
+        # 2. 통계/요약 검색 — diff가 없거나 부족할 때 보완
+        stat_docs = self.retrieve(f"{domain} 회귀 취약 도메인 {language}".strip(), n_retrieve // 2)
 
-        context_text = "\n".join(f"  - {d}" for d in docs[:n_retrieve])
+        # diff 패턴을 앞에 배치 (더 구체적이므로 우선)
+        all_docs = list(dict.fromkeys(diff_docs + stat_docs))[:n_retrieve]
+
+        diff_section = ""
+        stat_section = ""
+        for doc in all_docs:
+            if "diff:" in doc:
+                diff_section += f"\n---\n{doc}"
+            else:
+                stat_section += f"\n  - {doc}"
+
+        context_block = ""
+        if diff_section:
+            context_block += f"\n## 유사 레포의 실제 fix diff\n{diff_section}"
+        if stat_section:
+            context_block += f"\n## 통계 기반 패턴\n{stat_section}"
+        if not context_block:
+            context_block = "\n## 참고 데이터\n  (아직 수집된 데이터 없음)"
 
         prompt = f"""당신은 AI 코딩 어시스턴트 규칙 전문가입니다.
-아래 데이터 기반 인사이트를 참고해서 CLAUDE.md에 추가할 실용적인 규칙을 생성하세요.
+아래 데이터를 참고해서 CLAUDE.md에 추가할 실용적인 규칙을 생성하세요.
 
 ## 현재 상황
 - 분석 대상 도메인: {domain}
 - 현재 fix율: {fix_rate}%
 - 언어: {language or "미지정"}
 {f"- 추가 컨텍스트: {extra_context}" if extra_context else ""}
-
-## 유사 레포에서 수집된 패턴
-{context_text if context_text else "  (아직 수집된 데이터 없음)"}
+{context_block}
 
 ## 요청
 위 데이터를 바탕으로 {domain} 도메인의 회귀를 줄이기 위한 CLAUDE.md 규칙을 3개 생성하세요.
 
 요구사항:
 - 각 규칙은 한 문장으로 명확하게 (구체적인 행동 지침 포함)
-- 데이터에서 관찰된 패턴을 근거로 할 것
+- diff가 있으면 그 안의 구체적인 함수명·파일명·설정값을 규칙에 반영
 - 번호 없이 한 줄씩 출력
 
 규칙만 출력하고 설명은 생략하세요."""
 
         return self._call_claude(prompt, model)
+
+    def _has_diff_patterns(self) -> bool:
+        """ChromaDB에 diff_pattern 타입 청크가 있는지 확인."""
+        try:
+            results = self.collection.get(where={"type": "diff_pattern"}, limit=1)
+            return len(results["ids"]) > 0
+        except Exception:
+            return False
 
     def explain_cluster(
         self,

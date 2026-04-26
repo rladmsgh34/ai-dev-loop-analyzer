@@ -202,6 +202,52 @@ def load_analysis_cache() -> list[dict]:
     return chunks
 
 
+def load_diff_patterns() -> list[dict]:
+    """diff-patterns.json → 청크 리스트.
+    각 항목은 실제 fix PR의 diff snippet + 도메인 + 레포 정보를 담는다.
+    통계 요약이 아닌 실제 코드 패턴을 임베딩해 RAG 검색 품질을 높인다.
+    """
+    path = DATA_DIR / "diff-patterns.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text())
+    except Exception:
+        return []
+
+    chunks = []
+    for entry in data.get("patterns", []):
+        pr_num = entry.get("pr_number", 0)
+        title = entry.get("title", "")
+        domain = entry.get("domain", "general")
+        repo = entry.get("repo", "unknown")
+        date = entry.get("date", "")
+        diff = entry.get("diff_snippet", "").strip()
+        files = ", ".join(entry.get("files", [])[:5])
+
+        if not diff:
+            continue
+
+        chunk_id = f"diff_{repo.replace('/', '_')}_{pr_num}"
+        chunks.append({
+            "id": chunk_id,
+            "text": (
+                f"[{repo}] fix PR #{pr_num} ({domain}): {title}\n"
+                f"변경 파일: {files}\n"
+                f"diff:\n{diff[:600]}"  # 600자로 청크 크기 제한
+            ),
+            "metadata": {
+                "type": "diff_pattern",
+                "domain": domain,
+                "repo": repo,
+                "pr_number": pr_num,
+                "date": date,
+            },
+        })
+
+    return chunks
+
+
 def ingest(append: bool = False):
     collection = get_collection()
 
@@ -223,6 +269,7 @@ def ingest(append: bool = False):
     all_chunks.extend(load_language_patterns())
     all_chunks.extend(load_rules_history())
     all_chunks.extend(load_analysis_cache())
+    all_chunks.extend(load_diff_patterns())
 
     new_chunks = [c for c in all_chunks if c["id"] not in existing_ids]
 

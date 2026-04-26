@@ -490,6 +490,17 @@ def print_report(
     ai_stats = analyze_ai_vs_human(prs)
 
     if output_format == "json":
+        fix_prs_with_diff = [
+            {
+                "number": p.number,
+                "title": p.title,
+                "domain": p.domain,
+                "files": p.files,
+                "diff_snippet": p.diff_snippet,
+            }
+            for p in prs
+            if p.is_fix and p.diff_snippet
+        ]
         print(json.dumps({
             "summary": {"total_prs": total, "fix_prs": fix_count, "fix_rate": round(fix_rate, 1)},
             "clusters": [{"start": c.start, "end": c.end, "size": c.size, "domain": c.domain} for c in clusters],
@@ -497,6 +508,7 @@ def print_report(
             "domain_counts": [{"domain": d, "fix_count": n} for d, n in domain_counts],
             "claude_md_suggestions": rules,
             "ai_vs_human": ai_stats,
+            "fix_prs_with_diff": fix_prs_with_diff,
         }, ensure_ascii=False, indent=2))
         return
 
