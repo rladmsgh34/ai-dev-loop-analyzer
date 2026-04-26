@@ -45,21 +45,31 @@
 
 **기존 도메인 확장 신호**: 기존 도메인의 한 변형이지만 키워드만 추가하면 잡힐 때 (예: `reactivity` 같은 SPA 코어는 `runtime`이라는 신규 도메인이 나을 수도 있고, `ui`의 확장으로 볼 수도 있음 — 라벨링하면서 결정).
 
-## 다음 단계 (3단계 프로파일 빌드 입력)
+## 라벨링 진행 상태
 
-라벨링 완료 후 다음 형태로 집계:
+**2026-04-26 — 1차 AI 라벨링 적용** (`scripts/apply_step2_labels.py`)
 
-```
-도메인별 빈도:
-  reactivity      23건  → vue/core 신규 도메인 후보
-  compiler        18건  → vue/core 신규 도메인 후보
-  ssr             12건  → next.js 신규 도메인 후보
-  routing          9건  → 둘 다 해당
-  bundler          7건  → 기존 config 확장 가능
-  ...
-```
+PR 제목 prefix + top 파일 경로를 보고 일괄 라벨링. 사람이 직접 보는 ground truth보다 품질은 낮지만 step 3 (프로파일 빌드)을 막지 않기 위한 임시 패스. 라벨 결정 기록은 스크립트의 dict에 그대로 보존되어 있어 행별 검토·수정이 용이.
 
-이 집계가 `profiles/examples/vuejs-core.json`, `profiles/examples/vercel-nextjs.json` 신규 프로파일의 입력이 된다.
+### 도메인 분포 (라벨 기준)
+
+| 레포 | 1위 | 2위 | 3위 | 비고 |
+|---|---|---|---|---|
+| vuejs/core | types (24) | compiler (18) | reactivity (16) | vapor 10, runtime-dom 10, runtime 7, hydration 4, devtools 4, hmr 3, scheduler 2, ssr 1, playground 1 |
+| vercel/next.js | turbopack (18) | scripts (6) | cli/cache (3 each) | monorepo·edge-runtime 2, font·ts-plugin·server-actions·build·server-runtime·docs·config 1 each |
+| gwangcheon-shop | config (1) | — | — | `.claude/settings.json` — 기존 config 도메인의 확장 |
+
+### 3단계 프로파일 빌드 — 완료
+
+이 라벨링을 입력으로 `profiles/examples/vuejs-core.json` (12 도메인), `profiles/examples/vercel-nextjs.json` (14 도메인) 신규 작성. `scope_to_domain`을 적극 활용해 PR 제목 prefix(`fix(reactivity):` 등)에서 직접 매핑.
+
+### 4단계 회귀 테스트 — 완료
+
+`tests/test_classifier_benchmarks.py`가 라벨 대비 분류 정확도를 측정해 임계값 미달 시 실패:
+- `vuejs-core.json`: 85% (≥70% 기준), general 0%
+- `vercel-nextjs.json`: 97.6% (≥65% 기준), general 0%
+
+남은 오분류는 대부분 `fix(types)` PR이 reactivity·runtime-dom 패키지를 건드릴 때 분류기가 scope(`types`)를 우선해 발생. AI 라벨은 패키지를 우선해 라벨링했기 때문에 발생하는 라벨↔분류 정책 차이로, 사람이 라벨링할 때 정책을 통일하면 추가 개선 여지.
 
 ## 별도 발견 — `fix_pr_regex` v2 적용 완료
 
