@@ -147,7 +147,7 @@ NEXTJS: dict[int, Label] = {
     91262: ("ts-plugin",     "next/src/server/typescript|editor plugin", ""),
     91210: ("server-actions","server_actions|next-custom-transforms", ""),
     91099: ("scripts",       "scripts/patch-preview-tarball", ""),
-    91092: ("scripts",       "scripts/set-preview-version|lerna", ""),
+    91092: ("monorepo",      "scripts/set-preview-version|lerna", "lerna is a monorepo tool — overrides file-path scripts/ classification"),
     91087: ("scripts",       "scripts/pr-status", ""),
     90817: ("turbopack",     "turbopack|turbo-persistence|static_sorted_file", ""),
     90700: ("turbopack",     "turbopack|manifest-loader|posix.join", ""),

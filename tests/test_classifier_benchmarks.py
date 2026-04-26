@@ -55,10 +55,10 @@ def _classify_sample(profile_path: Path, csv_path: Path) -> tuple[int, int, Coun
 @pytest.mark.parametrize(
     "profile_name,csv_name,min_accuracy,max_general_rate",
     [
-        # vuejs-core: 100 labels, 12 domains. Aim for ≥70% accuracy.
-        ("vuejs-core.json", "vuejs-core-2026-04-26.csv", 0.70, 0.10),
-        # vercel-nextjs: 41 labels, 14 domains. Aim for ≥65%.
-        ("vercel-nextjs.json", "vercel-nextjs-2026-04-26.csv", 0.65, 0.15),
+        # Thresholds locked to the 2026-04-26 scope-first baseline (100% on both).
+        # Slack of ~5%p covers a few label tweaks before forcing a re-tune.
+        ("vuejs-core.json", "vuejs-core-2026-04-26.csv", 0.95, 0.05),
+        ("vercel-nextjs.json", "vercel-nextjs-2026-04-26.csv", 0.95, 0.05),
     ],
 )
 def test_profile_classifier_accuracy(

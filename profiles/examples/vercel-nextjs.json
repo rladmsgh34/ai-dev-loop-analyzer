@@ -7,8 +7,8 @@
     ["test/e2e",     "\\.test\\.|\\.spec\\.|/tests?/|/e2e/|playwright|jest|vitest|coverage"],
     ["docs",         "\\.md$|AGENTS\\.md|readme|changelog"],
 
-    ["scripts",      "^scripts/|/scripts/|pr-status|set-preview-version|patch-preview-tarball|devlow-bench|pack-util|install-native"],
     ["monorepo",     "pnpm-workspace|postinstall|minimumReleaseAge|lerna"],
+    ["scripts",      "^scripts/|/scripts/|pr-status|set-preview-version|patch-preview-tarball|devlow-bench|pack-util|install-native"],
     ["font",         "next_font|NextFontIssue"],
     ["server-actions","server_actions|next-custom-transforms"],
     ["edge-runtime", "node-environment-extensions|edge.runtime|setImmediate"],

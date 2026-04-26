@@ -113,7 +113,8 @@ def load_profile(path: str | Path) -> None:
 
 def classify_domain(title: str, files: list[str]) -> str:
     # 1단계: conventional commit scope 추출 → 직접 매핑 (가장 정밀)
-    scope_match = re.match(r"^\w+\(([^)]+)\):", title, re.I)
+    # 콜론 옵션 — `fix(runtime-core) better typing` 같이 콜론 없는 비표준 scope도 잡는다.
+    scope_match = re.match(r"^\w+\(([^)]+)\):?", title, re.I)
     if scope_match:
         scope = scope_match.group(1).lower()
         for key, domain in _SCOPE_TO_DOMAIN.items():
