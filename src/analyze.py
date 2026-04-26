@@ -27,20 +27,49 @@ def _get_gh_token() -> str:
         return ""
 
 
-# ── 도메인 분류 규칙 (파일 경로 기반) ───────────────────────────────────────
-DOMAIN_PATTERNS = [
-    # PR 제목 키워드 + 파일 경로 모두 매칭
-    ("ci/cd",       r"deploy|docker|dockerfile|ci\b|workflow|buildx|healthcheck|compose|image.tag|prisma.cli|binary.target|musl|alpine"),
-    ("auth",        r"auth|login|signup|session|jwt|credential|credentials|signin|configuration.error"),
-    ("payment",     r"payment|portone|checkout|order|cart|purchase|결제|주문|장바구니"),
-    ("database",    r"prisma/|migration|schema\.prisma|prisma\b"),
-    ("security",    r"csp|xss|csrf|rate.limit|sanitize|escape|frame.src|allowlist|content.security"),
-    ("external-api",r"kakao|postcode|우편번호|google.maps|portone|gcs|sentry|daum"),
-    ("test/e2e",    r"\.test\.|\.spec\.|e2e|playwright|vitest|coverage|flaky|standalone.server"),
-    ("config",      r"next\.config|env\.ts|tsconfig|biome|tailwind|npmrc|pnpm"),
-    ("api",         r"src/app/api/|route\.ts|api.route"),
-    ("ui",          r"src/components/|page\.tsx|컴포넌트"),
+# ── 도메인 분류 규칙 (프로파일로 오버라이드 가능) ────────────────────────────
+DOMAIN_PATTERNS: list[tuple[str, str]] = [
+    # PR 제목 키워드 + 파일 경로 모두 매칭 — 기본값은 범용. load_profile()로 교체 가능.
+    ("ci/cd",        r"deploy|docker|dockerfile|ci\b|workflow|buildx|healthcheck|compose"),
+    ("auth",         r"auth|login|signup|session|jwt|credential|credentials|signin"),
+    ("payment",      r"payment|checkout|order|cart|purchase"),
+    ("database",     r"migration|schema\.|migrate\b"),
+    ("security",     r"csp|xss|csrf|rate.limit|sanitize|escape|content.security"),
+    ("external-api", r"stripe|twilio|sendgrid|s3\b|cloudfront|firebase|slack|webhook"),
+    ("test/e2e",     r"\.test\.|\.spec\.|e2e|playwright|vitest|jest|coverage|flaky"),
+    ("config",       r"\.config\.|env\.ts|tsconfig|biome|tailwind"),
+    ("api",          r"api/|route\.ts|route\.js"),
+    ("ui",           r"components/|page\.tsx|page\.jsx"),
 ]
+
+# fix PR 판별 정규식 — load_profile()로 오버라이드 가능
+FIX_PR_REGEX: str = r"^fix"
+
+# MCP rule_hints / LLM 프롬프트 힌트 — load_profile()로 채워짐
+RULE_HINTS: dict[str, str] = {}
+PROMPT_HINTS: dict[str, str] = {}
+
+
+def load_profile(path: str | Path) -> None:
+    """JSON 프로파일을 로드해 도메인 패턴·규칙·힌트를 교체한다.
+
+    프로파일 경로는 --profile CLI 인수 또는 AI_DEV_LOOP_PROFILE 환경변수로 지정.
+    """
+    global FIX_PR_REGEX
+    data = json.loads(Path(path).read_text())
+    if "domain_patterns" in data:
+        DOMAIN_PATTERNS[:] = [(d, r) for d, r in data["domain_patterns"]]
+    if "rule_templates" in data:
+        RULE_TEMPLATES.clear()
+        RULE_TEMPLATES.update(data["rule_templates"])
+    if "rule_hints" in data:
+        RULE_HINTS.clear()
+        RULE_HINTS.update(data["rule_hints"])
+    if "fix_pr_regex" in data:
+        FIX_PR_REGEX = data["fix_pr_regex"]
+    if "prompt_hints" in data:
+        PROMPT_HINTS.clear()
+        PROMPT_HINTS.update(data["prompt_hints"])
 
 def classify_domain(title: str, files: list[str]) -> str:
     combined = " ".join([title] + files).lower()
@@ -91,7 +120,7 @@ def fetch_prs(limit: int = 300) -> list[PR]:
     raw = json.loads(result.stdout)
     prs = []
     for item in raw:
-        is_fix = bool(re.match(r'^fix', item["title"], re.I))
+        is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
         domain = classify_domain(item["title"], [])
         prs.append(PR(
             number=item["number"],
@@ -306,6 +335,11 @@ def _build_prompt(
     domain_summary = "\n".join(f"- {d}: {n}회" for d, n in domain_counts if n >= 2) or "없음"
     file_summary = "\n".join(f"- {f}: {n}회" for f, n in risky_files[:8]) or "없음"
 
+    ai_assistant = PROMPT_HINTS.get("ai_assistant", "AI coding assistant")
+    config_file  = PROMPT_HINTS.get("config_file", "CLAUDE.md")
+    lang         = PROMPT_HINTS.get("language", "ko")
+    lang_note    = "한국어로 작성" if lang == "ko" else "Write in English"
+
     return f"""당신은 소프트웨어 품질 분석 전문가입니다.
 아래는 한 GitHub 레포지토리의 PR 히스토리 분석 결과입니다.
 
@@ -321,13 +355,13 @@ def _build_prompt(
 ## 고위험 파일 (fix PR에 자주 등장)
 {file_summary}
 
-위 데이터를 바탕으로 AI 코딩 어시스턴트(Claude Code)의 CLAUDE.md에 추가할 규칙을 3~5개 작성해주세요.
+위 데이터를 바탕으로 {ai_assistant}의 {config_file}에 추가할 규칙을 3~5개 작성해주세요.
 
 요구사항:
 1. 각 규칙은 "- " 로 시작하는 한 줄
 2. 반복된 실수 패턴을 방지하는 구체적인 행동 지침
 3. 파일명·도메인·횟수 등 데이터 기반 근거 포함
-4. 한국어로 작성
+4. {lang_note}
 5. 과도하게 일반적인 규칙("테스트를 잘 하세요") 금지
 
 규칙 목록만 출력하세요 (설명 없이):"""
@@ -541,6 +575,11 @@ def main():
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--input", help="미리 받은 PR JSON 파일 (gh 생략)")
     parser.add_argument(
+        "--profile",
+        default=os.environ.get("AI_DEV_LOOP_PROFILE"),
+        help="도메인·규칙 프로파일 JSON 경로 (AI_DEV_LOOP_PROFILE 환경변수로도 지정 가능)",
+    )
+    parser.add_argument(
         "--anthropic-key",
         default=os.environ.get("ANTHROPIC_API_KEY"),
         help="Anthropic API 키 (ANTHROPIC_API_KEY 환경변수 사용 가능)",
@@ -561,6 +600,9 @@ def main():
         help="AI 규칙 생성 비활성화, 템플릿만 사용",
     )
     args = parser.parse_args()
+
+    if args.profile:
+        load_profile(args.profile)
 
     if args.input:
         with open(args.input) as f:
@@ -597,7 +639,7 @@ def main():
         # 원시 PR 목록 JSON
         prs = []
         for item in raw:
-            is_fix = bool(re.match(r'^fix', item["title"], re.I))
+            is_fix = bool(re.match(FIX_PR_REGEX, item["title"], re.I))
             prs.append(PR(
                 number=item["number"], title=item["title"],
                 merged_at=item["mergedAt"], additions=item["additions"],

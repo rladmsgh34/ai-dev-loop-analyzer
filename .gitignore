@@ -6,5 +6,6 @@ __pycache__/
 !package.json
 !data/language-patterns.json
 !data/rules-history.json
+!profiles/**/*.json
 .DS_Store
 data/chroma/
