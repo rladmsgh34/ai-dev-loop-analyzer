@@ -1,5 +1,11 @@
 name: Evolve Rules
 
+# 동시 실행 방지 — PR이 연속 머지되면 워크플로우가 겹쳐 data/*.json에 push 충돌 발생.
+# cancel-in-progress: false 로 큐잉(순차 실행)하여 모든 분석이 반드시 실행되도록 보장.
+concurrency:
+  group: evolve-rules
+  cancel-in-progress: false
+
 on:
   schedule:
     - cron: '0 1 * * *'   # 매일 오전 10시 KST
