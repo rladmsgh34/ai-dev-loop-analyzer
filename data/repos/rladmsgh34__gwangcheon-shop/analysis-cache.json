@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-04-28",
+  "generated_at": "2026-04-29",
   "repo": "rladmsgh34/gwangcheon-shop",
-  "fix_rate": 16.0,
+  "fix_rate": 15.8,
   "summary": {
-    "total_prs": 188,
+    "total_prs": 190,
     "fix_prs": 30,
-    "fix_rate": 16.0
+    "fix_rate": 15.8
   },
   "risky_files": [
     {
