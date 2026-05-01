@@ -1,13 +1,5 @@
 [
   {
-    "repo": "rladmsgh34/gwangcheon-shop",
-    "profile": null,
-    "schedule": "daily",
-    "post_issues": true,
-    "fetch_limit": 300,
-    "enabled": true
-  },
-  {
     "repo": "vuejs/core",
     "profile": "profiles/examples/vuejs-core.json",
     "schedule": "weekly",
