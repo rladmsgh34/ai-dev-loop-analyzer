@@ -4,7 +4,6 @@
 
 공유 데이터 (전 레포 공통):
   data/diff-patterns.json      — BM25/벡터 학습용 diff 패턴
-  data/language-patterns.json  — 언어별 크로스 레포 통계
   data/.bm25_cache.pkl         — BM25 인덱스 (전 레포 합산)
 
 레포별 데이터 (레포마다 독립):

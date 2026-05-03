@@ -8,9 +8,9 @@ Claude Code, Cursor, Cline 등 MCP 지원 AI 에디터에서
 도구:
   check_risk_zones(file_paths)        — 편집할 파일의 회귀 위험도 사전 체크 (RAG 유사 패턴 포함)
   suggest_review_checklist(...)       — PR 제목 + 파일 기반 리뷰 체크리스트 생성
+  diff_risk_score(diff)               — 스테이지된 diff를 과거 fix 패턴과 비교해 위험도 점수화
   analyze_pr_history(repo)            — 레포 PR 히스토리 전체 분석
-  get_active_rules(domain)            — 도메인별 현재 활성 규칙 조회
-  get_warning_feedback()              — PostToolUse 경고 정밀도(TP/FP) 통계 및 임계값 제안
+  list_repos()                        — 분석 캐시가 존재하는 등록 레포 목록 조회
 
 설치 (Claude Code):
   claude mcp add ai-dev-loop-analyzer -- python3 /path/to/src/mcp_server.py
@@ -30,7 +30,6 @@ from mcp.types import TextContent, Tool
 # ── 경로 설정 ─────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
-HISTORY_FILE = DATA_DIR / "rules-history.json"
 SRC_DIR = Path(__file__).parent
 
 sys.path.insert(0, str(SRC_DIR))
@@ -41,11 +40,6 @@ from repo_store import load_cache, list_registered_repos, cache_path  # noqa: E4
 _profile_path = os.environ.get("AI_DEV_LOOP_PROFILE")
 if _profile_path and Path(_profile_path).exists():
     _ana.load_profile(_profile_path)
-
-def load_history() -> dict:
-    if HISTORY_FILE.exists():
-        return json.loads(HISTORY_FILE.read_text())
-    return {"rules": [], "snapshots": []}
 
 
 # ── 도구 구현 ─────────────────────────────────────────────────────────────────
@@ -396,35 +390,6 @@ def _diff_risk_score(diff: str, context: str = "") -> str:
     return "\n".join(lines)
 
 
-def _get_active_rules(domain: str = "") -> str:
-    """현재 활성 규칙 조회. domain 미지정 시 전체 반환."""
-    history = load_history()
-    rules = history.get("rules", [])
-
-    if not rules:
-        return "등록된 규칙 없음 — CLAUDE.md에 규칙이 추가되면 자동 등록됩니다."
-
-    if domain:
-        rules = [r for r in rules if domain.lower() in r["rule"].lower()]
-
-    if not rules:
-        return f"'{domain}' 도메인 관련 규칙 없음"
-
-    from rule_tracker import compute_effectiveness
-    effectiveness = {e["date_added"] + e["rule"][:20]: e for e in compute_effectiveness()}
-
-    lines = [f"## 활성 규칙 ({len(rules)}개)\n"]
-    for r in rules:
-        key = r["date_added"] + r["rule"][:20]
-        eff = effectiveness.get(key)
-        status = ""
-        if eff:
-            status = f" | {'✅ 효과 있음' if eff['effective'] else '⏳ 측정 중'} ({eff['delta']:+.1f}%p)"
-        lines.append(f"- **{r['date_added']}**{status}\n  {r['rule']}")
-
-    return "\n".join(lines)
-
-
 # ── MCP 서버 ──────────────────────────────────────────────────────────────────
 server = Server("ai-dev-loop-analyzer")
 
@@ -478,23 +443,6 @@ TOOLS = [
         },
     ),
     Tool(
-        name="get_active_rules",
-        description=(
-            "현재 CLAUDE.md에 등록된 AI Dev Loop 자동 규칙을 조회합니다. "
-            "규칙 추가 전후 fix-rate 변화(효과 측정)도 함께 반환합니다."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "domain": {
-                    "type": "string",
-                    "description": "필터할 도메인 (예: 'auth', 'payment'). 미입력 시 전체 반환.",
-                    "default": "",
-                }
-            },
-        },
-    ),
-    Tool(
         name="suggest_review_checklist",
         description=(
             "Given a PR title and list of changed files, generate a review checklist "
@@ -544,25 +492,6 @@ TOOLS = [
         },
     ),
     Tool(
-        name="get_warning_feedback",
-        description=(
-            "PostToolUse 훅 경고의 정밀도(Precision)를 조회합니다. "
-            "경고가 실제 회귀로 이어졌는지(TP) vs 오탐(FP)인지 통계와 "
-            "BM25 임계값 조정 제안을 반환합니다. "
-            "repo 미지정 시 등록된 전체 레포의 요약을 반환합니다."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "repo": {
-                    "type": "string",
-                    "description": "조회할 레포 (예: 'owner/repo'). 미지정 시 전체 레포 요약.",
-                    "default": "",
-                },
-            },
-        },
-    ),
-    Tool(
         name="list_repos",
         description=(
             "분석 캐시가 존재하는 등록 레포 목록을 반환합니다. "
@@ -604,11 +533,6 @@ async def call_tool(name: str, arguments: dict):
                 arguments["repo"],
                 arguments.get("limit", 200),
             )
-        elif name == "get_active_rules":
-            text = _get_active_rules(arguments.get("domain", ""))
-        elif name == "get_warning_feedback":
-            from feedback import feedback_report
-            text = feedback_report(arguments.get("repo") or None)
         elif name == "list_repos":
             repos = list_registered_repos()
             if not repos:
