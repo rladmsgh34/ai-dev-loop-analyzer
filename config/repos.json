@@ -1,18 +1,9 @@
 [
   {
-    "repo": "vuejs/core",
-    "profile": "profiles/examples/vuejs-core.json",
-    "schedule": "weekly",
-    "post_issues": false,
-    "fetch_limit": 800,
-    "enabled": true
-  },
-  {
-    "repo": "vercel/next.js",
-    "profile": "profiles/examples/vercel-nextjs.json",
-    "schedule": "weekly",
-    "post_issues": false,
-    "fetch_limit": 800,
-    "enabled": true
+    "repo": "rladmsgh34/gwangcheon-shop",
+    "profile": "profiles/examples/korean-nextjs-shop.json",
+    "schedule": "daily",
+    "fetch_limit": 200,
+    "enabled": false
   }
 ]

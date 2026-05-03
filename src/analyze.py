@@ -730,16 +730,6 @@ def print_report(
     else:
         print("  제안 없음 (패턴 충분하지 않음)")
 
-    # 규칙 효과 측정
-    try:
-        from rule_tracker import effectiveness_summary
-        eff = effectiveness_summary()
-        if "아직" not in eff:
-            print("\n" + "─" * 60)
-            print(eff)
-    except Exception:
-        pass
-
     print("\n" + "═" * 60 + "\n")
 
 

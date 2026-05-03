@@ -16,10 +16,6 @@ on:
         description: '특정 레포만 분석 (예: owner/repo). 미입력 시 enabled 레포 전체.'
         required: false
         default: ''
-      dry_run:
-        description: 'Dry run — 분석만 하고 PR 생성 생략'
-        type: boolean
-        default: false
       fetch_files:
         description: 'fix PR 파일 + 리뷰 코멘트 수집 (더 정확, 느림)'
         type: boolean
@@ -29,12 +25,6 @@ on:
 
 jobs:
   # ── setup-matrix: config/repos.json → 트리거별 동적 매트릭스 ────────────────
-  # 트리거 분기:
-  #   - schedule '0 1 * * *' → schedule="daily" + enabled
-  #   - schedule '0 2 * * 0' → schedule="weekly" + enabled
-  #   - workflow_dispatch with target_repo → 그 레포만 (enabled 무시 — 디버깅용)
-  #   - workflow_dispatch without target_repo → enabled 전체
-  #   - repository_dispatch → client_payload.repo (없으면 gwangcheon-shop)
   setup-matrix:
     runs-on: ubuntu-latest
     outputs:
@@ -77,41 +67,31 @@ jobs:
       # max-parallel: 1 — analyze.py에 incremental fetch가 없어 매번 fetch_limit만큼
       # gh API를 소비함. 직렬 실행으로 GITHUB_TOKEN(1000/hr) / GH_PAT(5000/hr) 한도 보호.
       max-parallel: 1
-      # fail-fast: false — 한 레포가 실패해도 나머지는 계속 진행.
       fail-fast: false
       matrix:
         target: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     permissions:
       contents: write
-      issues: write
-      pull-requests: write
     env:
       TARGET_REPO: ${{ matrix.target.repo }}
-      POST_ISSUES: ${{ matrix.target.post_issues }}
       FETCH_LIMIT: ${{ matrix.target.fetch_limit }}
       PROFILE_PATH: ${{ matrix.target.profile }}
       IS_PR_TRIGGER: ${{ github.event_name == 'repository_dispatch' }}
 
     steps:
       # ref 명시 — 기본값(detached HEAD)이면 뒤의 git push가 "not currently on a branch"로 실패.
-      # workflow_dispatch가 PR 브랜치에서 dry-run으로 트리거될 수도 있어 head_ref 우선.
       - name: Checkout ai-dev-loop-analyzer
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref_name }}
 
-      # ── Step 0: prerequisites ───────────────────────────────────────────────
-      - name: Ensure labels and data directory
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Ensure data directory
         run: |
-          gh label create "daily-report" --color "e4e669" --description "Daily auto-analysis report" 2>/dev/null || true
           # repo_store.repo_slug() 단일 진실 공급원 — workflow가 직접 tr '/' '_'로
           # 만들면 '__' (double underscore)와 미스매치돼 cache가 영영 안 커밋됨.
           REPO_SLUG=$(python3 -c "import sys; sys.path.insert(0, 'src'); from repo_store import repo_slug; print(repo_slug('$TARGET_REPO'))")
           echo "REPO_SLUG=$REPO_SLUG" >> $GITHUB_ENV
           mkdir -p "data/repos/${REPO_SLUG}"
-          touch data/rules-history.json
 
       - name: Checkout target repo
         uses: actions/checkout@v4
@@ -121,8 +101,6 @@ jobs:
           path: target-repo
 
       # GH_PAT rate-limit 체크포인트 — 매트릭스 iteration 시작.
-      # 끝 직후 동일 호출로 한 번 더 찍어 delta가 그 iteration 실제 소비량.
-      # fetch_limit 스케일업(PR #36) intervention 측정용.
       - name: rate_limit checkpoint (start)
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
@@ -149,7 +127,6 @@ jobs:
             FETCH_FLAG=""
           fi
 
-          # 프로파일 결정 — 파일 존재 시에만 --profile 전달
           PROFILE_FLAG=""
           if [ -n "$PROFILE_PATH" ] && [ -f "$PROFILE_PATH" ]; then
             PROFILE_FLAG="--profile $PROFILE_PATH"
@@ -162,9 +139,7 @@ jobs:
           fi
 
           # Incremental fetch: cache가 있으면 generated_at - 14일부터만 가져온다.
-          # 14일 overlap = detect_clusters의 window=14일을 보존하기 위한 최소값
-          # + 늦은 머지/리뷰/타임존 안전판. 중복 PR은 dict-based dedup으로 무해.
-          # 첫 실행 (cache 없음)이면 그냥 fetch_limit만큼.
+          # 14일 overlap = detect_clusters의 window=14일을 보존하기 위한 최소값.
           SEARCH_FLAG=""
           CACHE_PATH="data/repos/${REPO_SLUG}/analysis-cache.json"
           if [ -f "$CACHE_PATH" ]; then
@@ -201,20 +176,11 @@ jobs:
             $FETCH_FLAG \
             2>/dev/null > /tmp/report.json
 
-          FIX_RATE=$(python3 -c "import json; d=json.load(open('/tmp/report.json')); print(d['summary']['fix_rate'])")
-          CLUSTER_COUNT=$(python3 -c "import json; d=json.load(open('/tmp/report.json')); print(len(d['clusters']))")
-          echo "fix_rate=$FIX_RATE" >> $GITHUB_OUTPUT
-          echo "cluster_count=$CLUSTER_COUNT" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
-          echo "is_pr_trigger=$IS_PR_TRIGGER" >> $GITHUB_OUTPUT
-          echo "profile_flag=$PROFILE_FLAG" >> $GITHUB_OUTPUT
 
       # ── Step 1.5: analysis-cache 레포별 경로에 저장 ──────────────────────────
-      # 캐시 빌드는 analyze.build_cache_dict()로 위임 (mcp_server와 동일 함수 사용 → 스키마 드리프트 차단).
+      # 캐시 빌드는 analyze.build_cache_dict()로 위임 (mcp_server와 동일 함수 → 스키마 드리프트 차단).
       - name: Save analysis cache to per-repo directory
-        env:
-          TARGET_REPO: ${{ env.TARGET_REPO }}
-          PROFILE_PATH: ${{ env.PROFILE_PATH }}
         run: |
           python3 - <<'PYEOF'
           import json, os, sys
@@ -228,7 +194,6 @@ jobs:
 
           import analyze as ana
 
-          # 프로파일: matrix override 우선, 없으면 target-repo in-tree
           profile_path = os.environ.get('PROFILE_PATH') or ''
           if not profile_path or not Path(profile_path).exists():
               fallback = 'target-repo/.claude/ai-dev-loop-profile.json'
@@ -246,283 +211,7 @@ jobs:
           print(f'✅ analysis-cache 저장: {p}')
           PYEOF
 
-      # ── Step 2: 일일 리포트 (analyzer 자체 레포에 issue) ───────────────────
-      # 외부 레포(post_issues=false)는 일일 리포트 노이즈가 의미 없으므로 스킵.
-      - name: Post daily report issue
-        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPORT_DATE: ${{ steps.analyze.outputs.date }}
-        run: |
-          python3 - <<'PYEOF'
-          import json, subprocess, os
-
-          d = json.load(open('/tmp/report.json'))
-          s = d['summary']
-          date = os.environ.get('REPORT_DATE', '')
-          target_repo = os.environ.get('TARGET_REPO', '')
-
-          lines = [
-            f"## 📊 일일 PR 품질 리포트 — {date} ({target_repo})",
-            "",
-            f"**총 PR**: {s['total_prs']}개 | **fix PR**: {s['fix_prs']}개 ({s['fix_rate']}%)",
-            "",
-          ]
-
-          clusters = d.get('clusters', [])
-          if clusters:
-            lines += ["### 📍 회귀 클러스터", "| 도메인 | PR 범위 | 크기 |", "|--------|---------|------|"]
-            for c in clusters:
-              lines.append(f"| `{c['domain']}` | #{c['start']} → #{c['end']} | {c['size']}개 |")
-            lines.append("")
-
-          domain_counts = d.get('domain_counts', [])
-          if domain_counts:
-            lines += ["### 🏴 도메인별 fix", "| 도메인 | 횟수 |", "|--------|------|"]
-            for dc in domain_counts:
-              lines.append(f"| `{dc['domain']}` | {dc['fix_count']}회 |")
-            lines.append("")
-
-          risky = d.get('risky_files', [])
-          if risky:
-            lines += ["### 📁 고위험 파일"]
-            for f in risky[:5]:
-              lines.append(f"- `{f['file']}` ({f['fix_count']}회)")
-            lines.append("")
-
-          rules = d.get('claude_md_suggestions', [])
-          if rules:
-            lines += ["### 💡 CLAUDE.md 개선 아이디어"]
-            for r in rules:
-              lines.append(r)
-
-          lines += ["---", f"_[ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer) · {date} · {target_repo}_"]
-
-          body = "\n".join(lines)
-          title = f"[일일 리포트] {date} — {target_repo} fix율 {s['fix_rate']}%"
-
-          existing = json.loads(subprocess.run(
-            ['gh', 'issue', 'list', '--label', 'daily-report', '--state', 'open',
-             '--json', 'number,title', '--limit', '20'],
-            capture_output=True, text=True
-          ).stdout or '[]')
-
-          # 같은 날 + 같은 타겟의 이슈만 갱신 (다른 타겟은 별개 이슈로 유지)
-          today_issue = next((i for i in existing if date in i['title'] and target_repo in i['title']), None)
-          if today_issue:
-            subprocess.run(['gh', 'issue', 'edit', str(today_issue['number']),
-                            '--title', title, '--body', body], check=True)
-          else:
-            subprocess.run(['gh', 'issue', 'create', '--title', title,
-                            '--body', body, '--label', 'daily-report'], check=True)
-          PYEOF
-
-      # ── Step 2b: 타겟 레포에 회귀 경고 이슈 생성 ────────────────────────────
-      # 🚨 핵심 안전판 — post_issues=true (rladmsgh34/* 같은 owned 레포)일 때만 실행.
-      # 외부 레포(vuejs/core, vercel/next.js 등)에는 절대 이슈가 생성되지 않도록 보호.
-      - name: 타겟 레포에 회귀 경고 이슈 생성
-        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-          TARGET_REPO: ${{ env.TARGET_REPO }}
-          REPORT_DATE: ${{ steps.analyze.outputs.date }}
-        run: |
-          python3 - <<'PYEOF'
-          import json, subprocess, os, sys
-
-          d = json.load(open('/tmp/report.json'))
-          s = d['summary']
-          date = os.environ.get('REPORT_DATE', '')
-          target_repo = os.environ.get('TARGET_REPO', '')
-          analyzer_repo = 'rladmsgh34/ai-dev-loop-analyzer'
-
-          clusters = d.get('clusters', [])
-          domain_counts = d.get('domain_counts', [])
-          risky_files = d.get('risky_files', [])
-
-          # ── 조건 체크 ─────────────────────────────────────────────────────
-          # 조건 1: clusters가 2개 이상 (반복 패턴)
-          has_clusters = len(clusters) >= 2
-
-          # 조건 2: 특정 도메인의 fix_count가 5 이상
-          hot_domains = [dc for dc in domain_counts if dc['fix_count'] >= 5]
-          has_hot_domain = len(hot_domains) > 0
-
-          # 조건 3: fix_rate가 20% 초과
-          has_high_fix_rate = s['fix_rate'] > 20
-
-          if not (has_clusters or has_hot_domain or has_high_fix_rate):
-              print(f"조건 미충족 — 이슈 생성 생략 (clusters={len(clusters)}, hot_domains={len(hot_domains)}, fix_rate={s['fix_rate']}%)")
-              sys.exit(0)
-
-          # ── 레이블 보장 (없으면 생성, 이미 있으면 무시) ──────────────────
-          for label, color, desc in [
-              ('bug',          'ee0701', 'Something is not working'),
-              ('ai-generated', '0075ca', 'Automatically generated by AI analyzer'),
-          ]:
-              subprocess.run(
-                  ['gh', 'label', 'create', label,
-                   '--repo', target_repo,
-                   '--color', color,
-                   '--description', desc],
-                  capture_output=True  # 이미 존재 시 에러 무시
-              )
-
-          # ── 대표 도메인 선택 ──────────────────────────────────────────────
-          if clusters:
-              top_cluster = max(clusters, key=lambda c: c['size'])
-              rep_domain = top_cluster['domain']
-          elif hot_domains:
-              rep_domain = hot_domains[0]['domain']
-          else:
-              rep_domain = domain_counts[0]['domain'] if domain_counts else 'general'
-
-          # ── 이슈 제목 ─────────────────────────────────────────────────────
-          title = f"\U0001f501 AI 회귀 패턴 감지: {rep_domain} 도메인 ({date})"
-
-          # ── 이슈 본문 ─────────────────────────────────────────────────────
-          analyzer_issue_url = f"https://github.com/{analyzer_repo}/issues"
-
-          lines = [
-              f"## 분석 결과",
-              "",
-          ]
-
-          if clusters:
-              lines += ["### \U0001f4cd 회귀 클러스터", "| 도메인 | PR 범위 | 크기 |", "|--------|---------|------|"]
-              for c in clusters:
-                  lines.append(f"| `{c['domain']}` | #{c['start']} → #{c['end']} | {c['size']}개 |")
-              lines.append("")
-
-          if hot_domains:
-              lines += ["### \U0001f3f4 집중 발생 도메인 (fix 5회 이상)", "| 도메인 | fix 횟수 |", "|--------|----------|"]
-              for dc in hot_domains:
-                  lines.append(f"| `{dc['domain']}` | {dc['fix_count']}회 |")
-              lines.append("")
-
-          if risky_files:
-              lines += ["### \U0001f4c1 고위험 파일"]
-              for f in risky_files[:5]:
-                  lines.append(f"- `{f['file']}` ({f['fix_count']}회 수정)")
-              lines.append("")
-
-          lines += [
-              f"**전체 fix율**: {s['fix_rate']}% ({s['fix_prs']}/{s['total_prs']}개)",
-              "",
-              "## 권장 조치",
-              "",
-          ]
-
-          suggestions = d.get('claude_md_suggestions', [])
-          if suggestions:
-              lines += ["### \U0001f4a1 CLAUDE.md 개선 제안"]
-              for sug in suggestions:
-                  lines.append(sug)
-              lines.append("")
-
-          if risky_files:
-              top_file = risky_files[0]['file']
-              lines += [
-                  f"- `{top_file}` 변경 시 체크리스트 강화 검토",
-              ]
-
-          lines += [
-              f"- [ai-dev-loop-analyzer 일일 리포트]({analyzer_issue_url}?q=일일+리포트) 참고",
-              "",
-              "---",
-              f"_ai-dev-loop-analyzer 자동 생성 · {date}_",
-          ]
-
-          body = "\n".join(lines)
-
-          # ── 중복 방지: 같은 날 같은 도메인 이슈가 이미 있으면 댓글 ─────
-          existing_raw = subprocess.run(
-              ['gh', 'issue', 'list',
-               '--repo', target_repo,
-               '--label', 'ai-generated',
-               '--state', 'open',
-               '--json', 'number,title',
-               '--limit', '10'],
-              capture_output=True, text=True
-          ).stdout or '[]'
-          existing = json.loads(existing_raw)
-
-          today_issue = next(
-              (i for i in existing if date in i['title'] and rep_domain in i['title']),
-              None
-          )
-
-          if today_issue:
-              comment_body = f"## \U0001f504 업데이트 ({date})\n\n{body}"
-              subprocess.run(
-                  ['gh', 'issue', 'comment', str(today_issue['number']),
-                   '--repo', target_repo,
-                   '--body', comment_body],
-                  check=True
-              )
-              print(f"기존 이슈 #{today_issue['number']}에 댓글 추가 완료")
-          else:
-              result = subprocess.run(
-                  ['gh', 'issue', 'create',
-                   '--repo', target_repo,
-                   '--title', title,
-                   '--body', body,
-                   '--label', 'bug',
-                   '--label', 'ai-generated'],
-                  capture_output=True, text=True
-              )
-              if result.returncode == 0:
-                  print(f"타겟 레포 이슈 생성 완료: {result.stdout.strip()}")
-              else:
-                  print(f"이슈 생성 실패: {result.stderr}", file=sys.stderr)
-                  sys.exit(1)
-          PYEOF
-
-      # ── Step 3: snapshot ───────────────────────────────────────────────────
-      - name: Save rule effectiveness snapshot
-        continue-on-error: true
-        run: |
-          python3 - <<'PYEOF'
-          import json, sys
-          sys.path.insert(0, 'src')
-          from rule_tracker import record_snapshot, record_new_rules
-          import os
-
-          d = json.load(open('/tmp/report.json'))
-          date = os.environ.get('REPORT_DATE', '')
-          target_repo = os.environ.get('TARGET_REPO', '')
-          # analyzer 본인 분석 시 self 태그 — workflow 매트릭스에서는 절대 발생 안 하지만
-          # 로컬 self-analysis 진입점 보호용. (workflow는 항상 외부 repo 분석)
-          analyzer_repo = 'rladmsgh34/ai-dev-loop-analyzer'
-          origin = 'self' if target_repo == analyzer_repo else target_repo
-          total_fix = d['summary']['fix_rate']
-          total_prs = d['summary']['total_prs']
-
-          # domain_counts는 raw count → 비율(%)로 변환
-          domain_rates = {}
-          for dc in d.get('domain_counts', []):
-              if total_prs > 0:
-                  domain_rates[dc['domain']] = round(dc['fix_count'] / total_prs * 100, 1)
-
-          # 1) 스냅샷 기록 — repo 태그로 cross-repo pollution 차단
-          record_snapshot(domain_rates, total_fix, date, repo=origin)
-          print(f"스냅샷 기록 완료: {date} [{origin}]")
-
-          # 2) 오늘 제안된 규칙을 히스토리에 등록 (추가 시점 fix-rate 기준점 저장)
-          # 새 rule은 항상 explicit fact (분석 시점에 어느 repo 분석 중인지 확실).
-          rules = d.get('claude_md_suggestions', [])
-          if rules:
-              added = record_new_rules(rules, domain_rates, total_fix, date,
-                                        repo=origin, origin_confidence='explicit')
-              print(f"신규 규칙 등록: {len(added)}개 [origin={origin}]")
-          PYEOF
-        env:
-          REPORT_DATE: ${{ steps.analyze.outputs.date }}
-          TARGET_REPO: ${{ env.TARGET_REPO }}
-
-      # ── 3.5단계: diff 패턴 누적 저장 (RAG 임베딩용) ────────────────────────
+      # ── Step 2: diff 패턴 누적 저장 (RAG 임베딩용 핵심 입력) ────────────────
       - name: diff 패턴 저장
         continue-on-error: true
         run: |
@@ -538,7 +227,6 @@ jobs:
           patterns_path = Path("data/diff-patterns.json")
           existing = json.loads(patterns_path.read_text()) if patterns_path.exists() else {"patterns": []}
 
-          # 이미 저장된 PR 번호 목록
           saved_prs = {(e["repo"], e["pr_number"]) for e in existing["patterns"]}
 
           new_count = 0
@@ -571,121 +259,24 @@ jobs:
           REPORT_DATE: ${{ steps.analyze.outputs.date }}
           TARGET_REPO: ${{ env.TARGET_REPO }}
 
-      # ── Step 3.6: 피드백 루프 — 경고 로그 vs fix PR 교차 검증 ─────────────
-      - name: 경고 피드백 정밀도 평가
-        continue-on-error: true
-        env:
-          TARGET_REPO: ${{ env.TARGET_REPO }}
-        run: |
-          python3 - <<'PYEOF'
-          import json, os, sys
-          sys.path.insert(0, 'src')
-
-          target_repo = os.environ.get('TARGET_REPO', '')
-          if not target_repo:
-              print('TARGET_REPO 미지정 — 스킵')
-              sys.exit(0)
-
-          from repo_store import warning_log_path
-          log_path = warning_log_path(target_repo, create=False)
-          if not log_path.exists():
-              print(f'경고 로그 없음 ({log_path}) — 스킵 (rag_hook 경고가 아직 발생하지 않은 상태)')
-              sys.exit(0)
-
-          d = json.load(open('/tmp/report.json'))
-          fix_prs = []
-          for pr in d.get("fix_prs_with_diff", []):
-              fix_prs.append({
-                  "files":     pr.get("files", []),
-                  "domain":    pr.get("domain", "general"),
-                  "merged_at": pr.get("merged_at", ""),
-                  "title":     pr.get("title", ""),
-              })
-
-          from feedback import evaluate, feedback_report
-          stats = evaluate(fix_prs, repo=target_repo)
-          print(feedback_report(repo=target_repo))
-          PYEOF
-
-      - name: 히스토리 파일 커밋
+      - name: 데이터 커밋
         env:
           TARGET_REPO: ${{ env.TARGET_REPO }}
         run: |
           set -e
           git config user.name "ai-dev-loop-analyzer[bot]"
           git config user.email "ai-dev-loop-analyzer@users.noreply.github.com"
-          # REPO_SLUG는 Step 0에서 GITHUB_ENV로 export됨 — 여기서 재계산하면 동기 깨짐.
-          git add data/rules-history.json data/diff-patterns.json || true
+          git add data/diff-patterns.json || true
           git add "data/repos/${REPO_SLUG}/" || true
           if git diff --staged --quiet; then
             echo "변경 없음 — 커밋 스킵"
             exit 0
           fi
           git commit -m "data: daily snapshot ${{ steps.analyze.outputs.date }} [${TARGET_REPO}]"
-          # max-parallel:1 + serial matrix면 race가 없지만, 별도 워크플로우 run이
-          # 같은 브랜치에 push했을 가능성에 대비해 충돌 시 한 번만 rebase 재시도.
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
           git push origin "$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "$BRANCH")
 
-      # ── Step 4: patch CLAUDE.md ────────────────────────────────────────────
-      # 외부 레포는 CLAUDE.md를 보유하지 않거나 우리가 PR을 보낼 권한이 없으므로 스킵.
-      - name: Generate CLAUDE.md patch
-        if: env.IS_PR_TRIGGER != 'true' && env.POST_ISSUES == 'true'
-        continue-on-error: true
-        id: patch
-        run: |
-          if [ ! -f target-repo/CLAUDE.md ]; then
-            echo "target-repo/CLAUDE.md 없음 — 스킵"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          python3 src/patch_claude_md.py \
-            --report /tmp/report.json \
-            --claude-md target-repo/CLAUDE.md \
-            --date "${{ steps.analyze.outputs.date }}" \
-            ${{ inputs.dry_run == 'true' && '--dry-run' || '' }} \
-            2>&1 | tee /tmp/patch-log.txt
-
-          if grep -q "신규 규칙 없음" /tmp/patch-log.txt; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          fi
-
-      # ── Step 4b: open PR (only when dry_run=false and changes exist) ────────
-      - name: Open target repo PR
-        if: env.POST_ISSUES == 'true' && steps.patch.outputs.has_changes == 'true' && inputs.dry_run != 'true'
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GH_PAT }}
-          path: target-repo
-          commit-message: "chore: AI Dev Loop 자동 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
-          branch: chore/ai-loop-rules-${{ steps.analyze.outputs.date }}
-          title: "🤖 CLAUDE.md 규칙 업데이트 (${{ steps.analyze.outputs.date }})"
-          body: |
-            ## AI Dev Loop — 자동 생성 PR
-
-            [ai-dev-loop-analyzer](https://github.com/rladmsgh34/ai-dev-loop-analyzer)가
-            PR 히스토리 + 리뷰 코멘트를 분석해 감지한 패턴을 CLAUDE.md에 반영합니다.
-
-            ### 추가된 규칙
-            ```
-            ${{ steps.patch.outputs.rules }}
-            ```
-
-            ### 검토 방법
-            1. 규칙이 실제 상황에 맞는지 확인
-            2. 불필요한 규칙 삭제 후 머지
-            3. 머지하면 다음 Claude Code 세션부터 자동 적용
-
-            ---
-            _fix율: ${{ steps.analyze.outputs.fix_rate }}% | 클러스터: ${{ steps.analyze.outputs.cluster_count }}개_
-          labels: "documentation,ai-generated"
-          delete-branch: true
-
-      # rate_limit end checkpoint — 매트릭스 iteration 진짜 마지막.
-      # Step 4b (peter-evans/create-pull-request)도 GH_PAT 소비하므로 그 이후로 위치.
-      # `if: always()`로 앞 step 실패 시에도 측정 (intervention 검증 누락 방지).
+      # rate_limit end checkpoint — `if: always()`로 앞 step 실패 시에도 측정
       - name: rate_limit checkpoint (end)
         if: always()
         env:

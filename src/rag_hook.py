@@ -116,20 +116,6 @@ def main() -> None:
     print(f"   패턴 참고: {header}")
     print(f"   상세 분석: mcp diff_risk_score 툴로 확인하세요.")
 
-    # 피드백 루프: 경고 로그 기록 — 추후 fix PR과 교차 검증해 정밀도 측정
-    try:
-        import sys as _sys
-        _sys.path.insert(0, str(Path(__file__).parent))
-        from feedback import record_warning
-        record_warning(
-            file_path=file_path,
-            bm25_score=best_score,
-            matched_id=ids[best_idx],
-            matched_header=header,
-        )
-    except Exception:
-        pass  # 로깅 실패가 경고 출력을 막으면 안 됨
-
 
 if __name__ == "__main__":
     main()

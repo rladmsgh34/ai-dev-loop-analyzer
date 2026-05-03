@@ -18,7 +18,6 @@ REQUIRED_FIELDS = {
     "repo": str,
     "profile": (str, type(None)),
     "schedule": str,
-    "post_issues": bool,
     "fetch_limit": int,
     "enabled": bool,
 }
@@ -71,17 +70,6 @@ def test_no_duplicate_repos(repos):
     assert len(repo_names) == len(set(repo_names)), (
         f"duplicate repo entries: {repo_names}"
     )
-
-
-def test_external_repos_have_post_issues_false(repos):
-    """🚨 The critical safety guard. External repos must never get auto-issues."""
-    for entry in repos:
-        owner = entry["repo"].split("/")[0]
-        if owner != "rladmsgh34":
-            assert entry["post_issues"] is False, (
-                f"{entry['repo']}: external repo must have post_issues=false "
-                f"(would spam an OSS repo with AI-generated Korean issues)"
-            )
 
 
 def test_profile_paths_exist(repos):

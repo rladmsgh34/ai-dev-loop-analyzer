@@ -55,121 +55,6 @@ def get_collection():
     )
 
 
-def load_language_patterns() -> list[dict]:
-    """language-patterns.json → 청크 리스트"""
-    path = DATA_DIR / "language-patterns.json"
-    if not path.exists():
-        return []
-    data = json.loads(path.read_text())
-    chunks = []
-
-    for lang, stats in data.get("languages", {}).items():
-        top = ", ".join(stats["top_domains"][:3])
-        chunks.append({
-            "id": f"lang_{lang}_summary",
-            "text": (
-                f"{lang} 오픈소스 레포 {stats['repos_analyzed']}개 분석 결과: "
-                f"평균 fix율 {stats['avg_fix_rate']}%, "
-                f"평균 회귀 클러스터 {stats['avg_clusters']}개. "
-                f"가장 취약한 도메인: {top}. "
-                f"대표 레포: {', '.join(stats['sample_repos'][:3])}."
-            ),
-            "metadata": {
-                "type": "language_summary",
-                "language": lang,
-                "avg_fix_rate": stats["avg_fix_rate"],
-                "repos_analyzed": stats["repos_analyzed"],
-                "top_domain": stats["top_domains"][0] if stats["top_domains"] else "",
-                "date": data.get("updated_at", ""),
-            },
-        })
-
-        for domain, rate in stats.get("domain_avg_fix_rates", {}).items():
-            chunks.append({
-                "id": f"lang_{lang}_domain_{domain}",
-                "text": (
-                    f"{lang} 레포에서 {domain} 도메인의 평균 fix율은 {rate}%입니다. "
-                    f"({stats['repos_analyzed']}개 레포 기준)"
-                ),
-                "metadata": {
-                    "type": "domain_rate",
-                    "language": lang,
-                    "domain": domain,
-                    "fix_rate": rate,
-                    "date": data.get("updated_at", ""),
-                },
-            })
-
-    for r in data.get("repo_results", []):
-        top_domain = max(r.get("domain_fix_rates", {}).items(),
-                         key=lambda x: x[1].get("fix_count", 0),
-                         default=("unknown", {}))[0]
-        chunks.append({
-            "id": f"repo_{r['owner']}_{r['repo']}",
-            "text": (
-                f"{r['owner']}/{r['repo']} ({r.get('language', 'unknown')}, "
-                f"⭐{r.get('stars', 0):,}): "
-                f"총 {r['total_prs']}개 PR, fix율 {r['fix_rate']}%, "
-                f"회귀 클러스터 {r.get('cluster_count', 0)}개. "
-                f"가장 취약한 도메인: {top_domain}."
-            ),
-            "metadata": {
-                "type": "repo_result",
-                "language": r.get("language", ""),
-                "fix_rate": r["fix_rate"],
-                "top_domain": top_domain,
-                "repo": f"{r['owner']}/{r['repo']}",
-                "date": "",
-            },
-        })
-
-    return chunks
-
-
-def load_rules_history() -> list[dict]:
-    """rules-history.json → 청크 리스트"""
-    path = DATA_DIR / "rules-history.json"
-    if not path.exists():
-        return []
-    data = json.loads(path.read_text())
-    chunks = []
-
-    for entry in data.get("rules", []):
-        for rule in entry.get("rules", []):
-            rid = f"rule_{entry.get('date', 'unknown')}_{abs(hash(rule)) % 100000}"
-            chunks.append({
-                "id": rid,
-                "text": (
-                    f"[{entry.get('date', '')}] AI 규칙 추가: {rule} "
-                    f"(추가 당시 전체 fix율: {entry.get('total_fix_rate', '?')}%)"
-                ),
-                "metadata": {
-                    "type": "rule",
-                    "date": entry.get("date", ""),
-                    "fix_rate_at_add": entry.get("total_fix_rate", 0),
-                },
-            })
-
-    for snap in data.get("snapshots", []):
-        top = sorted(snap.get("domain_fix_rates", {}).items(), key=lambda x: -x[1])[:3]
-        top_text = ", ".join(f"{d}({r}%)" for d, r in top)
-        chunks.append({
-            "id": f"snapshot_{snap.get('date', 'unknown')}",
-            "text": (
-                f"[{snap.get('date', '')}] 스냅샷: "
-                f"전체 fix율 {snap.get('total_fix_rate', '?')}%. "
-                f"상위 도메인: {top_text}."
-            ),
-            "metadata": {
-                "type": "snapshot",
-                "date": snap.get("date", ""),
-                "total_fix_rate": snap.get("total_fix_rate", 0),
-            },
-        })
-
-    return chunks
-
-
 def load_analysis_cache() -> list[dict]:
     """analysis-cache.json → 청크 리스트"""
     path = DATA_DIR / "analysis-cache.json"
@@ -327,8 +212,6 @@ def ingest(append: bool = False):
     existing_ids = set(collection.get(include=[])["ids"]) if append else set()
 
     all_chunks: list[dict] = []
-    all_chunks.extend(load_language_patterns())
-    all_chunks.extend(load_rules_history())
     all_chunks.extend(load_analysis_cache())
     all_chunks.extend(load_diff_patterns())
 
