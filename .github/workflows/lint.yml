@@ -24,9 +24,6 @@ jobs:
         run: |
           echo "=== src/*.py ==="
           python3 -m py_compile src/analyze.py
-          python3 -m py_compile src/crawl_repos.py
-          python3 -m py_compile src/patch_claude_md.py
-          python3 -m py_compile src/rule_tracker.py
           python3 -m py_compile src/mcp_server.py
           echo "=== src/rag/*.py ==="
           python3 -m py_compile src/rag/__init__.py
