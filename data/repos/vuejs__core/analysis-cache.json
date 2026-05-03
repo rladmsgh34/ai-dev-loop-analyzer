@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-04-26",
+  "generated_at": "2026-05-03",
   "repo": "vuejs/core",
-  "fix_rate": 63.0,
+  "fix_rate": 60.0,
   "summary": {
-    "total_prs": 27,
-    "fix_prs": 17,
-    "fix_rate": 63.0
+    "total_prs": 30,
+    "fix_prs": 18,
+    "fix_rate": 60.0
   },
   "risky_files": [],
   "domain_counts": [
     {
       "domain": "vapor",
-      "fix_count": 7
+      "fix_count": 8
     },
     {
       "domain": "general",
