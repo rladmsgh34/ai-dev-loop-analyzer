@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-04-26",
+  "generated_at": "2026-05-03",
   "repo": "vercel/next.js",
-  "fix_rate": 13.1,
+  "fix_rate": 13.9,
   "summary": {
-    "total_prs": 168,
-    "fix_prs": 22,
-    "fix_rate": 13.1
+    "total_prs": 231,
+    "fix_prs": 32,
+    "fix_rate": 13.9
   },
   "risky_files": [],
   "domain_counts": [
     {
       "domain": "general",
-      "fix_count": 16
+      "fix_count": 26
     },
     {
       "domain": "cache",
@@ -44,6 +44,12 @@
       "start": 92494,
       "end": 93225,
       "size": 22,
+      "domain": "general"
+    },
+    {
+      "start": 92658,
+      "end": 93417,
+      "size": 10,
       "domain": "general"
     }
   ]
