@@ -1,32 +1,246 @@
 {
-  "updated_at": "2026-04-25",
-  "total_repos_analyzed": 5,
+  "updated_at": "2026-05-03",
+  "total_repos_analyzed": 232,
   "languages": {
     "typescript": {
-      "repos_analyzed": 5,
-      "avg_fix_rate": 42.5,
-      "avg_clusters": 11.0,
+      "repos_analyzed": 28,
+      "avg_fix_rate": 28.6,
+      "avg_clusters": 5.9,
       "domain_avg_fix_rates": {
-        "general": 36.4,
-        "auth": 7.0,
-        "test/e2e": 1.0,
-        "payment": 0.5,
-        "ci/cd": 2.2,
-        "security": 0.5
+        "general": 21.3,
+        "auth": 3.2,
+        "test/e2e": 1.3,
+        "payment": 1.0,
+        "config": 1.1,
+        "ci/cd": 1.4,
+        "security": 1.1,
+        "docs": 1.3,
+        "external-api": 0.8,
+        "ui": 1.4,
+        "maintenance": 1.7,
+        "api": 3.8
       },
       "top_domains": [
         "general",
+        "api",
         "auth",
-        "ci/cd",
-        "test/e2e",
-        "payment"
+        "maintenance",
+        "ci/cd"
       ],
       "sample_repos": [
         "freeCodeCamp/freeCodeCamp",
         "openclaw/openclaw",
-        "kamranahmedse/developer-roadmap",
+        "nilbuild/developer-roadmap",
         "vuejs/vue",
         "n8n-io/n8n"
+      ]
+    },
+    "python": {
+      "repos_analyzed": 29,
+      "avg_fix_rate": 21.0,
+      "avg_clusters": 4.1,
+      "domain_avg_fix_rates": {
+        "general": 16.0,
+        "docs": 1.3,
+        "external-api": 1.7,
+        "database": 0.7,
+        "maintenance": 1.0,
+        "ci/cd": 1.8,
+        "auth": 3.7,
+        "payment": 0.9,
+        "ui": 2.1,
+        "test/e2e": 2.2,
+        "security": 1.1
+      },
+      "top_domains": [
+        "general",
+        "auth",
+        "test/e2e",
+        "ui",
+        "ci/cd"
+      ],
+      "sample_repos": [
+        "public-apis/public-apis",
+        "donnemartin/system-design-primer",
+        "vinta/awesome-python",
+        "TheAlgorithms/Python",
+        "Significant-Gravitas/AutoGPT"
+      ]
+    },
+    "go": {
+      "repos_analyzed": 29,
+      "avg_fix_rate": 15.9,
+      "avg_clusters": 5.3,
+      "domain_avg_fix_rates": {
+        "general": 10.8,
+        "payment": 0.8,
+        "ci/cd": 1.2,
+        "test/e2e": 0.8,
+        "maintenance": 0.9,
+        "api": 1.0,
+        "docs": 1.8,
+        "ui": 1.7,
+        "auth": 2.3,
+        "config": 0.8,
+        "database": 2.6,
+        "external-api": 1.4
+      },
+      "top_domains": [
+        "general",
+        "database",
+        "auth",
+        "docs",
+        "ui"
+      ],
+      "sample_repos": [
+        "avelino/awesome-go",
+        "ollama/ollama",
+        "kubernetes/kubernetes",
+        "fatedier/frp",
+        "gin-gonic/gin"
+      ]
+    },
+    "rust": {
+      "repos_analyzed": 30,
+      "avg_fix_rate": 20.0,
+      "avg_clusters": 5.4,
+      "domain_avg_fix_rates": {
+        "auth": 2.1,
+        "general": 16.2,
+        "docs": 1.5,
+        "ui": 1.4,
+        "payment": 0.7,
+        "maintenance": 0.9,
+        "test/e2e": 0.8,
+        "security": 0.8,
+        "ci/cd": 1.4
+      },
+      "top_domains": [
+        "general",
+        "auth",
+        "docs",
+        "ui",
+        "ci/cd"
+      ],
+      "sample_repos": [
+        "ultraworkers/claw-code",
+        "rustdesk/rustdesk",
+        "rust-lang/rust",
+        "denoland/deno",
+        "tauri-apps/tauri"
+      ]
+    },
+    "java": {
+      "repos_analyzed": 27,
+      "avg_fix_rate": 14.2,
+      "avg_clusters": 5.1,
+      "domain_avg_fix_rates": {
+        "general": 11.2,
+        "docs": 3.4,
+        "maintenance": 0.7,
+        "auth": 0.9,
+        "payment": 0.6
+      },
+      "top_domains": [
+        "general",
+        "docs",
+        "auth",
+        "maintenance",
+        "payment"
+      ],
+      "sample_repos": [
+        "Snailclimb/JavaGuide",
+        "krahets/hello-algo",
+        "iluwatar/java-design-patterns",
+        "spring-projects/spring-boot",
+        "doocs/advanced-java"
+      ]
+    },
+    "javascript": {
+      "repos_analyzed": 29,
+      "avg_fix_rate": 17.1,
+      "avg_clusters": 4.1,
+      "domain_avg_fix_rates": {
+        "general": 13.2,
+        "docs": 1.9,
+        "config": 1.5,
+        "auth": 1.6,
+        "ci/cd": 1.7,
+        "maintenance": 1.7,
+        "security": 0.8,
+        "ui": 1.7,
+        "payment": 0.6
+      },
+      "top_domains": [
+        "general",
+        "docs",
+        "ci/cd",
+        "maintenance",
+        "ui"
+      ],
+      "sample_repos": [
+        "facebook/react",
+        "trekhleb/javascript-algorithms",
+        "affaan-m/everything-claude-code",
+        "airbnb/javascript",
+        "vercel/next.js"
+      ]
+    },
+    "kotlin": {
+      "repos_analyzed": 29,
+      "avg_fix_rate": 13.0,
+      "avg_clusters": 5.2,
+      "domain_avg_fix_rates": {
+        "general": 10.8,
+        "payment": 0.6,
+        "maintenance": 0.7,
+        "ui": 1.5,
+        "database": 1.0,
+        "ci/cd": 1.2,
+        "docs": 1.3,
+        "auth": 0.5
+      },
+      "top_domains": [
+        "general",
+        "ui",
+        "docs",
+        "ci/cd",
+        "database"
+      ],
+      "sample_repos": [
+        "topjohnwu/Magisk",
+        "2dust/v2rayNG",
+        "JetBrains/kotlin",
+        "square/okhttp",
+        "gedoor/legado"
+      ]
+    },
+    "swift": {
+      "repos_analyzed": 30,
+      "avg_fix_rate": 15.5,
+      "avg_clusters": 5.3,
+      "domain_avg_fix_rates": {
+        "docs": 1.8,
+        "ci/cd": 1.0,
+        "general": 12.9,
+        "maintenance": 0.8,
+        "auth": 0.5,
+        "ui": 1.0,
+        "payment": 0.6
+      },
+      "top_domains": [
+        "general",
+        "docs",
+        "ci/cd",
+        "ui",
+        "maintenance"
+      ],
+      "sample_repos": [
+        "jaywcjlove/awesome-mac",
+        "swiftlang/swift",
+        "vsouza/awesome-ios",
+        "iina/iina",
+        "Alamofire/Alamofire"
       ]
     }
   },
@@ -162,6 +376,6489 @@
       "top_domain": "general",
       "language": "typescript",
       "stars": 185559
+    },
+    {
+      "owner": "nilbuild",
+      "repo": "developer-roadmap",
+      "total_prs": 200,
+      "fix_rate": 14.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 354044
+    },
+    {
+      "owner": "anomalyco",
+      "repo": "opencode",
+      "total_prs": 200,
+      "fix_rate": 31.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 12.0
+        },
+        "api": {
+          "fix_count": 15,
+          "fix_rate": 7.5
+        },
+        "auth": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "ui": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 153674
+    },
+    {
+      "owner": "langgenius",
+      "repo": "dify",
+      "total_prs": 200,
+      "fix_rate": 35.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 44,
+          "fix_rate": 22.0
+        },
+        "ci/cd": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 139910
+    },
+    {
+      "owner": "yangshun",
+      "repo": "tech-interview-handbook",
+      "total_prs": 200,
+      "fix_rate": 2.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 139281
+    },
+    {
+      "owner": "excalidraw",
+      "repo": "excalidraw",
+      "total_prs": 200,
+      "fix_rate": 60.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 113,
+          "fix_rate": 56.5
+        },
+        "api": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 17,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 122393
+    },
+    {
+      "owner": "iptv-org",
+      "repo": "iptv",
+      "total_prs": 200,
+      "fix_rate": 2.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 115732
+    },
+    {
+      "owner": "clash-verge-rev",
+      "repo": "clash-verge-rev",
+      "total_prs": 200,
+      "fix_rate": 17.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 27,
+          "fix_rate": 13.5
+        },
+        "payment": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 115349
+    },
+    {
+      "owner": "firecrawl",
+      "repo": "firecrawl",
+      "total_prs": 200,
+      "fix_rate": 46.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 40,
+          "fix_rate": 20.0
+        },
+        "api": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "security": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "test/e2e": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "payment": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "maintenance": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "ci/cd": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 114354
+    },
+    {
+      "owner": "shadcn-ui",
+      "repo": "ui",
+      "total_prs": 200,
+      "fix_rate": 24.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 37,
+          "fix_rate": 18.5
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 113431
+    },
+    {
+      "owner": "microsoft",
+      "repo": "TypeScript",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 108721
+    },
+    {
+      "owner": "google-gemini",
+      "repo": "gemini-cli",
+      "total_prs": 200,
+      "fix_rate": 51.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 68,
+          "fix_rate": 34.0
+        },
+        "auth": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ui": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 102992
+    },
+    {
+      "owner": "supabase",
+      "repo": "supabase",
+      "total_prs": 200,
+      "fix_rate": 25.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 32,
+          "fix_rate": 16.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 101773
+    },
+    {
+      "owner": "immich-app",
+      "repo": "immich",
+      "total_prs": 200,
+      "fix_rate": 41.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 58,
+          "fix_rate": 29.0
+        },
+        "maintenance": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "auth": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "security": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 99550
+    },
+    {
+      "owner": "ant-design",
+      "repo": "ant-design",
+      "total_prs": 200,
+      "fix_rate": 21.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 16.5
+        },
+        "config": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 97915
+    },
+    {
+      "owner": "tailwindlabs",
+      "repo": "tailwindcss",
+      "total_prs": 200,
+      "fix_rate": 16.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "config": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 94825
+    },
+    {
+      "owner": "puppeteer",
+      "repo": "puppeteer",
+      "total_prs": 200,
+      "fix_rate": 19.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 35,
+          "fix_rate": 17.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 94231
+    },
+    {
+      "owner": "storybookjs",
+      "repo": "storybook",
+      "total_prs": 200,
+      "fix_rate": 1.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 89838
+    },
+    {
+      "owner": "garrytan",
+      "repo": "gstack",
+      "total_prs": 200,
+      "fix_rate": 31.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 44,
+          "fix_rate": 22.0
+        },
+        "auth": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "test/e2e": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 88264
+    },
+    {
+      "owner": "ChatGPTNextWeb",
+      "repo": "NextChat",
+      "total_prs": 200,
+      "fix_rate": 32.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 55,
+          "fix_rate": 27.5
+        },
+        "auth": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 12,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 87875
+    },
+    {
+      "owner": "microsoft",
+      "repo": "playwright",
+      "total_prs": 200,
+      "fix_rate": 25.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 37,
+          "fix_rate": 18.5
+        },
+        "test/e2e": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 87843
+    },
+    {
+      "owner": "mermaid-js",
+      "repo": "mermaid",
+      "total_prs": 200,
+      "fix_rate": 31.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 46,
+          "fix_rate": 23.0
+        },
+        "maintenance": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 87775
+    },
+    {
+      "owner": "modelcontextprotocol",
+      "repo": "servers",
+      "total_prs": 200,
+      "fix_rate": 22.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 31,
+          "fix_rate": 15.5
+        },
+        "ci/cd": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 84935
+    },
+    {
+      "owner": "realworld-apps",
+      "repo": "realworld",
+      "total_prs": 200,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 12,
+          "fix_rate": 6.0
+        },
+        "api": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 83355
+    },
+    {
+      "owner": "vitejs",
+      "repo": "vite",
+      "total_prs": 200,
+      "fix_rate": 31.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 46,
+          "fix_rate": 23.0
+        },
+        "maintenance": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "typescript",
+      "stars": 80356
+    },
+    {
+      "owner": "public-apis",
+      "repo": "public-apis",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 430208
+    },
+    {
+      "owner": "donnemartin",
+      "repo": "system-design-primer",
+      "total_prs": 200,
+      "fix_rate": 29.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 51,
+          "fix_rate": 25.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 346751
+    },
+    {
+      "owner": "vinta",
+      "repo": "awesome-python",
+      "total_prs": 200,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 295684
+    },
+    {
+      "owner": "TheAlgorithms",
+      "repo": "Python",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 220638
+    },
+    {
+      "owner": "Significant-Gravitas",
+      "repo": "AutoGPT",
+      "total_prs": 200,
+      "fix_rate": 43.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 57,
+          "fix_rate": 28.5
+        },
+        "auth": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "payment": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "external-api": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 183948
+    },
+    {
+      "owner": "AUTOMATIC1111",
+      "repo": "stable-diffusion-webui",
+      "total_prs": 200,
+      "fix_rate": 25.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 46,
+          "fix_rate": 23.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 162695
+    },
+    {
+      "owner": "yt-dlp",
+      "repo": "yt-dlp",
+      "total_prs": 200,
+      "fix_rate": 3.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 160272
+    },
+    {
+      "owner": "huggingface",
+      "repo": "transformers",
+      "total_prs": 200,
+      "fix_rate": 34.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 50,
+          "fix_rate": 25.0
+        },
+        "test/e2e": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "ci/cd": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 160191
+    },
+    {
+      "owner": "521xueweihan",
+      "repo": "HelloGitHub",
+      "total_prs": 17,
+      "fix_rate": 11.8,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 11.8
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 154455
+    },
+    {
+      "owner": "langflow-ai",
+      "repo": "langflow",
+      "total_prs": 200,
+      "fix_rate": 56.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 66,
+          "fix_rate": 33.0
+        },
+        "ci/cd": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ui": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "auth": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "security": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "test/e2e": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 147640
+    },
+    {
+      "owner": "ytdl-org",
+      "repo": "youtube-dl",
+      "total_prs": 200,
+      "fix_rate": 3.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 140177
+    },
+    {
+      "owner": "langchain-ai",
+      "repo": "langchain",
+      "total_prs": 200,
+      "fix_rate": 16.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "external-api": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 135652
+    },
+    {
+      "owner": "open-webui",
+      "repo": "open-webui",
+      "total_prs": 200,
+      "fix_rate": 40.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 50,
+          "fix_rate": 25.0
+        },
+        "auth": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "api": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "external-api": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 135256
+    },
+    {
+      "owner": "NousResearch",
+      "repo": "hermes-agent",
+      "total_prs": 200,
+      "fix_rate": 71.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 86,
+          "fix_rate": 43.0
+        },
+        "auth": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "ui": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "ci/cd": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "external-api": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "config": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 130050
+    },
+    {
+      "owner": "anthropics",
+      "repo": "skills",
+      "total_prs": 30,
+      "fix_rate": 6.7,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 6.7
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 127372
+    },
+    {
+      "owner": "microsoft",
+      "repo": "markitdown",
+      "total_prs": 175,
+      "fix_rate": 13.7,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 12.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.1
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 119631
+    },
+    {
+      "owner": "Comfy-Org",
+      "repo": "ComfyUI",
+      "total_prs": 200,
+      "fix_rate": 18.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 16.5
+        },
+        "api": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 111108
+    },
+    {
+      "owner": "Shubhamsaboo",
+      "repo": "awesome-llm-apps",
+      "total_prs": 178,
+      "fix_rate": 14.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 9.6
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.8
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.7
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 108458
+    },
+    {
+      "owner": "deepseek-ai",
+      "repo": "DeepSeek-V3",
+      "total_prs": 25,
+      "fix_rate": 24.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 5,
+          "fix_rate": 20.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 4.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 103353
+    },
+    {
+      "owner": "openai",
+      "repo": "whisper",
+      "total_prs": 121,
+      "fix_rate": 21.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 19.8
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.7
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 98791
+    },
+    {
+      "owner": "fastapi",
+      "repo": "fastapi",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "test/e2e",
+      "language": "python",
+      "stars": 97833
+    },
+    {
+      "owner": "nvbn",
+      "repo": "thefuck",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 15,
+          "fix_rate": 7.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 96786
+    },
+    {
+      "owner": "hacksider",
+      "repo": "Deep-Live-Cam",
+      "total_prs": 111,
+      "fix_rate": 22.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 19.8
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.9
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.9
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.9
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 92567
+    },
+    {
+      "owner": "github",
+      "repo": "spec-kit",
+      "total_prs": 200,
+      "fix_rate": 17.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "ci/cd": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 92214
+    },
+    {
+      "owner": "browser-use",
+      "repo": "browser-use",
+      "total_prs": 200,
+      "fix_rate": 39.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 63,
+          "fix_rate": 31.5
+        },
+        "auth": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "external-api": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "security": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 91753
+    },
+    {
+      "owner": "django",
+      "repo": "django",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 87384
+    },
+    {
+      "owner": "home-assistant",
+      "repo": "core",
+      "total_prs": 200,
+      "fix_rate": 20.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "test/e2e": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 86898
+    },
+    {
+      "owner": "3b1b",
+      "repo": "manim",
+      "total_prs": 200,
+      "fix_rate": 21.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 40,
+          "fix_rate": 20.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 86514
+    },
+    {
+      "owner": "sherlock-project",
+      "repo": "sherlock",
+      "total_prs": 200,
+      "fix_rate": 20.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 35,
+          "fix_rate": 17.5
+        },
+        "security": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "python",
+      "stars": 82822
+    },
+    {
+      "owner": "avelino",
+      "repo": "awesome-go",
+      "total_prs": 200,
+      "fix_rate": 3.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 171664
+    },
+    {
+      "owner": "ollama",
+      "repo": "ollama",
+      "total_prs": 200,
+      "fix_rate": 4.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 170585
+    },
+    {
+      "owner": "kubernetes",
+      "repo": "kubernetes",
+      "total_prs": 200,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 6.5
+        },
+        "test/e2e": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 122031
+    },
+    {
+      "owner": "fatedier",
+      "repo": "frp",
+      "total_prs": 200,
+      "fix_rate": 9.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 106248
+    },
+    {
+      "owner": "gin-gonic",
+      "repo": "gin",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 18,
+          "fix_rate": 9.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 88431
+    },
+    {
+      "owner": "gohugoio",
+      "repo": "hugo",
+      "total_prs": 200,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 87868
+    },
+    {
+      "owner": "syncthing",
+      "repo": "syncthing",
+      "total_prs": 200,
+      "fix_rate": 36.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 44,
+          "fix_rate": 22.0
+        },
+        "ui": {
+          "fix_count": 12,
+          "fix_rate": 6.0
+        },
+        "database": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 14,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 83427
+    },
+    {
+      "owner": "junegunn",
+      "repo": "fzf",
+      "total_prs": 200,
+      "fix_rate": 18.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 28,
+          "fix_rate": 14.0
+        },
+        "payment": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 79968
+    },
+    {
+      "owner": "jesseduffield",
+      "repo": "lazygit",
+      "total_prs": 200,
+      "fix_rate": 20.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 36,
+          "fix_rate": 18.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 11,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 77346
+    },
+    {
+      "owner": "caddyserver",
+      "repo": "caddy",
+      "total_prs": 200,
+      "fix_rate": 4.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 72032
+    },
+    {
+      "owner": "moby",
+      "repo": "moby",
+      "total_prs": 200,
+      "fix_rate": 15.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "external-api": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 71532
+    },
+    {
+      "owner": "nektos",
+      "repo": "act",
+      "total_prs": 200,
+      "fix_rate": 19.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 16.5
+        },
+        "ci/cd": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 70127
+    },
+    {
+      "owner": "base",
+      "repo": "node",
+      "total_prs": 200,
+      "fix_rate": 14.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "ci/cd": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 68591
+    },
+    {
+      "owner": "prometheus",
+      "repo": "prometheus",
+      "total_prs": 200,
+      "fix_rate": 8.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 63873
+    },
+    {
+      "owner": "traefik",
+      "repo": "traefik",
+      "total_prs": 200,
+      "fix_rate": 18.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 62961
+    },
+    {
+      "owner": "minio",
+      "repo": "minio",
+      "total_prs": 200,
+      "fix_rate": 31.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 51,
+          "fix_rate": 25.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 60846
+    },
+    {
+      "owner": "usememos",
+      "repo": "memos",
+      "total_prs": 200,
+      "fix_rate": 31.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 32,
+          "fix_rate": 16.0
+        },
+        "auth": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "ui": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "api": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 59345
+    },
+    {
+      "owner": "FiloSottile",
+      "repo": "mkcert",
+      "total_prs": 53,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 3.8
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 1.9
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 1.9
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 58725
+    },
+    {
+      "owner": "pocketbase",
+      "repo": "pocketbase",
+      "total_prs": 55,
+      "fix_rate": 27.3,
+      "domain_fix_rates": {
+        "docs": {
+          "fix_count": 6,
+          "fix_rate": 10.9
+        },
+        "general": {
+          "fix_count": 5,
+          "fix_rate": 9.1
+        },
+        "database": {
+          "fix_count": 3,
+          "fix_rate": 5.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 1.8
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "docs",
+      "language": "go",
+      "stars": 58093
+    },
+    {
+      "owner": "rclone",
+      "repo": "rclone",
+      "total_prs": 200,
+      "fix_rate": 7.0,
+      "domain_fix_rates": {
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "general": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "docs",
+      "language": "go",
+      "stars": 56986
+    },
+    {
+      "owner": "go-gitea",
+      "repo": "gitea",
+      "total_prs": 200,
+      "fix_rate": 38.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 43,
+          "fix_rate": 21.5
+        },
+        "auth": {
+          "fix_count": 16,
+          "fix_rate": 8.0
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 55308
+    },
+    {
+      "owner": "wagoodman",
+      "repo": "dive",
+      "total_prs": 164,
+      "fix_rate": 11.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 6.1
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.8
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.2
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 53866
+    },
+    {
+      "owner": "etcd-io",
+      "repo": "etcd",
+      "total_prs": 200,
+      "fix_rate": 9.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "config": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 51675
+    },
+    {
+      "owner": "ethereum",
+      "repo": "go-ethereum",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "maintenance",
+      "language": "go",
+      "stars": 51018
+    },
+    {
+      "owner": "jesseduffield",
+      "repo": "lazydocker",
+      "total_prs": 195,
+      "fix_rate": 14.9,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.3
+        },
+        "ci/cd": {
+          "fix_count": 5,
+          "fix_rate": 2.6
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 50883
+    },
+    {
+      "owner": "AlistGo",
+      "repo": "alist",
+      "total_prs": 200,
+      "fix_rate": 41.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 52,
+          "fix_rate": 26.0
+        },
+        "auth": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 49410
+    },
+    {
+      "owner": "hashicorp",
+      "repo": "terraform",
+      "total_prs": 200,
+      "fix_rate": 8.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 6.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 48312
+    },
+    {
+      "owner": "gogs",
+      "repo": "gogs",
+      "total_prs": 200,
+      "fix_rate": 5.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 47505
+    },
+    {
+      "owner": "v2ray",
+      "repo": "v2ray-core",
+      "total_prs": 200,
+      "fix_rate": 26.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 51,
+          "fix_rate": 25.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 11,
+      "top_domain": "general",
+      "language": "go",
+      "stars": 46862
+    },
+    {
+      "owner": "ultraworkers",
+      "repo": "claw-code",
+      "total_prs": 36,
+      "fix_rate": 2.8,
+      "domain_fix_rates": {
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 2.8
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "auth",
+      "language": "rust",
+      "stars": 189706
+    },
+    {
+      "owner": "rustdesk",
+      "repo": "rustdesk",
+      "total_prs": 200,
+      "fix_rate": 35.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 60,
+          "fix_rate": 30.0
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 113376
+    },
+    {
+      "owner": "rust-lang",
+      "repo": "rust",
+      "total_prs": 200,
+      "fix_rate": 5.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 112488
+    },
+    {
+      "owner": "denoland",
+      "repo": "deno",
+      "total_prs": 200,
+      "fix_rate": 70.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 114,
+          "fix_rate": 57.0
+        },
+        "auth": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 106603
+    },
+    {
+      "owner": "tauri-apps",
+      "repo": "tauri",
+      "total_prs": 200,
+      "fix_rate": 33.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 46,
+          "fix_rate": 23.0
+        },
+        "ci/cd": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 106140
+    },
+    {
+      "owner": "astral-sh",
+      "repo": "uv",
+      "total_prs": 200,
+      "fix_rate": 5.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 84280
+    },
+    {
+      "owner": "zed-industries",
+      "repo": "zed",
+      "total_prs": 200,
+      "fix_rate": 17.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 30,
+          "fix_rate": 15.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 81365
+    },
+    {
+      "owner": "openai",
+      "repo": "codex",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 16,
+          "fix_rate": 8.0
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 79623
+    },
+    {
+      "owner": "unionlabs",
+      "repo": "union",
+      "total_prs": 200,
+      "fix_rate": 14.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 12.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 74102
+    },
+    {
+      "owner": "alacritty",
+      "repo": "alacritty",
+      "total_prs": 200,
+      "fix_rate": 27.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 43,
+          "fix_rate": 21.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "security": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 14,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 63826
+    },
+    {
+      "owner": "BurntSushi",
+      "repo": "ripgrep",
+      "total_prs": 200,
+      "fix_rate": 9.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 63235
+    },
+    {
+      "owner": "rust-lang",
+      "repo": "rustlings",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 62689
+    },
+    {
+      "owner": "FuelLabs",
+      "repo": "sway",
+      "total_prs": 200,
+      "fix_rate": 13.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "ci/cd": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 61728
+    },
+    {
+      "owner": "dani-garcia",
+      "repo": "vaultwarden",
+      "total_prs": 200,
+      "fix_rate": 32.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 48,
+          "fix_rate": 24.0
+        },
+        "auth": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 18,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 59645
+    },
+    {
+      "owner": "sharkdp",
+      "repo": "bat",
+      "total_prs": 200,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 18,
+          "fix_rate": 9.0
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 58672
+    },
+    {
+      "owner": "farion1231",
+      "repo": "cc-switch",
+      "total_prs": 200,
+      "fix_rate": 44.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 65,
+          "fix_rate": 32.5
+        },
+        "auth": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "ui": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 58001
+    },
+    {
+      "owner": "meilisearch",
+      "repo": "meilisearch",
+      "total_prs": 200,
+      "fix_rate": 15.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 57392
+    },
+    {
+      "owner": "FuelLabs",
+      "repo": "fuel-core",
+      "total_prs": 200,
+      "fix_rate": 15.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "ci/cd": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 57107
+    },
+    {
+      "owner": "starship",
+      "repo": "starship",
+      "total_prs": 200,
+      "fix_rate": 16.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 57093
+    },
+    {
+      "owner": "rust-unofficial",
+      "repo": "awesome-rust",
+      "total_prs": 200,
+      "fix_rate": 0.0,
+      "domain_fix_rates": {},
+      "cluster_count": 0,
+      "top_domain": null,
+      "language": "rust",
+      "stars": 57071
+    },
+    {
+      "owner": "lencx",
+      "repo": "ChatGPT",
+      "total_prs": 123,
+      "fix_rate": 23.6,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 26,
+          "fix_rate": 21.1
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.6
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.8
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 54355
+    },
+    {
+      "owner": "typst",
+      "repo": "typst",
+      "total_prs": 200,
+      "fix_rate": 27.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 40,
+          "fix_rate": 20.0
+        },
+        "docs": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 53253
+    },
+    {
+      "owner": "warpdotdev",
+      "repo": "warp",
+      "total_prs": 200,
+      "fix_rate": 19.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 23,
+          "fix_rate": 11.5
+        },
+        "docs": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 52939
+    },
+    {
+      "owner": "ruvnet",
+      "repo": "RuView",
+      "total_prs": 90,
+      "fix_rate": 34.4,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 26,
+          "fix_rate": 28.9
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 3.3
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 1.1
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 1.1
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 51453
+    },
+    {
+      "owner": "tw93",
+      "repo": "Pake",
+      "total_prs": 114,
+      "fix_rate": 21.9,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 18,
+          "fix_rate": 15.8
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 2.6
+        },
+        "auth": {
+          "fix_count": 2,
+          "fix_rate": 1.8
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.9
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.9
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 48344
+    },
+    {
+      "owner": "astral-sh",
+      "repo": "ruff",
+      "total_prs": 200,
+      "fix_rate": 4.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 47342
+    },
+    {
+      "owner": "bevyengine",
+      "repo": "bevy",
+      "total_prs": 200,
+      "fix_rate": 15.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 45860
+    },
+    {
+      "owner": "helix-editor",
+      "repo": "helix",
+      "total_prs": 200,
+      "fix_rate": 22.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 35,
+          "fix_rate": 17.5
+        },
+        "ui": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "security": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 44218
+    },
+    {
+      "owner": "aaif-goose",
+      "repo": "goose",
+      "total_prs": 200,
+      "fix_rate": 26.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 30,
+          "fix_rate": 15.0
+        },
+        "auth": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "ui": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "maintenance": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "external-api": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 43691
+    },
+    {
+      "owner": "FuelLabs",
+      "repo": "fuels-rs",
+      "total_prs": 200,
+      "fix_rate": 14.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "rust",
+      "stars": 43226
+    },
+    {
+      "owner": "Snailclimb",
+      "repo": "JavaGuide",
+      "total_prs": 200,
+      "fix_rate": 25.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 48,
+          "fix_rate": 24.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 12,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 155373
+    },
+    {
+      "owner": "krahets",
+      "repo": "hello-algo",
+      "total_prs": 200,
+      "fix_rate": 21.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 36,
+          "fix_rate": 18.0
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 125819
+    },
+    {
+      "owner": "iluwatar",
+      "repo": "java-design-patterns",
+      "total_prs": 200,
+      "fix_rate": 4.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 93964
+    },
+    {
+      "owner": "spring-projects",
+      "repo": "spring-boot",
+      "total_prs": 97,
+      "fix_rate": 21.6,
+      "domain_fix_rates": {
+        "docs": {
+          "fix_count": 13,
+          "fix_rate": 13.4
+        },
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 6.2
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 1.0
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "docs",
+      "language": "java",
+      "stars": 80551
+    },
+    {
+      "owner": "doocs",
+      "repo": "advanced-java",
+      "total_prs": 91,
+      "fix_rate": 7.7,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 7.7
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 78966
+    },
+    {
+      "owner": "MisterBooo",
+      "repo": "LeetCodeAnimation",
+      "total_prs": 63,
+      "fix_rate": 1.6,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 1.6
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 76641
+    },
+    {
+      "owner": "elastic",
+      "repo": "elasticsearch",
+      "total_prs": 85,
+      "fix_rate": 10.6,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 8.2
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 1.2
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 1.2
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 76627
+    },
+    {
+      "owner": "NationalSecurityAgency",
+      "repo": "ghidra",
+      "total_prs": 200,
+      "fix_rate": 30.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 50,
+          "fix_rate": 25.0
+        },
+        "docs": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 18,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 67967
+    },
+    {
+      "owner": "TheAlgorithms",
+      "repo": "Java",
+      "total_prs": 200,
+      "fix_rate": 3.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 65518
+    },
+    {
+      "owner": "kdn251",
+      "repo": "interviews",
+      "total_prs": 42,
+      "fix_rate": 23.8,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 19.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 4.8
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 64941
+    },
+    {
+      "owner": "spring-projects",
+      "repo": "spring-framework",
+      "total_prs": 200,
+      "fix_rate": 19.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 20,
+          "fix_rate": 10.0
+        },
+        "docs": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 59894
+    },
+    {
+      "owner": "termux",
+      "repo": "termux-app",
+      "total_prs": 177,
+      "fix_rate": 7.9,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 7.3
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 54304
+    },
+    {
+      "owner": "google",
+      "repo": "guava",
+      "total_prs": 200,
+      "fix_rate": 6.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 51496
+    },
+    {
+      "owner": "dbeaver",
+      "repo": "dbeaver",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 49837
+    },
+    {
+      "owner": "skylot",
+      "repo": "jadx",
+      "total_prs": 200,
+      "fix_rate": 38.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 44,
+          "fix_rate": 22.0
+        },
+        "ui": {
+          "fix_count": 29,
+          "fix_rate": 14.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 22,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 48324
+    },
+    {
+      "owner": "ReactiveX",
+      "repo": "RxJava",
+      "total_prs": 200,
+      "fix_rate": 2.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 48285
+    },
+    {
+      "owner": "jeecgboot",
+      "repo": "JeecgBoot",
+      "total_prs": 133,
+      "fix_rate": 11.3,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 15,
+          "fix_rate": 11.3
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 46069
+    },
+    {
+      "owner": "apache",
+      "repo": "dubbo",
+      "total_prs": 200,
+      "fix_rate": 18.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 29,
+          "fix_rate": 14.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 41559
+    },
+    {
+      "owner": "halo-dev",
+      "repo": "halo",
+      "total_prs": 200,
+      "fix_rate": 16.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 27,
+          "fix_rate": 13.5
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 38424
+    },
+    {
+      "owner": "PhilJay",
+      "repo": "MPAndroidChart",
+      "total_prs": 191,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 20,
+          "fix_rate": 10.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 38216
+    },
+    {
+      "owner": "TeamNewPipe",
+      "repo": "NewPipe",
+      "total_prs": 200,
+      "fix_rate": 17.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 12.0
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 37951
+    },
+    {
+      "owner": "eugenp",
+      "repo": "tutorials",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 37351
+    },
+    {
+      "owner": "alibaba",
+      "repo": "arthas",
+      "total_prs": 200,
+      "fix_rate": 20.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 16.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 37288
+    },
+    {
+      "owner": "YunaiV",
+      "repo": "ruoyi-vue-pro",
+      "total_prs": 74,
+      "fix_rate": 39.2,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 28,
+          "fix_rate": 37.8
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 1.4
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 36915
+    },
+    {
+      "owner": "geekxh",
+      "repo": "hello-algorithm",
+      "total_prs": 26,
+      "fix_rate": 7.7,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 7.7
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 36070
+    },
+    {
+      "owner": "doocs",
+      "repo": "leetcode",
+      "total_prs": 200,
+      "fix_rate": 1.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 35964
+    },
+    {
+      "owner": "airbnb",
+      "repo": "lottie-android",
+      "total_prs": 200,
+      "fix_rate": 17.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 32,
+          "fix_rate": 16.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "java",
+      "stars": 35610
+    },
+    {
+      "owner": "facebook",
+      "repo": "react",
+      "total_prs": 200,
+      "fix_rate": 9.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 244806
+    },
+    {
+      "owner": "trekhleb",
+      "repo": "javascript-algorithms",
+      "total_prs": 200,
+      "fix_rate": 16.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 12,
+          "fix_rate": 6.0
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 195915
+    },
+    {
+      "owner": "affaan-m",
+      "repo": "everything-claude-code",
+      "total_prs": 200,
+      "fix_rate": 48.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 65,
+          "fix_rate": 32.5
+        },
+        "auth": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "ci/cd": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "maintenance": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 172209
+    },
+    {
+      "owner": "airbnb",
+      "repo": "javascript",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "config": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 148114
+    },
+    {
+      "owner": "vercel",
+      "repo": "next.js",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 139256
+    },
+    {
+      "owner": "Chalarangelo",
+      "repo": "30-seconds-of-code",
+      "total_prs": 200,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 7.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 127658
+    },
+    {
+      "owner": "mrdoob",
+      "repo": "three.js",
+      "total_prs": 200,
+      "fix_rate": 3.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 112284
+    },
+    {
+      "owner": "axios",
+      "repo": "axios",
+      "total_prs": 200,
+      "fix_rate": 38.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 53,
+          "fix_rate": 26.5
+        },
+        "ui": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "auth": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ci/cd": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "security": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 109040
+    },
+    {
+      "owner": "facebook",
+      "repo": "create-react-app",
+      "total_prs": 200,
+      "fix_rate": 19.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "maintenance": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "config": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "ci/cd": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 103464
+    },
+    {
+      "owner": "mui",
+      "repo": "material-ui",
+      "total_prs": 200,
+      "fix_rate": 1.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 98265
+    },
+    {
+      "owner": "microsoft",
+      "repo": "Web-Dev-For-Beginners",
+      "total_prs": 200,
+      "fix_rate": 8.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "docs": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 95704
+    },
+    {
+      "owner": "ryanmcdermott",
+      "repo": "clean-code-javascript",
+      "total_prs": 149,
+      "fix_rate": 23.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 22.1
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.7
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.7
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 94299
+    },
+    {
+      "owner": "sveltejs",
+      "repo": "svelte",
+      "total_prs": 200,
+      "fix_rate": 47.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 87,
+          "fix_rate": 43.5
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 86459
+    },
+    {
+      "owner": "louislam",
+      "repo": "uptime-kuma",
+      "total_prs": 200,
+      "fix_rate": 41.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 62,
+          "fix_rate": 31.0
+        },
+        "ci/cd": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "external-api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 86147
+    },
+    {
+      "owner": "anuraghazra",
+      "repo": "github-readme-stats",
+      "total_prs": 200,
+      "fix_rate": 17.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 31,
+          "fix_rate": 15.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 79228
+    },
+    {
+      "owner": "FortAwesome",
+      "repo": "Font-Awesome",
+      "total_prs": 200,
+      "fix_rate": 10.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 6.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 76536
+    },
+    {
+      "owner": "typicode",
+      "repo": "json-server",
+      "total_prs": 171,
+      "fix_rate": 13.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 9.9
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.8
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.2
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 75572
+    },
+    {
+      "owner": "hakimel",
+      "repo": "reveal.js",
+      "total_prs": 200,
+      "fix_rate": 20.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 31,
+          "fix_rate": 15.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "security": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 71114
+    },
+    {
+      "owner": "expressjs",
+      "repo": "express",
+      "total_prs": 200,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 68981
+    },
+    {
+      "owner": "juliangarnier",
+      "repo": "anime",
+      "total_prs": 87,
+      "fix_rate": 34.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 27.6
+        },
+        "docs": {
+          "fix_count": 6,
+          "fix_rate": 6.9
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 67751
+    },
+    {
+      "owner": "chartjs",
+      "repo": "Chart.js",
+      "total_prs": 200,
+      "fix_rate": 25.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 43,
+          "fix_rate": 21.5
+        },
+        "docs": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 14,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 67395
+    },
+    {
+      "owner": "leonardomso",
+      "repo": "33-js-concepts",
+      "total_prs": 200,
+      "fix_rate": 3.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 66356
+    },
+    {
+      "owner": "webpack",
+      "repo": "webpack",
+      "total_prs": 200,
+      "fix_rate": 21.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 33,
+          "fix_rate": 16.5
+        },
+        "config": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 65777
+    },
+    {
+      "owner": "gorhill",
+      "repo": "uBlock",
+      "total_prs": 200,
+      "fix_rate": 9.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 6.5
+        },
+        "config": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 64311
+    },
+    {
+      "owner": "resume",
+      "repo": "resume.github.com",
+      "total_prs": 84,
+      "fix_rate": 13.1,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 11.9
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 1.2
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 62829
+    },
+    {
+      "owner": "lodash",
+      "repo": "lodash",
+      "total_prs": 200,
+      "fix_rate": 13.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 61261
+    },
+    {
+      "owner": "jgraph",
+      "repo": "drawio-desktop",
+      "total_prs": 30,
+      "fix_rate": 3.3,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 3.3
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 60840
+    },
+    {
+      "owner": "atom",
+      "repo": "atom",
+      "total_prs": 200,
+      "fix_rate": 11.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 60833
+    },
+    {
+      "owner": "adam-p",
+      "repo": "markdown-here",
+      "total_prs": 27,
+      "fix_rate": 7.4,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 7.4
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "javascript",
+      "stars": 60187
+    },
+    {
+      "owner": "topjohnwu",
+      "repo": "Magisk",
+      "total_prs": 200,
+      "fix_rate": 9.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 16,
+          "fix_rate": 8.0
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 60185
+    },
+    {
+      "owner": "2dust",
+      "repo": "v2rayNG",
+      "total_prs": 200,
+      "fix_rate": 12.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 55322
+    },
+    {
+      "owner": "JetBrains",
+      "repo": "kotlin",
+      "total_prs": 200,
+      "fix_rate": 5.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 52663
+    },
+    {
+      "owner": "square",
+      "repo": "okhttp",
+      "total_prs": 200,
+      "fix_rate": 6.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 9,
+          "fix_rate": 4.5
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 46948
+    },
+    {
+      "owner": "gedoor",
+      "repo": "legado",
+      "total_prs": 200,
+      "fix_rate": 6.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 12,
+          "fix_rate": 6.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 46379
+    },
+    {
+      "owner": "android",
+      "repo": "architecture-samples",
+      "total_prs": 200,
+      "fix_rate": 5.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 45649
+    },
+    {
+      "owner": "gkd-kit",
+      "repo": "gkd",
+      "total_prs": 13,
+      "fix_rate": 15.4,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 15.4
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 38193
+    },
+    {
+      "owner": "shadowsocks",
+      "repo": "shadowsocks-android",
+      "total_prs": 200,
+      "fix_rate": 14.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 29,
+          "fix_rate": 14.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 36661
+    },
+    {
+      "owner": "alibaba",
+      "repo": "p3c",
+      "total_prs": 62,
+      "fix_rate": 24.2,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 22.6
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 1.6
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 30835
+    },
+    {
+      "owner": "square",
+      "repo": "leakcanary",
+      "total_prs": 200,
+      "fix_rate": 16.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 20,
+          "fix_rate": 10.0
+        },
+        "docs": {
+          "fix_count": 7,
+          "fix_rate": 3.5
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 29922
+    },
+    {
+      "owner": "signalapp",
+      "repo": "Signal-Android",
+      "total_prs": 200,
+      "fix_rate": 17.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 31,
+          "fix_rate": 15.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 9,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 28736
+    },
+    {
+      "owner": "ReVanced",
+      "repo": "revanced-manager",
+      "total_prs": 200,
+      "fix_rate": 34.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 51,
+          "fix_rate": 25.5
+        },
+        "ui": {
+          "fix_count": 8,
+          "fix_rate": 4.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 14,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 27679
+    },
+    {
+      "owner": "kavishdevar",
+      "repo": "librepods",
+      "total_prs": 140,
+      "fix_rate": 8.6,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 11,
+          "fix_rate": 7.9
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.7
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 26799
+    },
+    {
+      "owner": "JunkFood02",
+      "repo": "Seal",
+      "total_prs": 193,
+      "fix_rate": 4.1,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 5,
+          "fix_rate": 2.6
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 25998
+    },
+    {
+      "owner": "pppscn",
+      "repo": "SmsForwarder",
+      "total_prs": 44,
+      "fix_rate": 4.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 2,
+          "fix_rate": 4.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 25488
+    },
+    {
+      "owner": "RikkaApps",
+      "repo": "Shizuku",
+      "total_prs": 51,
+      "fix_rate": 7.8,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 3,
+          "fix_rate": 5.9
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 2.0
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 24656
+    },
+    {
+      "owner": "CymChad",
+      "repo": "BaseRecyclerViewAdapterHelper",
+      "total_prs": 194,
+      "fix_rate": 22.2,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 37,
+          "fix_rate": 19.1
+        },
+        "ui": {
+          "fix_count": 5,
+          "fix_rate": 2.6
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 13,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 24616
+    },
+    {
+      "owner": "android",
+      "repo": "compose-samples",
+      "total_prs": 200,
+      "fix_rate": 4.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 23109
+    },
+    {
+      "owner": "google-ai-edge",
+      "repo": "gallery",
+      "total_prs": 185,
+      "fix_rate": 5.9,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 5.4
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 22499
+    },
+    {
+      "owner": "google",
+      "repo": "iosched",
+      "total_prs": 66,
+      "fix_rate": 13.6,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 10.6
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 3.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 21692
+    },
+    {
+      "owner": "android",
+      "repo": "nowinandroid",
+      "total_prs": 200,
+      "fix_rate": 11.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 15,
+          "fix_rate": 7.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "security": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 21133
+    },
+    {
+      "owner": "MatsuriDayo",
+      "repo": "NekoBoxForAndroid",
+      "total_prs": 40,
+      "fix_rate": 25.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 10,
+          "fix_rate": 25.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 20496
+    },
+    {
+      "owner": "mihonapp",
+      "repo": "mihon",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 8.5
+        },
+        "database": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 20311
+    },
+    {
+      "owner": "afollestad",
+      "repo": "material-dialogs",
+      "total_prs": 179,
+      "fix_rate": 17.3,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 28,
+          "fix_rate": 15.6
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.1
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.6
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 19607
+    },
+    {
+      "owner": "JetBrains",
+      "repo": "compose-multiplatform",
+      "total_prs": 200,
+      "fix_rate": 12.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ci/cd": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "database": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 19021
+    },
+    {
+      "owner": "square",
+      "repo": "picasso",
+      "total_prs": 200,
+      "fix_rate": 6.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 11,
+          "fix_rate": 5.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 18872
+    },
+    {
+      "owner": "google",
+      "repo": "flexbox-layout",
+      "total_prs": 200,
+      "fix_rate": 22.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 36,
+          "fix_rate": 18.0
+        },
+        "config": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 12,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 18339
+    },
+    {
+      "owner": "android",
+      "repo": "sunflower",
+      "total_prs": 200,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 18,
+          "fix_rate": 9.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 17787
+    },
+    {
+      "owner": "open-ani",
+      "repo": "animeko",
+      "total_prs": 200,
+      "fix_rate": 22.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 37,
+          "fix_rate": 18.5
+        },
+        "ui": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 15,
+      "top_domain": "general",
+      "language": "kotlin",
+      "stars": 17488
+    },
+    {
+      "owner": "jaywcjlove",
+      "repo": "awesome-mac",
+      "total_prs": 200,
+      "fix_rate": 2.5,
+      "domain_fix_rates": {
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 1,
+      "top_domain": "docs",
+      "language": "swift",
+      "stars": 103217
+    },
+    {
+      "owner": "swiftlang",
+      "repo": "swift",
+      "total_prs": 200,
+      "fix_rate": 7.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 6.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 69950
+    },
+    {
+      "owner": "vsouza",
+      "repo": "awesome-ios",
+      "total_prs": 200,
+      "fix_rate": 0.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 52044
+    },
+    {
+      "owner": "iina",
+      "repo": "iina",
+      "total_prs": 200,
+      "fix_rate": 37.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 72,
+          "fix_rate": 36.0
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 12,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 44700
+    },
+    {
+      "owner": "Alamofire",
+      "repo": "Alamofire",
+      "total_prs": 200,
+      "fix_rate": 15.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "maintenance": {
+          "fix_count": 4,
+          "fix_rate": 2.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 42377
+    },
+    {
+      "owner": "exelban",
+      "repo": "stats",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 24,
+          "fix_rate": 12.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 38489
+    },
+    {
+      "owner": "utmapp",
+      "repo": "UTM",
+      "total_prs": 200,
+      "fix_rate": 13.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 26,
+          "fix_rate": 13.0
+        }
+      },
+      "cluster_count": 6,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 33927
+    },
+    {
+      "owner": "MonitorControl",
+      "repo": "MonitorControl",
+      "total_prs": 200,
+      "fix_rate": 13.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 22,
+          "fix_rate": 11.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 33076
+    },
+    {
+      "owner": "shadowsocks",
+      "repo": "ShadowsocksX-NG",
+      "total_prs": 64,
+      "fix_rate": 20.3,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 13,
+          "fix_rate": 20.3
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 32890
+    },
+    {
+      "owner": "kodecocodes",
+      "repo": "swift-algorithm-club",
+      "total_prs": 200,
+      "fix_rate": 13.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 21,
+          "fix_rate": 10.5
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 29106
+    },
+    {
+      "owner": "rxhanson",
+      "repo": "Rectangle",
+      "total_prs": 200,
+      "fix_rate": 10.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 16,
+          "fix_rate": 8.0
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 28980
+    },
+    {
+      "owner": "ChartsOrg",
+      "repo": "Charts",
+      "total_prs": 200,
+      "fix_rate": 17.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 32,
+          "fix_rate": 16.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 28003
+    },
+    {
+      "owner": "jordanbaird",
+      "repo": "Ice",
+      "total_prs": 22,
+      "fix_rate": 4.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 1,
+          "fix_rate": 4.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 27706
+    },
+    {
+      "owner": "airbnb",
+      "repo": "lottie-ios",
+      "total_prs": 200,
+      "fix_rate": 29.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 53,
+          "fix_rate": 26.5
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "payment": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 16,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 26733
+    },
+    {
+      "owner": "apple",
+      "repo": "container",
+      "total_prs": 200,
+      "fix_rate": 15.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "ci/cd": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 26305
+    },
+    {
+      "owner": "vapor",
+      "repo": "vapor",
+      "total_prs": 200,
+      "fix_rate": 19.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 29,
+          "fix_rate": 14.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "docs": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "api": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 11,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 26048
+    },
+    {
+      "owner": "permissionlesstech",
+      "repo": "bitchat",
+      "total_prs": 200,
+      "fix_rate": 24.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 36,
+          "fix_rate": 18.0
+        },
+        "security": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "ui": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "test/e2e": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 25783
+    },
+    {
+      "owner": "ReactiveX",
+      "repo": "RxSwift",
+      "total_prs": 200,
+      "fix_rate": 23.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 26,
+          "fix_rate": 13.0
+        },
+        "docs": {
+          "fix_count": 10,
+          "fix_rate": 5.0
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "maintenance": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 11,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 24650
+    },
+    {
+      "owner": "onevcat",
+      "repo": "Kingfisher",
+      "total_prs": 200,
+      "fix_rate": 22.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 37,
+          "fix_rate": 18.5
+        },
+        "ci/cd": {
+          "fix_count": 3,
+          "fix_rate": 1.5
+        },
+        "test/e2e": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 7,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 24315
+    },
+    {
+      "owner": "SwiftyJSON",
+      "repo": "SwiftyJSON",
+      "total_prs": 200,
+      "fix_rate": 16.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 25,
+          "fix_rate": 12.5
+        },
+        "docs": {
+          "fix_count": 5,
+          "fix_rate": 2.5
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "payment": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 8,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 22957
+    },
+    {
+      "owner": "CodeEditApp",
+      "repo": "CodeEdit",
+      "total_prs": 200,
+      "fix_rate": 18.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 31,
+          "fix_rate": 15.5
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 10,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 22831
+    },
+    {
+      "owner": "HeroTransitions",
+      "repo": "Hero",
+      "total_prs": 120,
+      "fix_rate": 19.2,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 17,
+          "fix_rate": 14.2
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.7
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.7
+        },
+        "config": {
+          "fix_count": 1,
+          "fix_rate": 0.8
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.8
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 22454
+    },
+    {
+      "owner": "JohnCoates",
+      "repo": "Aerial",
+      "total_prs": 200,
+      "fix_rate": 10.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 19,
+          "fix_rate": 9.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        },
+        "ci/cd": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 4,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 20968
+    },
+    {
+      "owner": "nikitabobko",
+      "repo": "AeroSpace",
+      "total_prs": 22,
+      "fix_rate": 36.4,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 7,
+          "fix_rate": 31.8
+        },
+        "docs": {
+          "fix_count": 1,
+          "fix_rate": 4.5
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 20581
+    },
+    {
+      "owner": "SnapKit",
+      "repo": "SnapKit",
+      "total_prs": 133,
+      "fix_rate": 12.8,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 14,
+          "fix_rate": 10.5
+        },
+        "ui": {
+          "fix_count": 2,
+          "fix_rate": 1.5
+        },
+        "database": {
+          "fix_count": 1,
+          "fix_rate": 0.8
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 20337
+    },
+    {
+      "owner": "Caldis",
+      "repo": "Mos",
+      "total_prs": 62,
+      "fix_rate": 8.1,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 4,
+          "fix_rate": 6.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 1.6
+        }
+      },
+      "cluster_count": 0,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 19958
+    },
+    {
+      "owner": "ReactiveCocoa",
+      "repo": "ReactiveCocoa",
+      "total_prs": 200,
+      "fix_rate": 8.5,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 12,
+          "fix_rate": 6.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "ci/cd": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        },
+        "maintenance": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 19848
+    },
+    {
+      "owner": "p0deje",
+      "repo": "Maccy",
+      "total_prs": 136,
+      "fix_rate": 14.7,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 16,
+          "fix_rate": 11.8
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.5
+        },
+        "auth": {
+          "fix_count": 1,
+          "fix_rate": 0.7
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.7
+        }
+      },
+      "cluster_count": 3,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 19668
+    },
+    {
+      "owner": "realm",
+      "repo": "SwiftLint",
+      "total_prs": 200,
+      "fix_rate": 4.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 6,
+          "fix_rate": 3.0
+        },
+        "docs": {
+          "fix_count": 2,
+          "fix_rate": 1.0
+        }
+      },
+      "cluster_count": 2,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 19545
+    },
+    {
+      "owner": "OpenEmu",
+      "repo": "OpenEmu",
+      "total_prs": 200,
+      "fix_rate": 14.0,
+      "domain_fix_rates": {
+        "general": {
+          "fix_count": 27,
+          "fix_rate": 13.5
+        },
+        "ui": {
+          "fix_count": 1,
+          "fix_rate": 0.5
+        }
+      },
+      "cluster_count": 5,
+      "top_domain": "general",
+      "language": "swift",
+      "stars": 17520
     }
   ]
 }
