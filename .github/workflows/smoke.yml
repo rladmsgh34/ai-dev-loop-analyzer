@@ -27,7 +27,7 @@ jobs:
           BASE_URL: ${{ inputs.base_url || 'https://ai-dev-loop-analyzer.rladmsgh34.org' }}
         run: |
           set +e
-          ./web/scripts/smoke.sh 2>&1 | tee /tmp/smoke.log
+          ./scripts/smoke.sh 2>&1 | tee /tmp/smoke.log
           echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
 
       - name: Open / update smoke-failure issue
